@@ -75,7 +75,7 @@
 </head>
 
 <body>
-<div id="content_header"></div>
+ <div id="content_header"></div>
   <div id="main_content_wrap" class="outer">
     <section id="main_content" class="inner">
       <div class="row">
@@ -85,11 +85,11 @@
         <div class="col-75">
           <select id="method">
             <option value="def">Select encryption method</option>
-            <option value="aes">Blowfish</option>
             <option value="aes">AES</option>
-            <option value="des">3DES</option>
+            <option value="3des">3DES</option>
             <option value="rc4">RC4 Stream</option>
             <option value="rb">Rabbit Stream</option>
+            <option value="des">DES (3DES is recommended)</option>
           </select>
         </div>
       </div>
@@ -104,7 +104,7 @@
         <div class="col-25"></div>
         <div class="col-75">
           <input id="tpass" name="tpass" type="checkbox" onclick="togglePassword()">
-          <label for="tpass">Show Password</label>
+          <label for="tpass">Show Key</label>
         </div>
       </div>
       <div class="row">
@@ -126,12 +126,12 @@
         </div>
       </div>
       <div class="row button-row">
-        <button onclick="swap();">Swap</button>
-        <button onclick="dec();">Decrypt</button>
-        <button onclick="enc();">Encrypt</button>
-        <button onclick="sha1();">SHA1</button>
-        <button onclick="sha3();">SHA3</button>
-        <button onclick="md();">MD5</button>
+        <button id="btnswap" class="button btn_refresh" onclick="swap();">Swap</button>
+        <button id="btndec" class="button btn_refresh" onclick="dec();">Decrypt</button>
+        <button id="btnenc" class="button btn_refresh" onclick="enc();">Encrypt</button>
+        <!-- <button class="button" onclick="sha1();">SHA1</button>
+        <button class="button" onclick="sha3();">SHA3</button>
+        <button class="button" onclick="md();">MD5</button> -->
       </div>
       <div class="row">
         <div class="col-25"></div>
@@ -149,16 +149,32 @@
             </div>
         </div>
       </div>
-      <div class="row button-row">
-        <button onclick="doDL();">Download</button>
+      <div id="row_chipher_btn" class="row button-row">
+        <button id="btndl" class="button" onclick="doDL();">Download</button>
+        <button id="btngenq" class="button" onclick="genQuery();">Gen URL</button>
       </div>
-
+      <div id="row_url" class="row">
+         <div class="col-25"></div>
+         <div class="col-75">
+           <textarea readonly id="url" name="subject" placeholder="Url will appear here.."
+             style="height:60px;width:94%;"></textarea>
+           <div class="btn btn-primary tooltip" style="float: right;">
+             <img id="clip_url" class="clipimg" src="images/clipboard--v1.png" onclick="copyUrl()"
+               alt="clipboard copy url text" />
+             <div class="top">
+               <h3>Copy</h3>
+               <p>Click to copy this text to the clipbard</p>
+               <i></i>
+             </div>
+           </div>
+         </div>
+      </div>
       <div>
 
         <h4>User Manual</h4>
         <p>Encryption:</p>
         <ol>
-          <li>Choose Algorithm (AES, DES ..)</li>
+          <li>Choose Algorithm (AES, 3DES ..)</li>
           <li>Enter your secret key (AKA password)</li>
           <li>Copy/paste or write your text you want to encrypt</li>
           <li>Click Encrypt</li>
@@ -167,14 +183,20 @@
         <br>
         <p>Decryption:</p>
         <ol>
-          <li>Choose Algorithm (AES, DES ..)</li>
+          <li>Choose Algorithm (AES, 3DES ..)</li>
           <li>Enter your secret key you used for encryption (AKA password)</li>
           <li>Copy/paste or write your encrypted text you want to decrypt</li>
           <li>Click decrypt</li>
           <li>Click on Download to save your file</li>
         </ol>
-        <p>
-          You can use Hash function (SHA1, SHA3, MD5) to check the integrity of your text in the future.</p>
+        <p>URL:</p>
+        <ul>
+          <li>After encryption optinally generate a url</li>
+          <li>Url can be shared publicly or privatly, its up to you</li>
+          <li>Copy url and share the link</li>
+          <li>Url does not contain the key</li>
+          <li>Url link will populate this page when clicked. Only Key need be entered and then click Decrypt</li>
+        </ul>
       </div>
 
       <br>

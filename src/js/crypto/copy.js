@@ -1,12 +1,19 @@
 function copyPlain() {
-  var s = document.getElementById('plain').value;
+  let s = document.getElementById('plain').value;
   if (s) {
     copyToClipboard(s);
   }
 }
 
 function copyChipher() {
-  var s = document.getElementById('chipher').value;
+  let s = document.getElementById('chipher').value;
+  if (s) {
+    copyToClipboard(s);
+  }
+}
+
+function copyUrl() {
+  let s = document.getElementById('url').value;
   if (s) {
     copyToClipboard(s);
   }

@@ -1,3 +1,3 @@
 # Visit the following link and try the system
 
-[https://lock.equalitycanada.com](https://lock.equalitycanada.com/)
+[https://github.com/Amourspirit/browser-encryption](https://github.com/Amourspirit/browser-encryption/)
