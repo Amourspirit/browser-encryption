@@ -1,0 +1,39 @@
+{
+  "name": "encrypt_tools_online",
+  "_name": "Encrypt Tools Online",
+  "_title": "Online Encryption and Decryption",
+  "_site_title": "Encryption Tools",
+  "version": "1.1.1",
+  "description": "Online Encryption and Decryption project.",
+  "homepage": "https://github.com/Amourspirit/browser-encryption",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Amourspirit/browser-encryption.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Amourspirit/browser-encryption/issues"
+  },
+  "scripts": {
+    "lite": "lite-server --baseDir='site' --port 10001",
+    "litesrc": "lite-server --baseDir='src' --port 10002",
+    "start": "npm run lite",
+    "startsrc": "npm run litesrc"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "grunt": "^1.2.1",
+    "grunt-contrib-clean": "^2.0.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-cssmin": "^3.0.0",
+    "grunt-contrib-uglify": "^5.0.0",
+    "grunt-html": "^14.2.0",
+    "grunt-minify-html": "^3.0.0",
+    "grunt-remove-comments": "^0.1.6",
+    "grunt-replace": "^1.0.1",
+    "grunt-shell": "^3.0.1",
+    "grunt-terser": "^1.0.0",
+    "lite-server": "^1.3.1",
+    "load-grunt-tasks": "^5.1.0"
+  }
+}

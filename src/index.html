@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+  <meta name="description" content="@@description">
+  <!-- Site Title -->
+  <title>@@EncryptTools</title>
+  <script type="text/javascript">
+    var publication_date = "@@[pdate]";
+  </script>
+  <script type="text/javascript">
+    var blog_title = "@@[title]";
+  </script>
+  <!-- #REMOVE_BLOCK -->
+  <!-- This block will be removed with grunt build -->
+  <script type="text/javascript" src="js/blog_signature.js"></script>
+  <script type="text/javascript" src="js/blog_header.js"></script>
+  <script type="text/javascript" src="js/blog_footer.js"></script>
+  <script src="js/clip.js"></script>
+  <script src="js/crypto/copy.js"></script>
+  <!-- #END_REMOVE_BLOCK -->
+  <link rel="stylesheet" type="text/css" href="css/crypto.css" />
+  <link rel="stylesheet" type="text/css" href="css/stylesheet.css" media="screen" />
+  <link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!-- Main JavaScript -->
+   <script src="js/main.js"></script>
+  <script src="js/mainscript.js"></script>
+  
+  <!-- Crypto Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"
+    integrity="sha512-nOQuvD9nKirvxDdvQ9OMqe2dgapbPB7vYAMrzJihw5m+aNcf0dX53m6YxM4LgA9u8e9eg9QX+/+mPu8kCNpV2A=="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/enc-utf8.min.js"
+    integrity="sha512-XtjCqGV/vned5r5jnnVJEkfTdENYiubE+lJ600LBbwvm+uUzSlDBBFa/O4mJl2OJ4GV6pzfqBxIOT+T7UoYr0A=="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/aes.min.js"
+    integrity="sha512-eqbQu9UN8zs1GXYopZmnTFFtJxpZ03FHaBMoU3dwoKirgGRss9diYqVpecUgtqW2YRFkIVgkycGQV852cD46+w=="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/rc4.min.js"
+    integrity="sha512-G+QXsw/6nM7gGN3arr6xoG6c87OiRPtQSFz0Q+/8R2YLq3uUHVCsmaXcHZVnssrQry0hiBbbkC2Zay3NvQzlng=="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/rabbit.min.js"
+    integrity="sha512-KIVwLFbhGhHYJD/ZUXi7wQvCAWpZsPW8/QoO+9QAjY8hAvTnWmnjk+tbkzML9m6u4GYpXxos2HsXlyFQ52OvRQ=="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/sha1.min.js"
+    integrity="sha512-i19qg3d5yHSYVRQizhWLdZCvkenhD2RGY8QZtGhKgw+nu8b7Urndqpov9LwQWeZsIECGjaU0BW9k8lZc5V61uA=="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/sha3.min.js"
+    integrity="sha512-OofaVFAsV0w/0cZ2ohAY+gzlPPl+wJ0fkhtcoO8W7eSHLZkKgmn/KqI5R2e7zqhuLlJsMVwpJGMBcBo0hVvJCQ=="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/md5.min.js"
+    integrity="sha512-VLDQac8zlryHkFvL1HIH9KKjkPNdsNLEXM/vImKGMaNkEXbNtb+dyhnyXFkxai1RVNtwrD5L7vffgtzYzeKI3A=="
+    crossorigin="anonymous"></script>
+  <script
+    src="https://cdn.jsdelivr.net/gh/agorlov/javascript-blowfish@698bbb50d533db3425d448be324028a1f20b4ffe/Blowfish.js">
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/enc-base64.min.js"
+    integrity="sha512-KdYlUmn5GJL1N0dOEXHouJ7i4w2ARpP5IB421hWT09zzvBdxv5GiWaSSiAsx/iYZBO1XHm3hzEN3/PJCNxdJNg=="
+    crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/enc-hex.min.js" crossorigin="anonymous">
+    </script>
+  <script src="js/crypto/down.js"></script>
+  <script>
+    let strBreaker = null;
+  </script>
+  <script type="module">
+    import { stringBreaker } from
+    'https://cdn.jsdelivr.net/gh/Amourspirit/node-string-breaker@fa591f1fc40fa77e749e5f741c81e23ae292b3f0/js/node_string_breaker.min.js';
+    strBreaker=stringBreaker;
+  </script>
+</head>
+
+<body>
+<div id="content_header"></div>
+  <div id="main_content_wrap" class="outer">
+    <section id="main_content" class="inner">
+      <div class="row">
+        <div class="col-25">
+          <label for="method">Choose Algorithm</label>
+        </div>
+        <div class="col-75">
+          <select id="method">
+            <option value="def">Select encryption method</option>
+            <option value="aes">Blowfish</option>
+            <option value="aes">AES</option>
+            <option value="des">3DES</option>
+            <option value="rc4">RC4 Stream</option>
+            <option value="rb">Rabbit Stream</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-25">
+          <label for="key">Enter Key</label>
+        </div>
+        <div class="col-75">
+          <input type="password" id="key" name="key" placeholder="Enter key .."></div>
+      </div>
+      <div class="row">
+        <div class="col-25"></div>
+        <div class="col-75">
+          <input id="tpass" name="tpass" type="checkbox" onclick="togglePassword()">
+          <label for="tpass">Show Password</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-25">
+          <label for="plain">Enter Text</label>
+        </div>
+        <div class="col-75">
+          <textarea id="plain" name="subject" placeholder="Write something.." spellcheck="false"
+            style="height:200px;width:94%;"></textarea>
+          <div class="btn btn-primary tooltip" style="float: right;">
+            <img id="clip_plain" class="clipimg" src="images/clipboard--v1.png"
+              onclick="copyPlain()" alt="clipboard copy plain text"/>
+            <div class="top">
+              <h3>Copy</h3>
+              <p>Click to copy this text to the clipbard</p>
+              <i></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row button-row">
+        <button onclick="swap();">Swap</button>
+        <button onclick="dec();">Decrypt</button>
+        <button onclick="enc();">Encrypt</button>
+        <button onclick="sha1();">SHA1</button>
+        <button onclick="sha3();">SHA3</button>
+        <button onclick="md();">MD5</button>
+      </div>
+      <div class="row">
+        <div class="col-25"></div>
+        <div class="col-75">
+          <textarea readonly id="chipher" name="subject" placeholder="Result will appear here.."
+            style="height:200px;width:94%;"></textarea>
+            <div class="btn btn-primary tooltip" style="float: right;">
+              <img id="clip_chipher" class="clipimg" src="images/clipboard--v1.png"
+                onclick="copyChipher()" alt="clipboard copy chipher text" />
+              <div class="top">
+                <h3>Copy</h3>
+                <p>Click to copy this text to the clipbard</p>
+                <i></i>
+              </div>
+            </div>
+        </div>
+      </div>
+      <div class="row button-row">
+        <button onclick="doDL();">Download</button>
+      </div>
+
+      <div>
+
+        <h4>User Manual</h4>
+        <p>Encryption:</p>
+        <ol>
+          <li>Choose Algorithm (AES, DES ..)</li>
+          <li>Enter your secret key (AKA password)</li>
+          <li>Copy/paste or write your text you want to encrypt</li>
+          <li>Click Encrypt</li>
+          <li>Click on Download to save your file</li>
+        </ol>
+        <br>
+        <p>Decryption:</p>
+        <ol>
+          <li>Choose Algorithm (AES, DES ..)</li>
+          <li>Enter your secret key you used for encryption (AKA password)</li>
+          <li>Copy/paste or write your encrypted text you want to decrypt</li>
+          <li>Click decrypt</li>
+          <li>Click on Download to save your file</li>
+        </ol>
+        <p>
+          You can use Hash function (SHA1, SHA3, MD5) to check the integrity of your text in the future.</p>
+      </div>
+
+      <br>
+      <div id="signature"></div>
+    </section>
+  </div>
+  <div id="content_footer"></div>
+</body>
+
+</html>
