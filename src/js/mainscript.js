@@ -163,23 +163,45 @@ function selectEncFromQuery() {
 //#endregion
 
 //#region Generate query string
+/**
+ * Generates a querystring of the current url, path, Encryption type, and results
+ */
 function genQuery() {
+    let url = getUrlPath();
+    url += '?enc=' + getMethodVal();
+    url += '&val=' + encodeURIComponent(getChipherVal());
+    setUrlVal(url);
+}
+/**
+ * Gets the Protocol, hostname, port and path of current page.
+ * Port is excluded if 80 or 443
+ * @returns {string} Url with path (no query string)
+ */
+function getUrlPath() {
+    // <protocol>//<hostname>:<port>/<pathname><search><hash>
+    let pathname = window.location.pathname;
+    let url = getUrlCurrent();
+    if (pathname) {
+        url += pathname;
+    }
+    return url;
+}
+/**
+ * Gets the Protocol, hostname and port.
+ * Port is excluded if 80 or 443
+ * @returns {string} Url (no path or query string)
+ */
+function getUrlCurrent() {
     // https://stackoverflow.com/questions/1034621/get-the-current-url-with-javascript
     // <protocol>//<hostname>:<port>/<pathname><search><hash>
     let protocol = window.location.protocol;
     let hostname = window.location.hostname;
     let port = window.location.port;
-    let pathname = window.location.pathname;
     let url = protocol + '//' + hostname;
-    if (port && port !== '80' && port !== '443' ) {
+    if (port && port !== '80' && port !== '443') {
         url += ':' + port;
     }
-    if (pathname) {
-        url += pathname;
-    }
-    url += '?enc=' + getMethodVal();
-    url += '&val=' + encodeURIComponent(getChipherVal());
-    document.getElementById("url").value = url;
+    return url;
 }
 //#endregion
 
@@ -266,6 +288,31 @@ function getMethodVal() {
  */
 function setMethodVal(str) {
     selectElement("method", str);
+}
+
+
+/**
+ * Gets the value of url text area
+ * @returns {string} value of cipher text area.
+ */
+function getUrlVal() {
+    let el = getUrlEl();
+    return el.value;
+}
+/**
+ * Sets the value of url text area
+ * @param {string} str 
+ */
+function setUrlVal(str) {
+    let el = getUrlEl();
+    el.value = str;
+}
+/**
+ * Gets the url text area element
+ * @returns {HTMLHtmlElement} text area element
+ */
+function getUrlEl() {
+    return document.getElementById("url");
 }
 //#endregion
 

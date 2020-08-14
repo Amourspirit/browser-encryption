@@ -48,8 +48,7 @@ module.exports = function (grunt) {
   // #region grunt init config
   grunt.initConfig({
     clean: {
-      dirs: ['scratch', 'site'],
-      unused: ['./site/css/github-light.min.css'] // file will be embeded into stylesheet.min.css by cssmin
+      dirs: ['scratch', 'site']
     },
 
     tslint: {
@@ -84,12 +83,6 @@ module.exports = function (grunt) {
       js: {
         src: 'src/js/clip.js',
         dest: 'site/js/clip.min.js',
-      },
-      img: {
-        expand: true,
-        cwd: 'src/images/',
-        src: '**/*',
-        dest: 'site/images/',
       },
       ico: {
         expand: true,
@@ -244,7 +237,6 @@ module.exports = function (grunt) {
   ]);
   grunt.registerTask('build', [
     'clean:dirs',
-    'copy:img',
     'copy:ico',
     // 'copy:js',
     'replace:html',
@@ -252,7 +244,6 @@ module.exports = function (grunt) {
     'minifyHtml:dist',
     'cssmin',
     //'uglify',
-    'terser:mainscript',
-    'clean:unused'
+    'terser:mainscript'
   ]);
 };

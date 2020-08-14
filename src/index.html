@@ -4,6 +4,8 @@
 <head>
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
   <meta name="description" content="@@description">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <!-- Site Title -->
   <title>@@EncryptTools</title>
   <script type="text/javascript">
@@ -20,15 +22,17 @@
   <script src="js/clip.js"></script>
   <script src="js/crypto/copy.js"></script>
   <!-- #END_REMOVE_BLOCK -->
-  <link rel="stylesheet" type="text/css" href="css/crypto.css" />
-  <link rel="stylesheet" type="text/css" href="css/stylesheet.css" media="screen" />
-  <link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <!-- <link rel="stylesheet" type="text/css" href="css/crypto.css" /> -->
+  <link rel="stylesheet" type="text/css" href="css/main.css" />
+
   <!-- jQuery library -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <!-- Main JavaScript -->
-   <script src="js/main.js"></script>
+  <script src="js/main.js"></script>
   <script src="js/mainscript.js"></script>
-  
+
   <!-- Crypto Libraries -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"
     integrity="sha512-nOQuvD9nKirvxDdvQ9OMqe2dgapbPB7vYAMrzJihw5m+aNcf0dX53m6YxM4LgA9u8e9eg9QX+/+mPu8kCNpV2A=="
@@ -56,147 +60,192 @@
     crossorigin="anonymous"></script>
   <script
     src="https://cdn.jsdelivr.net/gh/agorlov/javascript-blowfish@698bbb50d533db3425d448be324028a1f20b4ffe/Blowfish.js">
-  </script>
+    </script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/enc-base64.min.js"
     integrity="sha512-KdYlUmn5GJL1N0dOEXHouJ7i4w2ARpP5IB421hWT09zzvBdxv5GiWaSSiAsx/iYZBO1XHm3hzEN3/PJCNxdJNg=="
     crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/enc-hex.min.js" crossorigin="anonymous">
-    </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/enc-hex.min.js" crossorigin="anonymous">
+  </script>
   <script src="js/crypto/down.js"></script>
   <script>
     let strBreaker = null;
   </script>
   <script type="module">
     import { stringBreaker } from
-    'https://cdn.jsdelivr.net/gh/Amourspirit/node-string-breaker@fa591f1fc40fa77e749e5f741c81e23ae292b3f0/js/node_string_breaker.min.js';
-    strBreaker=stringBreaker;
+      'https://cdn.jsdelivr.net/gh/Amourspirit/node-string-breaker@fa591f1fc40fa77e749e5f741c81e23ae292b3f0/js/node_string_breaker.min.js';
+    strBreaker = stringBreaker;
   </script>
 </head>
 
 <body>
- <div id="content_header"></div>
-  <div id="main_content_wrap" class="outer">
+  <div id="content_header"></div>
+  <div id="main_content_wrap" class="outer container">
     <section id="main_content" class="inner">
       <div class="row">
-        <div class="col-25">
-          <label for="method">Choose Algorithm</label>
-        </div>
-        <div class="col-75">
-          <select id="method">
-            <option value="def">Select encryption method</option>
-            <option value="aes">AES</option>
-            <option value="3des">3DES</option>
-            <option value="rc4">RC4 Stream</option>
-            <option value="rb">Rabbit Stream</option>
-            <option value="des">DES (3DES is recommended)</option>
-          </select>
+        <div class="form-group">
+          <div class="col-sm-2">
+            <label for="method">Choose Algorithm</label>
+          </div>
+          <div class="col-sm-10">
+            <select id="method" class="form-control">
+              <option value="def">Select encryption method</option>
+              <option value="aes">AES</option>
+              <option value="3des">3DES</option>
+              <option value="rc4">RC4 Stream</option>
+              <option value="rb">Rabbit Stream</option>
+              <option value="des">DES (3DES is recommended)</option>
+            </select>
+          </div>
         </div>
       </div>
       <div class="row">
-        <div class="col-25">
-          <label for="key">Enter Key</label>
+        <div class="form-group">
+          <div class="col-sm-2">
+            <label for="key">Enter Key</label>
+          </div>
+          <div class="col-sm-10">
+            <input type="password" id="key" name="key" class="form-control" placeholder="Enter key .."></div>
         </div>
-        <div class="col-75">
-          <input type="password" id="key" name="key" placeholder="Enter key .."></div>
       </div>
       <div class="row">
-        <div class="col-25"></div>
-        <div class="col-75">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-10">
           <input id="tpass" name="tpass" type="checkbox" onclick="togglePassword()">
           <label for="tpass">Show Key</label>
         </div>
       </div>
       <div class="row">
-        <div class="col-25">
-          <label for="plain">Enter Text</label>
-        </div>
-        <div class="col-75">
-          <textarea id="plain" name="subject" placeholder="Write something.." spellcheck="false"
-            style="height:200px;width:94%;"></textarea>
-          <div class="btn btn-primary tooltip" style="float: right;">
-            <img id="clip_plain" class="clipimg" src="images/clipboard--v1.png"
-              onclick="copyPlain()" alt="clipboard copy plain text"/>
-            <div class="top">
-              <h3>Copy</h3>
-              <p>Click to copy this text to the clipbard</p>
-              <i></i>
-            </div>
+        <div class="form-group">
+          <div class="col-sm-2">
+            <label for="plain">Enter Text</label>
+          </div>
+          <div class="col-sm-9">
+            <textarea id="plain" name="subject" class="form-control" placeholder="Write something.." spellcheck="false"
+              style="height:200px;"></textarea>
+          </div>
+          <div class="col-sm-1 copy_icon"><a href="#" onclick="copyPlain(); return false;"
+              title="Click to copy this text to the clipboard" data-toggle="tooltip" data-placement="bottom">
+              <span class="glyphicon glyphicon-copy"></span>
+            </a>
           </div>
         </div>
+
       </div>
       <div class="row button-row">
-        <button id="btnswap" class="button btn_refresh" onclick="swap();">Swap</button>
-        <button id="btndec" class="button btn_refresh" onclick="dec();">Decrypt</button>
-        <button id="btnenc" class="button btn_refresh" onclick="enc();">Encrypt</button>
+        <div class="col-sm-11 button-cell">
+          <button id="btnswap" class="button btn_refresh btn-success" onclick="swap();"
+          data-toggle="tooltip" title="Swap Text and Results">Swap</button>
+          <button id="btndec" class="button btn_refresh btn-success" onclick="dec();"
+          data-toggle="tooltip" title="Decrypt Text">Decrypt</button>
+          <button id="btnenc" class="button btn_refresh btn-success" onclick="enc();"
+          data-toggle="tooltip" title="Encrypt Text">Encrypt</button>
+        </div>
+        <div class="col-sm-1"></div>
+
         <!-- <button class="button" onclick="sha1();">SHA1</button>
         <button class="button" onclick="sha3();">SHA3</button>
         <button class="button" onclick="md();">MD5</button> -->
       </div>
       <div class="row">
-        <div class="col-25"></div>
-        <div class="col-75">
-          <textarea readonly id="chipher" name="subject" placeholder="Result will appear here.."
-            style="height:200px;width:94%;"></textarea>
-            <div class="btn btn-primary tooltip" style="float: right;">
-              <img id="clip_chipher" class="clipimg" src="images/clipboard--v1.png"
-                onclick="copyChipher()" alt="clipboard copy chipher text" />
-              <div class="top">
-                <h3>Copy</h3>
-                <p>Click to copy this text to the clipbard</p>
-                <i></i>
-              </div>
-            </div>
+        <div class="form-group">
+          <div class="col-sm-2"></div>
+          <div class="col-sm-9">
+            <textarea readonly id="chipher" name="subject" class="form-control" placeholder="Result will appear here.."
+              style="height:200px;"></textarea>
+          </div>
+          <div class="col-sm-1 copy_icon"><a href="#" onclick="copyChipher(); return false;"
+              title="Click to copy this text to the clipboard" data-toggle="tooltip" data-placement="bottom">
+              <span class="glyphicon glyphicon-copy"></span>
+            </a>
+          </div>
         </div>
       </div>
       <div id="row_chipher_btn" class="row button-row">
-        <button id="btndl" class="button" onclick="doDL();">Download</button>
-        <button id="btngenq" class="button" onclick="genQuery();">Gen URL</button>
+        <div class="col-sm-11 button-cell">
+          <button id="btndl" class="button btn-success" onclick="doDL();" data-toggle="tooltip"
+            title="Download results to your local device">Download</button>
+          <button id="btngenq" class="button btn-success" onclick="genQuery();" data-toggle="tooltip"
+          title="Generate a url that contains results that can be shared. (key is not included)">Gen URL</button>
+        </div>
+        <div class="col-sm-1"></div>
       </div>
       <div id="row_url" class="row">
-         <div class="col-25"></div>
-         <div class="col-75">
-           <textarea readonly id="url" name="subject" placeholder="Url will appear here.."
-             style="height:60px;width:94%;"></textarea>
-           <div class="btn btn-primary tooltip" style="float: right;">
-             <img id="clip_url" class="clipimg" src="images/clipboard--v1.png" onclick="copyUrl()"
-               alt="clipboard copy url text" />
-             <div class="top">
-               <h3>Copy</h3>
-               <p>Click to copy this text to the clipbard</p>
-               <i></i>
-             </div>
-           </div>
-         </div>
+        <div class="form-group">
+          <div class="col-sm-2"></div>
+          <div class="col-sm-9">
+            <textarea readonly id="url" name="subject" class="form-control" placeholder="Url will appear here.."
+              style="height:60px;"></textarea>
+          </div>
+        </div>
+        <div class="col-sm-1 copy_icon"><a href="#" onclick="copyUrl(); return false;"
+            title="Click to copy this text to the clipboard" data-toggle="tooltip" data-placement="bottom">
+            <span class="glyphicon glyphicon-copy"></span>
+          </a>
+        </div>
       </div>
       <div>
-
-        <h4>User Manual</h4>
-        <p>Encryption:</p>
-        <ol>
-          <li>Choose Algorithm (AES, 3DES ..)</li>
-          <li>Enter your secret key (AKA password)</li>
-          <li>Copy/paste or write your text you want to encrypt</li>
-          <li>Click Encrypt</li>
-          <li>Click on Download to save your file</li>
-        </ol>
-        <br>
-        <p>Decryption:</p>
-        <ol>
-          <li>Choose Algorithm (AES, 3DES ..)</li>
-          <li>Enter your secret key you used for encryption (AKA password)</li>
-          <li>Copy/paste or write your encrypted text you want to decrypt</li>
-          <li>Click decrypt</li>
-          <li>Click on Download to save your file</li>
-        </ol>
-        <p>URL:</p>
-        <ul>
-          <li>After encryption optinally generate a url</li>
-          <li>Url can be shared publicly or privatly, its up to you</li>
-          <li>Copy url and share the link</li>
-          <li>Url does not contain the key</li>
-          <li>Url link will populate this page when clicked. Only Key need be entered and then click Decrypt</li>
-        </ul>
+        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#user_manual">User
+          Manual</button>
+        <div id="user_manual" class="collapse">
+          <div class="panel-group" id="acc_manual">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#acc_manual" href="#acc_enc">Encryption:</a>
+                </h4>
+              </div>
+              <div id="acc_enc" class="panel-collapse collapse in">
+                <div class="panel-body">
+                  <ol>
+                    <li>Choose Algorithm (AES, 3DES ..)</li>
+                    <li>Enter your secret key (AKA password)</li>
+                    <li>Copy/paste or write your text you want to encrypt</li>
+                    <li>Click Encrypt</li>
+                    <li>Click on Download to save your file</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#acc_manual" href="#acc_dec">Decryption:</a>
+                </h4>
+              </div>
+              <div id="acc_dec" class="panel-collapse collapse">
+                <div class="panel-body">
+                  <ol>
+                    <li>Choose Algorithm (AES, 3DES ..)</li>
+                    <li>Enter your secret key you used for encryption (AKA password)</li>
+                    <li>Copy/paste or write your encrypted text you want to decrypt</li>
+                    <li>Click decrypt</li>
+                    <li>Click on Download to save your file</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#acc_manual" href="#acc_url">URL:</a>
+                </h4>
+              </div>
+              <div id="acc_url" class="panel-collapse collapse">
+                <div class="panel-body">
+                  <ul>
+                    <li>After encryption optinally generate a url</li>
+                    <li>Url can be shared publicly or privatly, its up to you</li>
+                    <li>Copy url and share the link</li>
+                    <li>Url does not contain the key</li>
+                    <li>Url link will populate this page when clicked. Only Key need be entered and then click Decrypt
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <br>

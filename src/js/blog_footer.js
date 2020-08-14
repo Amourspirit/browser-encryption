@@ -3,11 +3,11 @@ function setFooter() {
   if (x != null) {
     var html = '\
     <div id="footer_wrap" class="outer">\
-      <footer class="inner">\
+      <footer class="inner container">\
         <section class="clearfix">\
-          <p>\
+          <h3>\
             Client Side Encryption and Decryption\
-          </p>\
+          </h3>\
         </section>\
       </footer>\
     </div>';
