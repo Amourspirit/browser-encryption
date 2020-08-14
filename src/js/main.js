@@ -9,7 +9,6 @@ $(document).ready(function(){
     // });
     setHeader();
     setSignature();
-    setFooter();
     selectFromQueryString();
     $('[data-toggle="tooltip"]').tooltip();
     $("#chipher").on("change", function () {

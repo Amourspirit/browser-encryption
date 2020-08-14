@@ -69,3 +69,6 @@ footer {
 .panel-default>.panel-heading+.panel-collapse>.panel-body {
   border-top-color: #e6c78c;
 }
+.disclaimer{
+  font-size: 0.8em;
+}

@@ -182,7 +182,6 @@ module.exports = function (grunt) {
             'src/js/main.js',
             'src/js/blog_signature.js',
             'src/js/blog_header.js',
-            'src/js/blog_footer.js',
             'src/js/crypto/copy.js',
             'src/js/clip.js'
           ],
