@@ -171,7 +171,7 @@ function genQuery() {
     let port = window.location.port;
     let pathname = window.location.pathname;
     let url = protocol + '//' + hostname;
-    if (port != 80) {
+    if (port && port !== '80' && port !== '443' ) {
         url += ':' + port;
     }
     if (pathname) {
