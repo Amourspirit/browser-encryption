@@ -117,6 +117,10 @@ module.exports = function (grunt) {
               replacement: ' src="js/$1.min.js"'
             },
             {
+              match: / src="js\/enc\/([0-9a-zA-Z-_]*)\.js"/g,
+              replacement: ' src="js/enc/$1.min.js"'
+            },
+            {
               match: / href="css\/([0-9a-zA-Z-_]*)\.css"/g,
               replacement: ' href="css/$1.min.css"'
             },
@@ -223,7 +227,8 @@ module.exports = function (grunt) {
           ],
           'site/js/mainscript.min.js': ['src/js/mainscript.js'],
           'site/js/download.min.js': ['src/js/download.js'],
-          'site/js/down.min.js': ['src/js/down.js']
+          'site/js/down.min.js': ['src/js/down.js'],
+          'site/js/enc/keygen.min.js': ['src/js/enc/keygen.js']
           // 'site/js/clip.min.js': ['src/js/clip.js']
         }
       },
