@@ -84,6 +84,12 @@ module.exports = function (grunt) {
         src: 'src/js/clip.js',
         dest: 'site/js/clip.min.js',
       },
+      img: {
+        expand: true,
+        cwd: 'src/img/',
+        src: '**/*',
+        dest: 'site/img/',
+      },
       ico: {
         expand: true,
         cwd: 'src/',
@@ -109,10 +115,6 @@ module.exports = function (grunt) {
             {
               match: / src="js\/([0-9a-zA-Z-_]*)\.js"/g,
               replacement: ' src="js/$1.min.js"'
-            },
-            {
-              match: / src="js\/crypto\/([0-9a-zA-Z-_]*)\.js"/g,
-              replacement: ' src="js/crypto/$1.min.js"'
             },
             {
               match: / href="css\/([0-9a-zA-Z-_]*)\.css"/g,
@@ -146,11 +148,44 @@ module.exports = function (grunt) {
               replacement: function () {
                 return packageData._title;
               },
+            },
+            {
+              match: '[base]',
+              replacement: function () {
+                return packageData._site_base;
+              },
+            },
+            {
+              match: '[ogimage]',
+              replacement: function () {
+                return packageData._og_image;
+              },
+            },
+            {
+              match: '[source]',
+              replacement: function () {
+                return packageData.homepage;
+              },
             }
           ]
         },
         files: [
           { expand: true, flatten: true, src: ['src/index.html'], dest: 'scratch/' }
+        ]
+      },
+      js_source: {
+        options: {
+          patterns: [
+            {
+              match: '[source]',
+              replacement: function () {
+                return packageData.homepage;
+              },
+            }
+          ]
+        },
+        files: [
+          { expand: true, flatten: true, src: ['src/js/html/source.js'], dest: 'scratch/js/html/' }
         ]
       }
     },
@@ -180,14 +215,15 @@ module.exports = function (grunt) {
         files: {
           'site/js/main.min.js': [
             'src/js/main.js',
-            'src/js/blog_signature.js',
-            'src/js/blog_header.js',
-            'src/js/crypto/copy.js',
+            'src/js/html/blog_signature.js',
+            'src/js/html/blog_header.js',
+            'scratch/js/html/source.js',
+            'src/js/copy.js',
             'src/js/clip.js'
           ],
           'site/js/mainscript.min.js': ['src/js/mainscript.js'],
-          'site/js/crypto/download.min.js': ['src/js/crypto/download.js'],
-          'site/js/crypto/down.min.js': ['src/js/crypto/down.js']
+          'site/js/download.min.js': ['src/js/download.js'],
+          'site/js/down.min.js': ['src/js/down.js']
           // 'site/js/clip.min.js': ['src/js/clip.js']
         }
       },
@@ -237,8 +273,9 @@ module.exports = function (grunt) {
   grunt.registerTask('build', [
     'clean:dirs',
     'copy:ico',
-    // 'copy:js',
+    'copy:img',
     'replace:html',
+    'replace:js_source',
     'htmllint:all',
     'minifyHtml:dist',
     'cssmin',

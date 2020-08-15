@@ -5,7 +5,13 @@
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
   <meta name="description" content="@@description">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  <meta property="og:image" content="@@[ogimage]">
+  <meta property="og:image:alt" content="@@[base]img/pg_img.jpg">
+  <meta name="twitter:image" content="@@[base]img/pg_img.jpg">
+  <meta property="og:url" content="@@[base]">
+  <meta property="og:title" content="@@EncryptTools">
+  <meta property="og:description" content="@@description">
+  <meta property="og:type" content="website" />
   <!-- Site Title -->
   <title>@@EncryptTools</title>
   <script type="text/javascript">
@@ -16,11 +22,11 @@
   </script>
   <!-- #REMOVE_BLOCK -->
   <!-- This block will be removed with grunt build -->
-  <script type="text/javascript" src="js/blog_signature.js"></script>
-  <script type="text/javascript" src="js/blog_header.js"></script>
-  <script type="text/javascript" src="js/blog_footer.js"></script>
+  <script type="text/javascript" src="js/html/blog_signature.js"></script>
+  <script type="text/javascript" src="js/html/blog_header.js"></script>
   <script src="js/clip.js"></script>
-  <script src="js/crypto/copy.js"></script>
+  <script src="js/copy.js"></script>
+  <script src="js/html/source.js"></script>
   <!-- #END_REMOVE_BLOCK -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <!-- <link rel="stylesheet" type="text/css" href="css/crypto.css" /> -->
@@ -67,7 +73,7 @@
     crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/enc-hex.min.js" crossorigin="anonymous">
   </script>
-  <script src="js/crypto/down.js"></script>
+  <script src="js/down.js"></script>
   <script>
     let strBreaker = null;
   </script>
@@ -76,6 +82,8 @@
       'https://cdn.jsdelivr.net/gh/Amourspirit/node-string-breaker@fa591f1fc40fa77e749e5f741c81e23ae292b3f0/js/node_string_breaker.min.js';
     strBreaker = stringBreaker;
   </script>
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="628" />
 </head>
 
 <body>
@@ -259,6 +267,7 @@
               <h3>Client Side Encryption and Decryption</h3>
             </section>
             <div class="disclaimer">This website is provided "as is" without warranty of any kind, either express or implied. Use at your own risk.</div>
+            <div id="source_code" class="source-code"></div>
           </footer>
         </div>
   </div>

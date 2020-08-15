@@ -3,7 +3,9 @@
   "_name": "Encrypt Tools Online",
   "_title": "Online Encryption and Decryption",
   "_site_title": "Encryption Tools",
-  "version": "1.1.1",
+  "_site_base": "https://amourspirit.github.io/browser-encryption/",
+  "_og_image": "https://i.postimg.cc/Y9XM2wNj/security-2168233-1200.jpg",
+  "version": "1.1.2",
   "description": "Online Encryption and Decryption project.",
   "homepage": "https://github.com/Amourspirit/browser-encryption",
   "repository": {
