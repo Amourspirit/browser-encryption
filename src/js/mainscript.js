@@ -398,7 +398,35 @@ function uiChiperVal() {
         document.getElementById('row_chipher_btn').style.display = 'none';
     }
 }
-function uiBtnDl() {
+//#endregion
 
+//#region Generate Key
+const processKeygen = (length) => {
+    let checkedValue = document.getElementById('chk_hex').checked;
+    let len = length / 8;
+    let bHex = false;
+    if(checkedValue) {
+        len += len;
+        bHex = true;
+    }
+    setKeyVal(generateEncKey(len, bHex));
+}
+const generateEncKey = (length, hex) => {
+    const opt = {
+        alpha: false,
+        num: false,
+        symbols: false,
+        special: false,
+        hex: false,
+        ws: false,
+        b64: false,
+        ekey: false
+    }
+    if (hex) {
+        opt.hex = true;
+    } else {
+        opt.ekey = true;
+    }
+    return keygenJS(length, opt);
 }
 //#endregion

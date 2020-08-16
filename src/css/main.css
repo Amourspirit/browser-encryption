@@ -1,5 +1,53 @@
+body {
+  background-color: #f4e2bf;
+}
+
+#chipher,
+#plain {
+  white-space: pre;
+  overflow: auto;
+  resize: vertical;
+}
+
+#header_wrap {
+  background: #04253a;
+}
+
+#btn_generate_key {
+  float: right;
+}
+
+#project_title {
+  margin: 0;
+  color: #e1ddbf;
+  font-size: 42px;
+  font-weight: 700;
+  text-shadow: #111 0 0 10px;
+  text-decoration: none;
+}
+
+#project_tagline {
+  color: #e1ddbf;
+  font-size: 24px;
+  font-weight: 700;
+  background: 0 0;
+  text-shadow: #111 0 0 10px;
+  text-decoration: none;
+}
+
+#main_content {
+  padding-top: 40px;
+}
+
+#footer_wrap {
+  background: #04253a;
+  text-decoration: none;
+}
 .copy_icon {
   text-align: right;
+}
+.copy_icon>a {
+  display: block;
 }
 .glyphicon-copy {
   font-size: 2em;
@@ -9,40 +57,18 @@
   padding-top: 1em;
   padding-bottom: 1em;
 }
-body{
-  background-color: #f4e2bf;
+.btn-row-key {
+  padding-top: 0.8em;
+  padding-bottom: 2em;
 }
-#chipher,
-#plain {
-  white-space: pre;
-  overflow: auto;
-  resize: vertical;
+.btn-col-key {
+  text-align: center;
 }
-#header_wrap {
-  background: #04253a;
+.btn-row-key-header {
+  font-size: 1.3em;
 }
-#project_title {
-  margin: 0;
-  color: #e1ddbf;
-  font-size: 42px;
-  font-weight: 700;
-  text-shadow: #111 0 0 10px;
-  text-decoration: none;
-}
-#project_tagline {
-  color: #e1ddbf;
-  font-size: 24px;
-  font-weight: 700;
-  background: 0 0;
-  text-shadow: #111 0 0 10px;
-  text-decoration: none;
-}
-#main_content {
-  padding-top: 40px;
-}
-#footer_wrap {
-  background: #04253a;
-  text-decoration: none;
+.btn-col-key-header {
+  text-align: center;
 }
 .inner {
   position: relative;

@@ -42,7 +42,9 @@ const keygenJS = (length, opt) => {
     HEX: '0123458789ABCDEF',
     SYMBOLS: '!"@#$%&/{}()[]=+?*<>,;.:-_',
     SPECIAL: '|`~^\'',
-    WS: ' '
+    WS: ' ',
+    B64: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
+    ENCRYPT_KEY: 'abcdefghigjlmnopqrstuvwxyzABCDEFGHIJKLMNOPQURTUVWXYZ0123456789!%*@/?(+$&)',
   };
 
   const randomPassword = (length, opt) => {
@@ -64,6 +66,12 @@ const keygenJS = (length, opt) => {
     }
     if (opt.ws) {
       str += PWD_SYMBOLS.WS;
+    }
+    if (opt.b64) {
+      str += PWD_SYMBOLS.B64;
+    }
+    if (opt.ekey) {
+      str += PWD_SYMBOLS.ENCRYPT_KEY;
     }
     strLength = str.length;
     if (strLength === 0) {
@@ -110,6 +118,12 @@ const keygenJS = (length, opt) => {
     if (options.ws === undefined) {
       options.ws = defaultOptions.ws;
     }
+    if (options.b64 === undefined) {
+      options.b64 = defaultOptions.b64;
+    }
+    if (options.ekey === undefined) {
+      options.ekey = defaultOptions.ekey;
+    }
     return options;
   };
   const params = getOptions({
@@ -118,7 +132,9 @@ const keygenJS = (length, opt) => {
     symbols: false,
     special: false,
     hex: false,
-    ws: false
+    ws: false,
+    b64: false,
+    ekey:false
   }, opt);
   return randomPassword(length, params);
 }

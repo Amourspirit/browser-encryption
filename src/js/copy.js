@@ -18,3 +18,10 @@ function copyUrl() {
     copyToClipboard(s);
   }
 }
+
+function copyKey() {
+  let s = document.getElementById('key').value;
+  if (s) {
+    copyToClipboard(s);
+  }
+}

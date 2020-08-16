@@ -115,15 +115,56 @@
           <div class="col-sm-2">
             <label for="key">Enter Key</label>
           </div>
-          <div class="col-sm-10">
+          <div class="col-sm-9">
             <input type="password" id="key" name="key" class="form-control" placeholder="Enter key .."></div>
+             <div class="col-sm-1 copy_icon"><a href="#" onclick="copyKey(); return false;"
+                 title="Click to copy key text to the clipboard" data-toggle="tooltip" data-placement="top">
+                 <span class="glyphicon glyphicon-copy"></span>
+               </a>
+             </div>
         </div>
+        
       </div>
       <div class="row">
         <div class="col-sm-2"></div>
-        <div class="col-sm-10">
+        <div class="col-sm-9">
           <input id="tpass" name="tpass" type="checkbox" onclick="togglePassword()">
           <label for="tpass">Show Key</label>
+          <button id="btn_generate_key" class="button btn-success" data-toggle="collapse" data-target="#keygen_section">Generate Key</button>
+        </div>
+        <div class="col-sm-1"></div>
+      </div>
+      <div id="keygen_section" class="collapse">
+        <div class="row btn-row-key-header">
+          <div class="col-sm-2"></div>
+          <div class="col-sm-9 btn-col-key-header">Security Level</div>
+          <div class="col-sm-1">
+            Hex
+          </div>
+        </div>
+        <div class="row btn-row-key">
+          <div class="col-sm-2"></div>
+          <div class="col-sm-9 btn-col-key">
+            <div class="btn-group">
+              <button id="btn_64bit" type="button" class="btn btn-primary"
+                onclick="processKeygen(64);">64-bit</button>
+              <button id="btn_128bit" type="button" class="btn btn-primary"
+                onclick="processKeygen(128);">128-bit</button>
+              <button id="btn_256bit" type="button" class="btn btn-primary"
+                onclick="processKeygen(256);">256-bit</button>
+              <button id="btn_512bit" type="button" class="btn btn-primary"
+                onclick="processKeygen(512);">512-bit</button>
+              <button id="btn_1024bit" type="button" class="btn btn-primary"
+                onclick="processKeygen(1024);">1024-bit</button>
+              <button id="btn_2048bit" type="button" class="btn btn-primary"
+                onclick="processKeygen(2048);">2048-bit</button>
+              <button id="btn_4096bit" type="button" class="btn btn-primary"
+                onclick="processKeygen(4096);">4096-bit</button>
+            </div>
+          </div>
+          <div class="col-sm-1">
+            <input id="chk_hex" name="chk_hex" class="enc-key-hex" type="checkbox">
+          </div>
         </div>
       </div>
       <div class="row">
@@ -136,21 +177,20 @@
               style="height:200px;"></textarea>
           </div>
           <div class="col-sm-1 copy_icon"><a href="#" onclick="copyPlain(); return false;"
-              title="Click to copy this text to the clipboard" data-toggle="tooltip" data-placement="bottom">
+              title="Click to copy this text to the clipboard" data-toggle="tooltip" data-placement="top">
               <span class="glyphicon glyphicon-copy"></span>
             </a>
           </div>
         </div>
-
       </div>
       <div class="row button-row">
         <div class="col-sm-11 button-cell">
-          <button id="btnswap" class="button btn_refresh btn-success" onclick="swap();"
-          data-toggle="tooltip" title="Swap Text and Results">Swap</button>
-          <button id="btndec" class="button btn_refresh btn-success" onclick="dec();"
-          data-toggle="tooltip" title="Decrypt Text">Decrypt</button>
-          <button id="btnenc" class="button btn_refresh btn-success" onclick="enc();"
-          data-toggle="tooltip" title="Encrypt Text">Encrypt</button>
+          <button id="btnswap" class="button btn_refresh btn-success" onclick="swap();" data-toggle="tooltip"
+            title="Swap Text and Results">Swap</button>
+          <button id="btndec" class="button btn_refresh btn-success" onclick="dec();" data-toggle="tooltip"
+            title="Decrypt Text">Decrypt</button>
+          <button id="btnenc" class="button btn_refresh btn-success" onclick="enc();" data-toggle="tooltip"
+            title="Encrypt Text">Encrypt</button>
         </div>
         <div class="col-sm-1"></div>
 
@@ -166,7 +206,7 @@
               style="height:200px;"></textarea>
           </div>
           <div class="col-sm-1 copy_icon"><a href="#" onclick="copyChipher(); return false;"
-              title="Click to copy this text to the clipboard" data-toggle="tooltip" data-placement="bottom">
+              title="Click to copy this text to the clipboard" data-toggle="tooltip" data-placement="top">
               <span class="glyphicon glyphicon-copy"></span>
             </a>
           </div>
@@ -177,7 +217,7 @@
           <button id="btndl" class="button btn-success" onclick="doDL();" data-toggle="tooltip"
             title="Download results to your local device">Download</button>
           <button id="btngenq" class="button btn-success" onclick="genQuery();" data-toggle="tooltip"
-          title="Generate a url that contains results that can be shared. (key is not included)">Gen URL</button>
+            title="Generate a url that contains results that can be shared. (key is not included)">Gen URL</button>
         </div>
         <div class="col-sm-1"></div>
       </div>
@@ -190,13 +230,13 @@
           </div>
         </div>
         <div class="col-sm-1 copy_icon"><a href="#" onclick="copyUrl(); return false;"
-            title="Click to copy this text to the clipboard" data-toggle="tooltip" data-placement="bottom">
+            title="Click to copy this text to the clipboard" data-toggle="tooltip" data-placement="top">
             <span class="glyphicon glyphicon-copy"></span>
           </a>
         </div>
       </div>
       <div>
-        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#user_manual">User
+        <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#user_manual">User
           Manual</button>
         <div id="user_manual" class="collapse">
           <div class="panel-group" id="acc_manual">
@@ -210,10 +250,11 @@
                 <div class="panel-body">
                   <ol>
                     <li>Choose Algorithm (AES, 3DES ..)</li>
-                    <li>Enter your secret key (AKA password)</li>
+                    <li>Enter or generate your secret key (AKA password)</li>
                     <li>Copy/paste or write your text you want to encrypt</li>
                     <li>Click Encrypt</li>
                     <li>Click on Download to save your file</li>
+                    <li>Click Gen URL to create a link that contins the encryptd text ( without key ) that can be shared</li>
                   </ol>
                 </div>
               </div>
@@ -264,15 +305,16 @@
     </section>
   </div>
   <div id="content_footer">
-        <div id="footer_wrap" class="outer">
-          <footer class="inner container">
-            <section class="clearfix">
-              <h3>Client Side Encryption and Decryption</h3>
-            </section>
-            <div class="disclaimer">This website is provided "as is" without warranty of any kind, either express or implied. Use at your own risk.</div>
-            <div id="source_code" class="source-code"></div>
-          </footer>
-        </div>
+    <div id="footer_wrap" class="outer">
+      <footer class="inner container">
+        <section class="clearfix">
+          <h3>Client Side Encryption and Decryption</h3>
+        </section>
+        <div class="disclaimer">This website is provided "as is" without warranty of any kind, either express or
+          implied. Use at your own risk.</div>
+        <div id="source_code" class="source-code"></div>
+      </footer>
+    </div>
   </div>
 </body>
 
