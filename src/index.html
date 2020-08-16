@@ -115,20 +115,21 @@
           </div>
           <div class="col-sm-9">
             <input type="password" id="key" name="key" class="form-control" placeholder="Enter key .."></div>
-             <div class="col-sm-1 copy_icon"><a href="#" onclick="copyKey(); return false;"
-                 title="Click to copy key text to the clipboard" data-toggle="tooltip" data-placement="top">
-                 <span class="glyphicon glyphicon-copy"></span>
-               </a>
-             </div>
+          <div class="col-sm-1 copy_icon"><a href="#" onclick="copyKey(); return false;"
+              title="Click to copy key text to the clipboard" data-toggle="tooltip" data-placement="top">
+              <span class="glyphicon glyphicon-copy"></span>
+            </a>
+          </div>
         </div>
-        
+
       </div>
       <div class="row">
         <div class="col-sm-2"></div>
         <div class="col-sm-9">
           <input id="tpass" name="tpass" type="checkbox" onclick="togglePassword()">
           <label for="tpass">Show Key</label>
-          <button id="btn_generate_key" class="button btn-success" data-toggle="collapse" data-target="#keygen_section">Generate Key</button>
+          <button id="btn_generate_key" class="button btn-success" data-toggle="collapse"
+            data-target="#keygen_section">Generate Key</button>
         </div>
         <div class="col-sm-1"></div>
       </div>
@@ -144,8 +145,7 @@
           <div class="col-sm-2"></div>
           <div class="col-sm-9 btn-col-key">
             <div class="btn-group">
-              <button id="btn_64bit" type="button" class="btn btn-primary"
-                onclick="processKeygen(64);">64-bit</button>
+              <button id="btn_64bit" type="button" class="btn btn-primary" onclick="processKeygen(64);">64-bit</button>
               <button id="btn_128bit" type="button" class="btn btn-primary"
                 onclick="processKeygen(128);">128-bit</button>
               <button id="btn_256bit" type="button" class="btn btn-primary"
@@ -191,10 +191,6 @@
             title="Encrypt Text">Encrypt</button>
         </div>
         <div class="col-sm-1"></div>
-
-        <!-- <button class="button" onclick="sha1();">SHA1</button>
-        <button class="button" onclick="sha3();">SHA3</button>
-        <button class="button" onclick="md();">MD5</button> -->
       </div>
       <div class="row">
         <div class="form-group">
@@ -208,6 +204,13 @@
               <span class="glyphicon glyphicon-copy"></span>
             </a>
           </div>
+        </div>
+      </div>
+      <div class="row collapse found-link">
+        <div class="found-link-inner">
+          <div class="col-sm-2"></div>
+          <div class="col-sm-9 "><div id="found_link"></div></div>
+          <div class="col-sm-1"></div>
         </div>
       </div>
       <div id="row_chipher_btn" class="row button-row">
@@ -252,7 +255,8 @@
                     <li>Copy/paste or write your text you want to encrypt</li>
                     <li>Click Encrypt</li>
                     <li>Click on Download to save your file</li>
-                    <li>Click Gen URL to create a link that contins the encryptd text ( without key ) that can be shared</li>
+                    <li>Click Gen URL to create a link that contins the encryptd text ( without key ) that can be shared
+                    </li>
                   </ol>
                 </div>
               </div>
