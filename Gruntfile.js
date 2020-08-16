@@ -189,7 +189,7 @@ module.exports = function (grunt) {
           ]
         },
         files: [
-          { expand: true, flatten: true, src: ['src/js/html/source.js'], dest: 'scratch/js/html/' }
+          { expand: true, flatten: true, src: ['src/js/html/inject.js'], dest: 'scratch/js/html/' }
         ]
       }
     },
@@ -219,9 +219,7 @@ module.exports = function (grunt) {
         files: {
           'site/js/main.min.js': [
             'src/js/main.js',
-            'src/js/html/blog_signature.js',
-            'src/js/html/blog_header.js',
-            'scratch/js/html/source.js',
+            'scratch/js/html/inject.js',
             'src/js/copy.js',
             'src/js/clip.js'
           ],

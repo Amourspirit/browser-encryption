@@ -7,10 +7,11 @@ $(document).ready(function(){
     // $("#reset").click(function(){
     //     $("#main-form")[0].reset();
     // });
-    setHeader();
-    setSignature();
+    injectHtmlJs();
+    // setHeader();
+    //  setSignature();
     selectFromQueryString();
-    setSorceCodeLink();
+    // setSorceCodeLink();
     $('[data-toggle="tooltip"]').tooltip();
     $("#chipher").on("change", function () {
         uiRefresh();
