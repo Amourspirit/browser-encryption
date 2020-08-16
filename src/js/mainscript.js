@@ -386,27 +386,49 @@ const getParameterByName = (name, url) => {
 const uiRefresh =() => {
     const uiChiperVal = () => {
         let str = getChipherVal();
+        let strMatchHtml = '';
         if (str) {
             document.getElementById('row_url').style.display = 'block';
             document.getElementById('row_chipher_btn').style.display = 'block';
             // regex here captures spaces but sometimes spaces are in querystinrg
-            let reUrl = /((http(s)?:\/\/.)(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*))/;
+            let reUrl = /^http(s)?:\/\/.(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b(.(?!\.jpg|\.png|\.gif|\.jpeg$))+$/gm;
             let resUrl = str.match(reUrl);
             if (resUrl) {
+                strMatchHtml = '<ul>';
+                // strMatchHtml += '<li><a href="' + resUrl[0] + '" target="_blank">' + resUrl[0] + '</a></li>';
+                resUrl.forEach(m => {
+                    strMatchHtml += '<li><a href="' + m + '" target="_blank">' + m + '</a></li>';
+                });
+                strMatchHtml += '</ul>';
                 // match a url
-                strMatchUrl = '<a href="' + resUrl[1] + '" target="_blank">Found Link</a>';
-                document.getElementById('found_link').innerHTML = strMatchUrl;
+                document.getElementById('found_link').innerHTML = strMatchHtml;
                 // expand the area
                 $('.found-link').collapse("show");
             } else {
                 document.getElementById('found_link').innerHTML = '';
                 $('.found-link').collapse("hide");
             }
+            let reImage = /(https?:\/\/(?:[a-z\-]+\.)+[a-z]{2,6}(?:\/[^\/#?]+)+\.(?:jpe?g|gif|png))/;
+            let resImg = str.match(reImage);
+            if (resImg) {
+                // match a url
+                strMatchHtml = '<a href="' + resImg[1] + '" target="_blank">';
+                strMatchHtml += '<img src="' + resImg[1] +'" class="img-responsive center-block" alt="image">';
+                strMatchHtml += '</a>'
+                document.getElementById('found_image').innerHTML = strMatchHtml;
+                // expand the area
+                $('.found-image').collapse("show");
+            } else {
+                document.getElementById('found_image').innerHTML = '';
+                $('.found-image').collapse("hide");
+            }
         } else {
             document.getElementById('row_url').style.display = 'none';
             document.getElementById('row_chipher_btn').style.display = 'none';
             document.getElementById('found_link').innerHTML = '';
             $('.found-link').collapse("hide");
+            document.getElementById('found_image').innerHTML = '';
+            $('.found-image').collapse("hide");
         }
     }
     uiChiperVal();
