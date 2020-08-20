@@ -29,11 +29,11 @@ $(document).ready(function(){
         let el = $('.collapse-links>span.glyph-toggle');
         if (el.length > 0) {
             if ($(this).hasClass("collapsed")) {
-                el.removeClass("glyphicon-chevron-down");
-                el.addClass("glyphicon-chevron-up");
+                el.removeClass("oi-chevron-bottom");
+                el.addClass("oi-chevron-top");
             } else {
-                el.removeClass("glyphicon-chevron-up");
-                el.addClass("glyphicon-chevron-down");
+                el.removeClass("oi-chevron-top");
+                el.addClass("oi-chevron-bottom");
             }
         }
     });
@@ -41,11 +41,11 @@ $(document).ready(function(){
         let el = $('.collapse-imgages>span.glyph-toggle');
         if (el.length > 0) {
             if ($(this).hasClass("collapsed")) {
-                el.removeClass("glyphicon-chevron-down");
-                el.addClass("glyphicon-chevron-up");
+                el.removeClass("oi-chevron-bottom");
+                el.addClass("oi-chevron-top");
             } else {
-                el.removeClass("glyphicon-chevron-up");
-                el.addClass("glyphicon-chevron-down");
+                el.removeClass("oi-chevron-top");
+                el.addClass("oi-chevron-bottom");
             }
         }
     });
@@ -53,13 +53,17 @@ $(document).ready(function(){
         let el = $('.collapse-form>span.glyph-toggle');
         if (el.length > 0) {
             if ($(this).hasClass("collapsed")) {
-                el.removeClass("glyphicon-chevron-down");
-                el.addClass("glyphicon-chevron-up");
+                el.removeClass("oi-chevron-bottom");
+                el.addClass("oi-chevron-top");
             } else {
-                el.removeClass("glyphicon-chevron-up");
-                el.addClass("glyphicon-chevron-down");
+                el.removeClass("oi-chevron-top");
+                el.addClass("oi-chevron-bottom");
             }
         }
+    });
+    $(document).on("click", '[data-toggle="lightbox"]', function (event) {
+        event.preventDefault();
+        $(this).ekkoLightbox();
     });
     uiRefresh();
 });

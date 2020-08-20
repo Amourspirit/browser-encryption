@@ -62,9 +62,9 @@ Client Side Encryption and Decryption\
 
   const injectEncryptionButtons = () => {
     let el = document.getElementById("btn_enc_cell");
-    let btnSwap = create('<button id="btnswap" class="button btn_refresh btn-success" onclick="swap();" data-toggle="tooltip" title="Swap Text and Results"><span class="glyphicon glyphicon-sort"></span> Swap</button>');
-    let btnDecode = create('<button id="btndec" class="button btn_refresh btn-success" onclick="dec();" data-toggle="tooltip" title="Decrypt Text"><span class="glyphicon glyphicon-transfer"></span> Decrypt</button>');
-    let btnEncode = create('<button id="btnenc" class="button btn_refresh btn-success" onclick="enc();" data-toggle="tooltip" title="Encrypt Text"><span class="glyphicon glyphicon-lock"></span> Encrypt</button>');
+    let btnSwap = create('<button id="btnswap" class="button btn_refresh btn-success" onclick="swap();" data-toggle="tooltip" title="Swap Text and Results"><span class="oi oi-loop-square"></span> Swap</button>');
+    let btnDecode = create('<button id="btndec" class="button btn_refresh btn-success" onclick="dec();" data-toggle="tooltip" title="Decrypt Text"><span class="oi oi-lock-unlocked"></span> Decrypt</button>');
+    let btnEncode = create('<button id="btnenc" class="button btn_refresh btn-success" onclick="enc();" data-toggle="tooltip" title="Encrypt Text"><span class="oi oi-lock-locked"></span> Encrypt</button>');
     el.appendChild(btnSwap);
     el.appendChild(create(sp));
     el.appendChild(btnDecode);

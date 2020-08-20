@@ -201,17 +201,16 @@ module.exports = function (grunt) {
       }
     },
     cssmin: {
+      options: {
+        mergeIntoShorthands: false,
+        roundingPrecision: -1
+      },
       target: {
-        files: [{
-          expand: true,
-          cwd: 'src/css',
-          src: ['*.css', '!*.min.css'],
-          dest: 'site/css',
-          ext: '.min.css'
-        }]
+        files: {
+          'site/css/main.min.css': ['src/css/main.css', 'src/css/bs-oth.css']
+        }
       }
     },
-
     terser: {
       mainscript: {
         options: {

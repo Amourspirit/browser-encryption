@@ -631,22 +631,21 @@ const uiRefresh =() => {
         }
         let rowInt = 12 / cellsPerRow;
 
-        const createImageCell = (url) => {
+        const createImageCellBs4 = (url) => {
             let html = '<div class="col-md-' + rowInt + '">';
-            html += '<div class="thumbnail">';
-            html += '<a href="' + url + '" target="_blank">';
-            html += createImageHtml(url);
-            html += '</a></div></div>';
+            html += '<a href="' + url + '" data-toggle="lightbox" data-gallery="gallery">';
+            html += createImageHtmlBs4(url);
+            html += '</a></div>';
             return html;
         }
-        const createImageHtml = (url) => {
+        const createImageHtmlBs4 = (url) => {
             let html = '<img ';
             if (useLazyLoad) {
                 html += 'class="lozad" data-src="' + url + '"';
             } else {
                 html += 'src="' + url + '"';
             }
-            html += ' alt="" style="width:100%" />';
+            html += ' alt="" class="img-fluid rounded" alt="" style="width:100%"/>';
             return html;
         }
         const createEmptyCell = () => {
@@ -667,9 +666,9 @@ const uiRefresh =() => {
             j ++;
             if (j === 1) {
                 // create a new row
-                html = '<div class="row">';
+                html = '<div class="row" style="margin: 15px;">';
             }
-            html += createImageCell(m);
+            html += createImageCellBs4(m);
             if (j === cellsPerRow) {
                 j = 0;
                 // row is complete close and add to el
@@ -731,13 +730,13 @@ const uiRefresh =() => {
         const panelSelLinks = '#' + foundPanelLinksElId;
         const panelSelImages = '#' + foundPanelImageElId;
         if (isValid && str) {
-            document.getElementById('row_url').style.display = 'block';
-            document.getElementById('row_chipher_btn').style.display = 'block';
+            $("#row_url").show();
+            $("#row_chipher_btn").show();
             processLinks(str, linkEl);
             processImages(str, imgEl);
         } else {
-            document.getElementById('row_url').style.display = 'none';
-            document.getElementById('row_chipher_btn').style.display = 'none';
+            $("#row_url").hide();
+            $("#row_chipher_btn").hide();
             linkEl.innerHTML = '';
             imgEl.innerHTML = '';
             $(panelSelLinks).collapse("hide");

@@ -2,14 +2,14 @@ body {
   background-color: #f4e2bf;
 }
 .copy_icon {
-  text-align: right;
+  text-align: left;
+  font-size: 1.4rem;
 }
 .copy_icon>a {
-  display: block;
+  /* display: block; */
+  color: black;
 }
-.glyphicon-copy {
-  font-size: 1.5em;
-}
+
 .button-row {
   /* text-align: right; */
   padding-top: 0.5em;
@@ -46,22 +46,7 @@ footer {
 .outer {
   background-color: #f4e2bf;
 }
-.panel {
-  background-color: #eacf9c;
-}
-.panel-default>.panel-heading {
-  background-color: #e6c78c;
-}
-.panel-default {
-  border-color: #e6c78c;
-}
-.panel-default>.panel-heading+.panel-collapse>.panel-body {
-  border-top-color: #e6c78c;
-}
-.panel-footer {
-  background-color: #e8c480;
-  height: 35px;
-}
+
 .disclaimer{
   font-size: 0.8em;
 }
@@ -75,12 +60,35 @@ footer {
 .chevron {
   float: right;
 }
+.glyph-toggle,
+.chevron {
+  color: inherit;
+}
+.chevron > a {
+  color: inherit;
+}
+.card.card-links {
+  word-wrap: normal;
+}
+.card-user-manual {
+  margin-top: 5px;
+}
+.main-content {
+  padding-top: 20px;
+}
+.row-main {
+  margin-bottom: 0.3rem;
+}
+#url {
+  height: 50px;
+}
 #chipher,
 #plain,
 #url {
   white-space: pre;
   overflow: auto;
   resize: vertical;
+  font-family: monospace;
 }
 
 #header_wrap {
@@ -114,9 +122,6 @@ footer {
   text-decoration: none;
 }
 
-#sec_main_content {
-  padding-top: 40px;
-}
 
 #footer_wrap {
   background: #04253a;
