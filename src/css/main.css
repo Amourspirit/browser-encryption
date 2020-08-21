@@ -79,6 +79,66 @@ footer {
 .row-main {
   margin-bottom: 0.3rem;
 }
+.row.row-full-height {
+  height: 100%;
+  min-height: 100%;
+}
+.inputpane {
+  margin-top: 5px;
+  padding: 0.6em;
+  border: 1px solid #ccc;
+  overflow: auto;
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.modal {
+  background-color: white;
+}
+.modal-container {
+  flex-basis: 50%;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+}
+.modal-dialog.modal-dialog-full {
+  max-width: 100%;
+  width: 100%;
+  /* height: 100%; */
+  margin: 0;
+  padding: 0;
+}
+
+.modal-content.modal-content-full {
+  /* height: auto; */
+  min-height: 100%;
+  height: 100%;
+  border-radius: 0;
+}
+
+.modal-footer {
+  border-top: none;
+}
+
+.makdownrow {
+  height: 100%;
+  min-height: 100%;
+}
+textarea#markdown {
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-size: 12px;
+  resize: none;
+  height: 100%;
+  min-height: 100%;
+  width: 100%;
+  overflow: auto;
+}
+.marked-content {
+  overflow: auto;
+  /* overflow-y: scroll; */
+  height: 100%;
+}
 #url {
   height: 50px;
 }
