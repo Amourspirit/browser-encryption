@@ -36,10 +36,17 @@
     });
 })(jQuery);
 
-
 $(document).ready(function () {
     window.RANDOM_INLINE_KEY = keygenJS(256, {
         ekey: true
+    });
+    marked.setOptions({
+        renderer: new marked.Renderer(),
+        highlight: function (code, language) {
+            // const hljs = require('highlight.js');
+            const validLanguage = hljs.getLanguage(language) ? language : 'plaintext';
+            return hljs.highlight(validLanguage, code).value;
+        },
     });
     window.observer = lozad(); // lazy loads elements with default selector as '.lozad'
     window.observer.observe();

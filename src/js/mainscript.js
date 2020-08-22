@@ -601,9 +601,7 @@ const getParameterByName = (name, url) => {
 //#region UI
 const uiRefresh =() => {
     const foundImgagesElId ='found_images';
-    const foundLinksElId = 'found_links';
     const foundPanelImageElId = 'found_img_pnl';
-    const foundPanelLinksElId = 'found_links_pnl';
     const foundContentContentElId ="found_content";
     const thumbnailRowCount = 3;
     const create = (htmlStr) => {
@@ -614,40 +612,6 @@ const uiRefresh =() => {
             frag.appendChild(temp.firstChild);
         }
         return frag;
-    }
-    /**
-     * Process decrypted text for links and display links on page.
-     * @param {string} str Decrypted text
-     * @param {HTMLHtmlElement} el element that links will be appended
-     * @returns {boolean} True if links are found and processed; Otherwise, false.
-     */
-    const processLinksB4 = (str, el) => {
-        // regex here captures spaces but sometimes spaces are in querystinrg
-        let reUrl = /http(s)?:\/\/.(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b(.(?!\.jpg|\.png|\.gif|\.jpeg$))+$/gm;
-        let resUrl = str.match(reUrl);
-        el.innerHTML = '';
-        let strMatchHtml = '';
-        let retval = false;
-        const panelSel = '#' + foundPanelLinksElId;
-        if (resUrl) {
-            strMatchHtml = '<div class="list-group list-group-links">';
-            resUrl.forEach(m => {
-                strMatchHtml += '<a href="' + m + '" class="list-group-item list-group-item-action" target="_blank">';
-                strMatchHtml += '<span class="oi oi-link-intact" title="Found Link"> '
-                strMatchHtml += m + '</span></a>';
-            });
-            strMatchHtml += "</div>";
-            // match a url
-            el.appendChild(create(strMatchHtml));
-            // expand the area
-            $(".card-links").show();
-            $(panelSel).collapse("show");
-            retval = true;
-        } else {
-            $(panelSel).collapse("hide");
-            $(".card-links").hide();
-        }
-        return retval;
     }
     /**
      * Add a single Image to element el
@@ -771,22 +735,16 @@ const uiRefresh =() => {
     const uiChiperVal = () => {
         let isValid = (getValEncState() == ENCRYPTED_STATE.NORMAL);
         let str = getValChipher();
-        const linkEl = document.getElementById(foundLinksElId);
         const imgEl = document.getElementById(foundImgagesElId);
-        const panelSelLinks = '#' + foundPanelLinksElId;
         const panelSelImages = '#' + foundPanelImageElId;
         if (isValid && str) {
             $("#row_url").show();
             $("#row_chipher_btn").show();
-            // processLinks(str, linkEl);
-            processLinksB4(str, linkEl);
             processImages(str, imgEl);
         } else {
             $("#row_url").hide();
             $("#row_chipher_btn").hide();
-            linkEl.innerHTML = '';
             imgEl.innerHTML = '';
-            $(panelSelLinks).collapse("hide");
             $(panelSelImages).collapse("hide");
         }
     }

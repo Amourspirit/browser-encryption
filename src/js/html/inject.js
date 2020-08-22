@@ -45,8 +45,12 @@ Client Side Encryption and Decryption\
   const setOtherOnline = () => {
     let x = document.getElementById("oth_online_tools");
     if (x != null) {
-      let fragment = create('<a href="https://emn178.github.io/online-tools/index.html" target="blank">Other online encryption tools</a>');
-      x.appendChild(fragment);
+      x.innerHTML = '';
+      const othOnlineEncryption = create('<a href="https://emn178.github.io/online-tools/index.html" target="blank">Other online encryption tools</a>');
+      x.appendChild(othOnlineEncryption);
+      x.appendChild(create('<br>'));
+      const gitMarkDownEdit = create('<a href="https://jbt.github.io/markdown-editor/" target="blank">Markdown Editor</a>');
+      x.appendChild(gitMarkDownEdit);
     }
   }
   
