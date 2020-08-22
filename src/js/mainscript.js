@@ -6,6 +6,11 @@ const ENCRYPTED_STATE={
     ERR_NO_ENC: 102,
     ERR_GEN: 101
 }
+/**
+ * See : https://github.com/cure53/DOMPurify
+ */
+// const USE_PURIFY = typeof (DOMPurify) === 'function';
+// const USE_LAZY_LOAD = typeof (observer) === 'object';
 //#region encrypt/decrypt
 /**
  * Encrypts plain and updates the value of cipher on the page
@@ -22,6 +27,10 @@ const enc = () => {
         setValChipher('');
         setValEncState(ENCRYPTED_STATE.EMPTY, false);
         return;
+    }
+    // const clean = DOMPurify.sanitize(html);
+    if (window.USE_PURIFY) {
+        pp = DOMPurify.sanitize(pp);
     }
     let tp = getValMethod();
     let kk = getValKey();
@@ -94,33 +103,54 @@ const dec = () => {
     }
     let tp = getValMethod();
     let kk = getValKey();
-    let decrypted=null;
+    let decrypted = null;
     let success = false;
+    let strUtf8 = null;
     try {
         switch (tp) {
             case '3des':
                 decrypted = CryptoJS.DES.decrypt(removeWs(pp), kk);
-                setValChipher((decrypted.toString(CryptoJS.enc.Utf8)));
+                strUtf8 = decrypted.toString(CryptoJS.enc.Utf8);
+                if (window.USE_PURIFY) {
+                    strUtf8 = DOMPurify.sanitize(strUtf8);
+                }
+                setValChipher(strUtf8);
                 success = true;
                 break;
             case 'des':
                 decrypted = CryptoJS.TripleDES.decrypt(removeWs(pp), kk);
-                setValChipher((decrypted.toString(CryptoJS.enc.Utf8)));
+                strUtf8 = decrypted.toString(CryptoJS.enc.Utf8);
+                if (window.USE_PURIFY) {
+                    strUtf8 = DOMPurify.sanitize(strUtf8);
+                }
+                setValChipher(strUtf8);
                 success = true;
                 break;
             case 'aes':
                 decrypted = CryptoJS.AES.decrypt(removeWs(pp), kk);
-                setValChipher((decrypted.toString(CryptoJS.enc.Utf8)));
+                strUtf8 = decrypted.toString(CryptoJS.enc.Utf8);
+                if (window.USE_PURIFY) {
+                    strUtf8 = DOMPurify.sanitize(strUtf8);
+                }
+                setValChipher(strUtf8);
                 success = true;
                 break;
             case 'rc4':
                 decrypted = CryptoJS.RC4.decrypt(removeWs(pp), kk);
-                setValChipher((decrypted.toString(CryptoJS.enc.Utf8)));
+                strUtf8 = decrypted.toString(CryptoJS.enc.Utf8);
+                if (window.USE_PURIFY) {
+                    strUtf8 = DOMPurify.sanitize(strUtf8);
+                }
+                setValChipher(strUtf8);
                 success = true;
                 break;
             case 'rb':
                 decrypted = CryptoJS.Rabbit.decrypt(removeWs(pp), kk);
-                setValChipher((decrypted.toString(CryptoJS.enc.Utf8)));
+                strUtf8 = decrypted.toString(CryptoJS.enc.Utf8);
+                if (window.USE_PURIFY) {
+                    strUtf8 = DOMPurify.sanitize(strUtf8);
+                }
+                setValChipher(strUtf8);
                 success = true;
                 break;
             default:
@@ -231,9 +261,17 @@ const genQuery = () => {
     }
     let url = getUrlPath();
     url += '?enc=' + getValMethod();
-    url += '&val=' + encodeURIComponent(getValChipher());
+    let encodedStr = encodeURIComponent(getValChipher());
+    // replace brackets ( and ) wiht %28 and %29 respectivly.
+    // this is not absoultly necessary but links such as markdonw does not link () in links.
+    encodedStr = encodedStr.replace(/\(/g,'%28')
+        .replace(/\)/g,'%29');
+    url += '&val=' + encodedStr
     if(includeKey()) {
-        url += '&key=' + encodeURIComponent(getKeyHidden());
+        let keyStr = encodeURIComponent(getKeyHidden());
+        keyStr = keyStr.replace(/\(/g, '%28')
+            .replace(/\)/g, '%29');
+        url += '&key=' + keyStr;
     }
     setValUrl(url);
 }
@@ -510,6 +548,7 @@ const togglePassword =() => {
 const swap = () => {
     let src = getValPlain();
     let dst = getValChipher();
+
     setValChipher(src);
     setValPlain(dst);
     setValEncState(null, true);
@@ -565,6 +604,7 @@ const uiRefresh =() => {
     const foundLinksElId = 'found_links';
     const foundPanelImageElId = 'found_img_pnl';
     const foundPanelLinksElId = 'found_links_pnl';
+    const foundContentContentElId ="found_content";
     const thumbnailRowCount = 3;
     const create = (htmlStr) => {
         let frag = document.createDocumentFragment(),
@@ -581,7 +621,7 @@ const uiRefresh =() => {
      * @param {HTMLHtmlElement} el element that links will be appended
      * @returns {boolean} True if links are found and processed; Otherwise, false.
      */
-    const processLinks = (str, el) => {
+    const processLinksB4 = (str, el) => {
         // regex here captures spaces but sometimes spaces are in querystinrg
         let reUrl = /http(s)?:\/\/.(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b(.(?!\.jpg|\.png|\.gif|\.jpeg$))+$/gm;
         let resUrl = str.match(reUrl);
@@ -590,18 +630,22 @@ const uiRefresh =() => {
         let retval = false;
         const panelSel = '#' + foundPanelLinksElId;
         if (resUrl) {
-            strMatchHtml = '<ul>';
+            strMatchHtml = '<div class="list-group list-group-links">';
             resUrl.forEach(m => {
-                strMatchHtml += '<li><a href="' + m + '" target="_blank">' + m + '</a></li>';
+                strMatchHtml += '<a href="' + m + '" class="list-group-item list-group-item-action" target="_blank">';
+                strMatchHtml += '<span class="oi oi-link-intact" title="Found Link"> '
+                strMatchHtml += m + '</span></a>';
             });
-            strMatchHtml += '</ul>';
+            strMatchHtml += "</div>";
             // match a url
             el.appendChild(create(strMatchHtml));
             // expand the area
+            $(".card-links").show();
             $(panelSel).collapse("show");
             retval = true;
         } else {
             $(panelSel).collapse("hide");
+            $(".card-links").hide();
         }
         return retval;
     }
@@ -624,8 +668,7 @@ const uiRefresh =() => {
             throw new Error('rowcount must divide into 12 evenly');
         }
         let cellsPerRow = thumbnailRowCount;
-        const useLazyLoad = typeof (observer) === 'object';
-       
+               
         if (matches.length < thumbnailRowCount && 12 % matches.length  === 0) {
             cellsPerRow = matches.length;
         }
@@ -640,7 +683,7 @@ const uiRefresh =() => {
         }
         const createImageHtmlBs4 = (url) => {
             let html = '<img ';
-            if (useLazyLoad) {
+            if (window.USE_LAZY_LOAD) {
                 html += 'class="lozad" data-src="' + url + '"';
             } else {
                 html += 'src="' + url + '"';
@@ -687,7 +730,7 @@ const uiRefresh =() => {
             // rows += html;
             el.appendChild(create(html));
         }
-        if (useLazyLoad) {
+        if (window.USE_LAZY_LOAD) {
             observer.observe();
         }
     }
@@ -698,10 +741,11 @@ const uiRefresh =() => {
      * @returns {boolean} True if images are found and processed; Otherwise, false.
      */
     const processImages= (str, el) => {
-        let reImage = /(https?:\/\/(?:[0-9A-Za-z\-]+\.)+[a-z]{2,6}(?:\/[^\/#?]+)+\.(?:jpe?g|gif|a?png|webp|svg))/gm;
+        // let reImage = /(https?:\/\/(?:[0-9A-Za-z\-]+\.)+[a-z]{2,6}(?:\/[^\/#?]+)+\.(?:jpe?g|gif|a?png|webp|svg))/gm;
+        // let reImage = /((?:https?\:\/\/)(?:[a-zA-Z]{1}(?:[\w\-]+\.)+(?:[\w]{2,5}))(?:\:[\d]{1,5})?\/(?:[^\s\/]+\/)*(?:[^\s]+\.(?:jpe?g|gif|png))(?:\?\w+=\w+(?:&\w+=\w+)*)?)/gm;
+        let reImage = /(?:https?\:\/\/)([a-zA-Z0-9][a-zA-Z0-9-_]*\.)*[a-zA-Z0-9]*[a-zA-Z0-9-_]*[[a-zA-Z0-9]+\/(?:[^\s\/]+\/)*(?:[^\s]+\.(?:jpe?g|gif|png|webp|svg|apng))(?:\?\w+=\w+(?:&\w+=\w+)*)?/gm;
         let resImg = str.match(reImage);
         el.innerHTML = '';
-        let strMatchHtml = '';
         let retval = false;
         const panelSel = '#' + foundPanelImageElId;
         if (resImg) {
@@ -711,10 +755,12 @@ const uiRefresh =() => {
                 processImageSingle(el, resImg[0]);
             }
             // expand the area
+            $(".card-img").show();
             $(panelSel).collapse("show");
             retval = true;
         } else {
             $(panelSel).collapse("hide");
+            $(".card-img").hide();
         }
         return retval;
     }
@@ -732,7 +778,8 @@ const uiRefresh =() => {
         if (isValid && str) {
             $("#row_url").show();
             $("#row_chipher_btn").show();
-            processLinks(str, linkEl);
+            // processLinks(str, linkEl);
+            processLinksB4(str, linkEl);
             processImages(str, imgEl);
         } else {
             $("#row_url").hide();
@@ -743,8 +790,40 @@ const uiRefresh =() => {
             $(panelSelImages).collapse("hide");
         }
     }
-    
+    const processContent = () => {
+        let isValid = (getValEncState() == ENCRYPTED_STATE.NORMAL);
+        let str = getValChipher();
+        const contentEl = document.getElementById(foundContentContentElId);
+        contentEl.innerHTML = '';
+        if (isValid && str) {
+            let html = marked(str);
+            if (window.USE_PURIFY) {
+                html = DOMPurify.sanitize(html);
+            }
+            // set links to open in new window.
+            // html = $(html).newWindow().html();
+            if (window.USE_LAZY_LOAD ){
+                //html = $(html).bsResponsive().html();
+                let ll = $(html).lazyLoadExt();
+                $(contentEl).append(ll);
+            } else {
+                contentEl.innerHTML = html;
+            }
+            
+            $(".card-content").show();
+            $("#found_content_pnl").collapse("show");
+            if (window.USE_LAZY_LOAD) {
+                window.observer.observe();
+            }
+        } else {
+            contentEl.innerHTML = '';
+            $("#found_content_pnl").collapse("hide");
+            $(".card-content").hide();
+            
+        }
+    }
     uiChiperVal();
+    processContent();
 }
 //#endregion
 

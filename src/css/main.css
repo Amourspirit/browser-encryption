@@ -1,3 +1,21 @@
+:root {
+  --scrollbar: rgba(0, 0, 0, 0.2);
+  --black-025: #fafafb;
+  --black-050: #eff0f1;
+  --black-075: #e4e6e8;
+  --black-100: #d6d9dc;
+  --black-150: #c8ccd0;
+  --black-200: #bbc0c4;
+  --black-300: #9fa6ad;
+  --black-350: #9199a1;
+  --black-400: #848d95;
+  --black-500: #6a737c;
+  --black-600: #535a60;
+  --black-700: #3c4146;
+  --black-750: #2f3337;
+  --black-800: #242729;
+  --black-900: #0c0d0e;
+}
 body {
   background-color: #f4e2bf;
 }
@@ -5,11 +23,15 @@ body {
   text-align: left;
   font-size: 1.4rem;
 }
-.copy_icon>a {
-  /* display: block; */
-  color: black;
+.copy_icon,
+.edit-icon {
+  color: var(--black-800);
 }
 
+.copy_icon:hover,
+.edit-icon:hover {
+  color: var(--black-600);
+}
 .button-row {
   /* text-align: right; */
   padding-top: 0.5em;
@@ -124,6 +146,28 @@ footer {
 .makdownrow {
   height: 100%;
   min-height: 100%;
+}
+.list-group.list-group-links>a {
+  background-color: #e8c37d;
+}
+.list-group.list-group-links>a:hover {
+  background-color: rgb(241, 183, 96);
+}
+
+.ekko-lightbox.modal {
+  background-color: black;
+}
+.found-content pre {
+  margin-bottom: 1em;
+  padding: 12px 8px;
+  width: auto;
+  max-height: 600px;
+  overflow: auto;
+  font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,  Bitstream Vera Sans Mono, Courier New, monospace, sans-serif;
+  font-size: 13px;
+  background-color: var(--black-050);
+  border-radius: 3px;
+scrollbar-color: var(--scrollbar) transparent;
 }
 textarea#markdown {
   font-family: Menlo, Monaco, Consolas, "Courier New", monospace;

@@ -34,16 +34,9 @@
   <!-- Start Random Scripts -->
   <script src="js/enc/keygen.js"></script>
   <!-- End reandomScripts -->
-  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> -->
-  <!-- Latest compiled and minified bootstrap CSS -->
-  <!-- <link rel="stylesheet" type="text/css" href="css/crypto.css" /> -->
   <link rel="stylesheet" type="text/css" href="css/main.css" />
-
-
-  <!-- jQuery library -->
   <!-- jQuery library -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> -->
 
   <!-- Popper JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -95,7 +88,10 @@
   </script>
   <!-- Marked https://github.com/markedjs/marked -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- https://github.com/cure53/DOMPurify -->
+  <script src="https://cdn.jsdelivr.net/gh/cure53/DOMPurify/dist/purify.min.js"></script>
   <!-- othe libraries -->
+  <!-- https://github.com/ApoorvSaxena/lozad.js -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script>
   <script src="js/down.js"></script>
   <script type="module">
@@ -112,9 +108,7 @@
 <body>
   <div id="content_header"></div>
   <div id="main_content_wrap" class="container main-content">
-    <button id="makrdown_modal" type="button" class="btn btn-info btn-lg" data-toggle="modal"
-      data-target="#myModal">Open Modal</button>
-    <!-- <div class="card-group"> -->
+   <!-- <div class="card-group"> -->
     <div class="card card-default">
       <div class="card-heading">
         <h4 class="card-title">
@@ -153,8 +147,9 @@
                 <input type="password" id="key" name="key" class="form-control" placeholder="Enter key ..">
               </div>
             </div>
-            <div class="col-sm-1 copy_icon"><a href="#" onclick="copyKey(); return false;"
-                title="Click to copy key text to the clipboard" data-toggle="tooltip" data-placement="top">
+            <div class="col-sm-1"><a href="#" onclick="copyKey(); return false;"
+                title="Click to copy key text to the clipboard" data-toggle="tooltip" data-placement="top"
+                class="copy_icon">
                 <span class="oi oi-clipboard"></span>
               </a>
             </div>
@@ -212,14 +207,17 @@
                   spellcheck="false" style="height:200px;"></textarea>
               </div>
             </div>
-            <div class="col-sm-1 copy_icon"><a href="#" onclick="copyPlain(); return false;"
-                title="Click to copy this text to the clipboard" data-toggle="tooltip" data-placement="top">
-              <span class="oi oi-clipboard"></span></a>
-              <br>
-              <a id="edit_plain_md" href="#" data-toggle="tooltip"
-                  data-placement="top" title="Edit this content as markdonw"><span
+            <div class="col-sm-1">
+                <div class="row">
+                  <div class="col-sm-6"><a href="#" onclick="copyPlain(); return false;"
+                title="Click to copy this text to the clipboard" data-toggle="tooltip" data-placement="top"
+                class="copy_icon">
+              <span class="oi oi-clipboard"></span></a></div>
+                  <div class="col-sm-6"><a id="edit_plain_md" href="#" data-toggle="tooltip"
+                  data-placement="top" title="Edit this content as markdonw" class="edit-icon"><span
                   class="oi oi-pencil"></span>
-              </a>
+              </a></div>
+                </div>
             </div>
           </div>
           <div class="row row-main button-row">
@@ -235,8 +233,9 @@
                   placeholder="Result will appear here.." style="height:200px;"></textarea>
               </div>
             </div>
-            <div class="col-sm-1 copy_icon"><a href="#" onclick="copyChipher(); return false;"
-                title="Click to copy this text to the clipboard" data-toggle="tooltip" data-placement="top">
+            <div class="col-sm-1"><a href="#" onclick="copyChipher(); return false;"
+                title="Click to copy this text to the clipboard" data-toggle="tooltip" data-placement="top"
+                class="copy_icon">
                 <span class="oi oi-clipboard"></span>
               </a>
             </div>
@@ -259,8 +258,9 @@
                     placeholder="Url will appear here.."></textarea>
                 </div>
               </div>
-              <div class="col-sm-1 copy_icon"><a href="#" onclick="copyUrl(); return false;"
-                  title="Click to copy this text to the clipboard" data-toggle="tooltip" data-placement="top">
+              <div class="col-sm-1"><a href="#" onclick="copyUrl(); return false;"
+                  title="Click to copy this text to the clipboard" data-toggle="tooltip" data-placement="top"
+                  class="copy_icon">
                   <span class="oi oi-clipboard"></span>
                 </a>
               </div>
@@ -354,7 +354,24 @@
         </div>
       </div>
     </div>
-    <div class="card card-links">
+     <div class="card card-content" style="display:none;">
+       <div class="card-heading">
+         <h4 class="card-title">
+           <a class="collapse-content" data-toggle="collapse" href="#found_content_pnl"><span
+               class="oi oi-document"> Content</span></a>
+           <span class="chevron"><a class="collapse-content" data-toggle="collapse" href="#found_content_pnl"><span
+                 class="glyph-toggle oi oi-chevron-bottom"></span></a></span>
+         </h4>
+       </div>
+       <div id="found_content_pnl" class="card-collapse collapse">
+         <div id="found_content_body" class="card-body">
+           <div id="found_content" class="found-content"></div>
+         </div>
+         <div class="card-footer"><span class="chevron"><a class="collapse-content" data-toggle="collapse"
+               href="#found_content_pnl"><span class="glyph-toggle oi oi-chevron-top"></span></a></span></div>
+       </div>
+     </div>
+    <div class="card card-links" style="display:none;">
       <div class="card-heading">
         <h4 class="card-title">
           <a class="collapse-links" data-toggle="collapse" href="#found_links_pnl"><span class="oi oi-link-intact"
@@ -365,21 +382,13 @@
       </div>
       <div id="found_links_pnl" class="card-collapse collapse">
         <div id="found_links_body" class="card-body">
-          <div class="row found-link">
-            <div class="found-link-inner">
-              <div class="col-sm-2"></div>
-              <div class="col-sm-9 ">
-                <div id="found_links"></div>
-              </div>
-              <div class="col-sm-1"></div>
-            </div>
-          </div>
+          <div id="found_links"></div>
         </div>
         <div class="card-footer"><span class="chevron"><a class="collapse-links" data-toggle="collapse"
               href="#found_links_pnl"><span class="glyph-toggle oi oi-chevron-top"></span></a></span></div>
       </div>
     </div>
-    <div class="card card-img">
+    <div class="card card-img" style="display:none;">
       <div class="card-heading">
         <h4 class="card-title">
           <a class="collapse-imgages" data-toggle="collapse" href="#found_img_pnl"><span class="oi oi-image">
@@ -422,7 +431,10 @@
       <div class="modal-content modal-content-full">
         <div class="modal-header">
           <h4 class="modal-title">Modal Header</h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <div>
+           <button type="button" class="close" data-dismiss="modal"><span class="oi oi-x"></span></button>
+           <button type="button" class="close"><img id="modal_save_changes_header" src="img/save_50.png" style="width:24px;height:24px;" alt="Save"/></button>
+          </div>
         </div>
         <div class="modal-body">
           <div class="row makdownrow">
