@@ -814,5 +814,30 @@ const processKeygen = (length) => {
     }
     setValKey(generateEncKey(len, bHex));
 }
-
+/**
+ * Function that fires when there is a resize event of the browser window
+ * Raises bsSizeChanaged event when bootstrap size is changed
+ * @param {object} obj Contains name and index
+ * 
+ * obj.index can contain one the following values
+ * 0, 1, 2, 3, 4
+ * 
+ * obj.name can contain one of the following values
+ * xs, sm, md, lg, xl
+ */
+const windowResize =(obj) => {
+    // console.log('Bootstarp Changed: ', obj);
+    window.BS_SIZE_INDEX = obj.index;
+    // console.log('window.BS_SIZE_INDEX: ', window.BS_SIZE_INDEX);
+    // console.log('window.BS_SIZE_INDEX_PRV: ', window.BS_SIZE_INDEX_PRV);
+    if (!window.BS_SIZE_INDEX_PRV) {
+        window.BS_SIZE_INDEX_PRV = window.BS_SIZE_INDEX;
+        $(document).trigger("bsSizeChanaged", [window.BS_SIZE_INDEX, obj]);
+    }
+    if (window.BS_SIZE_INDEX !== window.BS_SIZE_INDEX_PRV) {
+        // console.log('Bootstarp Changed: ', obj);
+        $(document).trigger("bsSizeChanaged", [window.BS_SIZE_INDEX, obj]);
+        window.BS_SIZE_INDEX_PRV = window.BS_SIZE_INDEX;
+    }
+}
 //#endregion

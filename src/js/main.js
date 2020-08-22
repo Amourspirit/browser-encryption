@@ -37,6 +37,10 @@
 })(jQuery);
 
 $(document).ready(function () {
+    // console.log(bootstrapDetectBreakpoint());
+    $(window).on("resize", function (){
+            windowResize(bootstrapDetectBreakpoint());
+    });
     window.RANDOM_INLINE_KEY = keygenJS(256, {
         ekey: true
     });
@@ -189,8 +193,29 @@ $(document).ready(function () {
         // });
         $('.marked-content, #found_content').bsResponsive();
     });
-
     uiRefresh();
+});
+
+$(document).on("bsSizeChanaged", function (event, arg1, arg2) {
+    // console.log(event.data.foo); // "bar"
+    if(arg2.index > 3) {
+        $(".button-group").removeClass(function (index, className){
+            return (className.match(/(^|\s)btn-group[a-z\-]+/g) || []).join(' ');
+        }).addClass("btn-group-lg");
+        // $(".button-group").addClass("btn-group-lg");
+    } else if ( arg2.index === 3 ) {
+        $(".button-group").removeClass(function (index, className) {
+            return (className.match(/(^|\s)btn-group[a-z\-]+/g) || []).join(' ');
+        });
+    } else if (arg2.index === 2) {
+        $(".button-group").removeClass(function (index, className) {
+            return (className.match(/(^|\s)btn-group[a-z\-]+/g) || []).join(' ');
+        }).addClass("btn-group-sm");
+    } else {
+        $(".button-group").removeClass(function (index, className) {
+            return (className.match(/(^|\s)btn-group[a-z\-]+/g) || []).join(' ');
+        }).addClass("btn-group-vertical").addClass("btn-group-vert-wide");
+    }
 });
 
 (function () {

@@ -286,7 +286,7 @@ textarea#markdown {
   font-size: 12px;
   resize: none;
   height: 100%;
-  min-height: 100%;
+  min-height: 300px;
   width: 100%;
   overflow: auto;
 }
@@ -294,6 +294,9 @@ textarea#markdown {
   overflow: auto;
   /* overflow-y: scroll; */
   height: 100%;
+}
+.btn-group-vert-wide {
+  width: 100px;
 }
 #url {
   height: 50px;

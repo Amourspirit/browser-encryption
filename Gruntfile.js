@@ -207,7 +207,7 @@ module.exports = function (grunt) {
       },
       target: {
         files: {
-          'site/css/main.min.css': ['src/css/main.css', 'src/css/bs-oth.css']
+          'site/css/main.min.css': ['src/css/main.css', 'src/css/bs-oth.css', 'src/css/media992.css', 'src/css/media600.css']
         }
       }
     },
