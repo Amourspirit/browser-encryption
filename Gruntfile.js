@@ -48,7 +48,8 @@ module.exports = function (grunt) {
   // #region grunt init config
   grunt.initConfig({
     clean: {
-      dirs: ['scratch', 'site']
+      dirs: ['scratch', 'site'],
+      scratch: ['scratch']
     },
 
     tslint: {
@@ -113,16 +114,12 @@ module.exports = function (grunt) {
               replacement: ''
             },
             {
-              match: / src="js\/([0-9a-zA-Z-_]*)\.js"/g,
-              replacement: ' src="js/$1.min.js"'
+              match: /<script\s+src="([a-z/]+?)require\.js">/g,
+              replacement: '<script src="$1require.min.js">'
             },
             {
-              match: / src="js\/enc\/([0-9a-zA-Z-_]*)\.js"/g,
-              replacement: ' src="js/enc/$1.min.js"'
-            },
-            {
-              match: / href="css\/([0-9a-zA-Z-_]*)\.css"/g,
-              replacement: ' href="css/$1.min.css"'
+              match: /"\.\/js\/commonlocal"/g,
+              replacement: '"./js/common.min"'
             },
             {
               match: '[pdate]',
@@ -176,21 +173,6 @@ module.exports = function (grunt) {
         files: [
           { expand: true, flatten: true, src: ['src/index.html'], dest: 'scratch/' }
         ]
-      },
-      js_source: {
-        options: {
-          patterns: [
-            {
-              match: '[source]',
-              replacement: function () {
-                return packageData.homepage;
-              },
-            }
-          ]
-        },
-        files: [
-          { expand: true, flatten: true, src: ['src/js/html/inject.js'], dest: 'scratch/js/html/' }
-        ]
       }
     },
     minifyHtml: {
@@ -216,16 +198,16 @@ module.exports = function (grunt) {
         options: {
         },
         files: {
-          'site/js/main.min.js': [
-            'src/js/main.js',
-            'scratch/js/html/inject.js',
-            'src/js/copy.js',
-            'src/js/clip.js'
+          'site/js/lib/main.min.js': [
+            'src/js/lib/main.js',
+            'scratch/js/lib/html/inject.js',
+            'src/js/lib/copy.js',
+            'src/js/lib/clip.js'
           ],
-          'site/js/mainscript.min.js': ['src/js/mainscript.js'],
-          'site/js/download.min.js': ['src/js/download.js'],
-          'site/js/down.min.js': ['src/js/down.js'],
-          'site/js/enc/keygen.min.js': ['src/js/enc/keygen.js']
+          'site/js/lib/mainscript.min.js': ['src/js/lib/mainscript.js'],
+          'site/js/lib/download.min.js': ['src/js/lib/download.js'],
+          'site/js/lib/down.min.js': ['src/js/lib/down.js'],
+          'site/js/lib/enc/keygen.min.js': ['src/js/lib/enc/keygen.js']
           // 'site/js/clip.min.js': ['src/js/clip.js']
         }
       },
@@ -237,8 +219,83 @@ module.exports = function (grunt) {
         files: {
           'tmp/custom_options': ['test/fixtures/testing', 'test/fixtures/123']
         }
-      }
+      },
+      common: {
+        options: {
+        },
+        files: {
+          'site/js/common.min.js': ['src/js/common.js']
+          // 'site/js/clip.min.js': ['src/js/clip.js']
+        }
+      },
+      init: {
+        options: {
+        },
+        files: {
+          'site/js/lib/init.min.js': ['src/js/lib/init.js']
+          // 'site/js/clip.min.js': ['src/js/clip.js']
+        }
+      },
+      main: {
+        options: {
+        },
+        files: {
+          'site/js/lib/main.min.js': ['scratch/js/lib/main.js']
+          // 'site/js/clip.min.js': ['src/js/clip.js']
+        }
+      },
+      gen: {
+        options: {
+        },
+        files: {
+          'site/js/lib/gen.min.js': ['scratch/js/lib/gen.js']
+          // 'site/js/clip.min.js': ['src/js/clip.js']
+        }
+      },
+      require_js: {
+        options: {
+        },
+        files: {
+          'site/js/lib/require.min.js': ['src/js/lib/require.js']
+          // 'site/js/clip.min.js': ['src/js/clip.js']
+        }
+      },
     },
+    requirejs: {
+      compile_general: {
+        options: {
+          optimize: "none",
+          baseUrl: "src/js/lib",
+          mainConfigFile: "src/js/config/general.js",
+          // name: "path/to/almond", /* assumes a production build using almond, if you don't use almond, you
+          // need to set the "includes" or "modules" option instead of name */
+          include: [
+            "marked-init",
+            "inject",
+            "keygen",
+            "jq-bsresponsive",
+            "jq-lazyLoad",
+            "jq-newwindow",
+            "appdetect"
+          ],
+          out: "scratch/js/lib/gen.js"
+        }
+      },
+      compile_main: {
+        options: {
+          optimize: "none",
+          baseUrl: "src/js/lib",
+          mainConfigFile: "src/js/config/main.js",
+          // name: "path/to/almond", /* assumes a production build using almond, if you don't use almond, you
+          // need to set the "includes" or "modules" option instead of name */
+          include: [
+            "main",
+            "methods",
+          ],
+          out: "scratch/js/lib/main.js"
+        }
+      }
+    }
   });
   // #endregion
   // Actually load this plugin's task(s).
@@ -256,6 +313,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-terser');
+  grunt.loadNpmTasks('grunt-contrib-requirejs');
   // #endregion
   grunt.registerTask('default', [
     // 'build'
@@ -272,16 +330,30 @@ module.exports = function (grunt) {
   grunt.registerTask('start', [
     'shell:start'
   ]);
+  
+  grunt.registerTask('rmain', [
+    'clean:dirs',
+    'requirejs:compile_main',
+    'requirejs:compile_general',
+    'terser:main',
+    'terser:init',
+    'terser:gen'
+  ]);
   grunt.registerTask('build', [
     'clean:dirs',
     'copy:ico',
     'copy:img',
     'replace:html',
-    'replace:js_source',
     'htmllint:all',
     'minifyHtml:dist',
     'cssmin',
     //'uglify',
-    'terser:mainscript'
+    'requirejs:compile_main',
+    'requirejs:compile_general',
+    'terser:main',
+    'terser:init',
+    'terser:gen',
+    'terser:common',
+    'terser:require_js'
   ]);
 };

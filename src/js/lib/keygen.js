@@ -1,4 +1,6 @@
-const keygenJS = (length, opt) => {
+define([], function() {
+  'use strict';
+  const keygenJS = (length, opt) => {
   if (typeof length !== 'number') {
     throw new TypeError('keygenJS: length parmeter must be of type number');
   }
@@ -73,7 +75,7 @@ const keygenJS = (length, opt) => {
     if (opt.ekey) {
       str += PWD_SYMBOLS.ENCRYPT_KEY;
     }
-    strLength = str.length;
+    const strLength = str.length;
     if (strLength === 0) {
       throw new RangeError('keygenJS: Selected options will not produce a password, Select at least one option to include');
     }
@@ -138,3 +140,5 @@ const keygenJS = (length, opt) => {
   }, opt);
   return randomPassword(length, params);
 }
+  return keygenJS;
+});
