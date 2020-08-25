@@ -1,4 +1,4 @@
-define(['jquery','methods', 'appdetect'], function ($, methods, appdetect) {
+define(['jquery', 'methods', 'appdetect'], function ($, methods, appdetect) {
   'use strict';
   const injectHtmlJs = () => {
     const create = (htmlStr) => {
@@ -18,7 +18,7 @@ define(['jquery','methods', 'appdetect'], function ($, methods, appdetect) {
         let html = '\
 <div id="header_wrap" class="outer">\
 <header class="inner container">\
-<h1 id="project_title"><a href="' + methods.getUrlPath() + '">'+ blog_title + '</a></h1>\
+<h1 id="project_title"><a href="' + methods.getUrlPath() + '">' + blog_title + '</a></h1>\
 <h2 id="project_tagline">Client Side Encryption and Decryption</h2>\
 </header>\
 </div>';
@@ -69,7 +69,7 @@ define(['jquery','methods', 'appdetect'], function ($, methods, appdetect) {
 
     const injectEncryptionButtons = () => {
       let el = document.getElementById("btn_enc_cell");
-      if(!el) {
+      if (!el) {
         return;
       }
       let btnSwap = create('<button id="btnswap" class="button btn_refresh btn-success" onclick="methods.swap();" data-toggle="tooltip" title="Swap Text and Results"><span class="oi oi-loop-square"></span> Swap</button>');
@@ -85,6 +85,10 @@ define(['jquery','methods', 'appdetect'], function ($, methods, appdetect) {
     if (appdetect.isFacebookApp()) {
       let $this = $("#alert");
       $this.append('<div>Facebook app browser is not supported! Break out of app to use this page!</div>');
+      $this.addClass("alert-danger").fadeIn('slow');
+    } else if (appdetect.isWebview()) {
+      let $this = $("#alert");
+      $this.append('<div>Webview browsers is not supported! Break out of your current app to use this page!</div>');
       $this.addClass("alert-danger").fadeIn('slow');
     } else {
       injectEncryptionButtons();
