@@ -39,10 +39,6 @@ define([
 
   const ANDROID_BROWSER = isAndroid();
 
-  const test = () => {
-    "Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19".toLowerCase().match(/android.*applewebkit(?!.*version)/)
-    "Mozilla/5.0 (Linux; U; Android 4.1.1; en-gb; Build/KLP) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Safari/534.30".toLowerCase().match(/android.*applewebkit(?!.*version)/)
-  }
   /**
    * Gets is the this is a  IOS Browser
    * @returns {boolean} If not IOS or is IOS Webview returns false; Only returns true if user agent matches ios browser

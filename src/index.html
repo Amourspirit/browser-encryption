@@ -11,29 +11,13 @@
   <meta property="og:url" content="@@[base]">
   <meta property="og:title" content="@@EncryptTools">
   <meta property="og:description" content="@@description">
-  <meta property="og:type" content="website" />
+  <meta property="og:type" content="website">
+  <meta name="generator" content="@@[metaname] @@[version]">
   <!-- Site Title -->
   <title>@@EncryptTools</title>
   <style>
-    div#preloaded-images {
-      position: absolute;
-      overflow: hidden;
-      left: -9999px;
-      top: -9999px;
-      height: 1px;
-      width: 1px;
-    }
-
-    div#loading {
-      position: fixed;
-      left: 0px;
-      top: 0px;
-      width: 100%;
-      height: 100%;
-      z-index: 9999;
-      background: url('img/preloader.gif') 50% 50% no-repeat rgb(255, 255, 255);
-      opacity: 1;
-    }
+    div#preloaded-images {position: absolute;overflow: hidden;left: -9999px;top: -9999px;height: 1px;width: 1px;}
+    div#loading {position: fixed;left: 0px;top: 0px;width: 100%;height: 100%;z-index: 9999;background: url('img/preloader.gif') 50% 50% no-repeat rgb(255, 255, 255);opacity: 1;}
   </style>
   <!-- <script async src="js/lib/crypto.min.js"></script> -->
   <script type="text/javascript">
@@ -360,7 +344,7 @@
         </div>
       </div>
     </div>
-    <div class="card card-content" style="display:none;">
+    <div id="card_content" class="card card-content" style="display:none;">
       <div class="card-heading">
         <h4 class="card-title">
           <a class="collapse-content" data-toggle="collapse" href="#found_content_pnl"><span class="oi oi-document">
@@ -377,7 +361,7 @@
               href="#found_content_pnl"><span class="glyph-toggle oi oi-chevron-top"></span></a></span></div>
       </div>
     </div>
-    <div class="card card-img" style="display:none;">
+    <div id="card_img" class="card card-img" style="display:none;">
       <div class="card-heading">
         <h4 class="card-title">
           <a class="collapse-imgages" data-toggle="collapse" href="#found_img_pnl"><span class="oi oi-image">

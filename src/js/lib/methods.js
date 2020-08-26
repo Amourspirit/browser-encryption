@@ -1,5 +1,10 @@
-define(["jquery", "keygen", "crypto", "bootstrap"], function ($, keygenJS, crypto) {
-  if(window.CryptoJS == null) {
+define([
+  "jquery",
+  "keygen",
+  "crypto",
+  "bootstrap"
+], function ($, keygenJS, crypto) {
+  if (window.CryptoJS == null) {
     window.CryptoJS = crypto;
   }
   const methods = {};
@@ -8,32 +13,27 @@ define(["jquery", "keygen", "crypto", "bootstrap"], function ($, keygenJS, crypt
 
   const DEFAULT_MSG = 'Please enter encryption type';
   const ENCRYPT_WRAP = 67;
-  const ENCRYPTED_STATE = {
-    NORMAL: 0,
-    EMPTY: 1,
-    ERR_NO_ENC: 102,
-    ERR_GEN: 101
-  }
-  /**
- * See : https://github.com/cure53/DOMPurify
- */
-  // const USE_PURIFY = typeof (DOMPurify) === 'function';
-  // const USE_LAZY_LOAD = typeof (observer) === 'object';
+  const ENCRYPTED_STATE_NORMAL = 0;
+  const ENCRYPTED_STATE_EMPTY = 1;
+  const ENCRYPTED_STATE_ERR_GEN = 101;
+  const ENCRYPTED_STATE_ERR_NO_ENC = 102;
+
   /**
    * Encrypts plain and updates the value of cipher on the page
+  * @returns {boolean} True if encoding succeeded; Otherwise, false
    */
   methods.enc = () => {
     if (!methods.hpTest()) {
       // honey pot test failed.
       methods.setValChipher('');
-      setValEncState(ENCRYPTED_STATE.EMPTY, false);
-      return;
+      setValEncState(ENCRYPTED_STATE_EMPTY, false);
+      return false;
     }
     let pp = getValPlain();
     if (pp.length === 0) {
       methods.setValChipher('');
-      setValEncState(ENCRYPTED_STATE.EMPTY, false);
-      return;
+      setValEncState(ENCRYPTED_STATE_EMPTY, false);
+      return false;
     }
     // const clean = DOMPurify.sanitize(html);
     if (window.USE_PURIFY) {
@@ -79,34 +79,36 @@ define(["jquery", "keygen", "crypto", "bootstrap"], function ($, keygenJS, crypt
         default:
           // case def
           methods.setValChipher(DEFAULT_MSG);
-          setValEncState(ENCRYPTED_STATE.ERR_NO_ENC, false);
+          setValEncState(ENCRYPTED_STATE_ERR_NO_ENC, false);
           break;
       }
     } catch (error) {
       methods.setValChipher('Error occurred: Encryption failed...');
-      setValEncState(ENCRYPTED_STATE.ERR_GEN, false);
+      setValEncState(ENCRYPTED_STATE_ERR_GEN, false);
     }
     if (success === true) {
-      setValEncState(ENCRYPTED_STATE.NORMAL, true);
+      setValEncState(ENCRYPTED_STATE_NORMAL, true);
       setKeyHidden(null);
     }
+    return success;
   }
 
   /**
  * Decrypts the encrypted value of plain and populates the cipher field of the page
+ * @returns {boolean} True if decoding succeeded; Otherwise, false
  */
   methods.dec = () => {
     if (!methods.hpTest()) {
       // honey pot test failed.
       methods.setValChipher('');
-      setValEncState(ENCRYPTED_STATE.EMPTY, false);
-      return;
+      setValEncState(ENCRYPTED_STATE_EMPTY, false);
+      return false;
     }
     let pp = getValPlain();
     if (pp.length === 0) {
       methods.setValChipher('');
-      setValEncState(ENCRYPTED_STATE.EMPTY, false);
-      return;
+      setValEncState(ENCRYPTED_STATE_EMPTY, false);
+      return false;
     }
     let tp = getValMethod();
     let kk = getValKey();
@@ -163,17 +165,33 @@ define(["jquery", "keygen", "crypto", "bootstrap"], function ($, keygenJS, crypt
         default:
           // case def
           methods.setValChipher(DEFAULT_MSG);
-          setValEncState(ENCRYPTED_STATE.ERR_NO_ENC, false);
+          setValEncState(ENCRYPTED_STATE_ERR_NO_ENC, false);
           break;
       }
     } catch (error) {
       methods.setValChipher('Error occurred: Decryption failed...');
-      setValEncState(ENCRYPTED_STATE.ERR_GEN, false);
+      setValEncState(ENCRYPTED_STATE_ERR_GEN, false);
     }
     if (success === true) {
-      setValEncState(ENCRYPTED_STATE.NORMAL, true);
+      setValEncState(ENCRYPTED_STATE_NORMAL, true);
       setKeyHidden(null);
     }
+    return success;
+  }
+
+  /**
+ * Gets if Contents of Plain is encrypted text
+ * @returns {boolean} True if Plain is encrypted text; Otherwise false.
+ */
+  methods.isPlainEnc = () => {
+    return isStringEncrypted(getValPlain());
+  }
+  /**
+ * Gets if Contents of Chipher is encrypted text
+ * @returns {boolean} True if Plain is encrypted text; Otherwise false.
+ */
+  methods.isChipherEnc = () => {
+    return isStringEncrypted(methods.getValChipher());
   }
   //#endregion
 
@@ -421,33 +439,25 @@ define(["jquery", "keygen", "crypto", "bootstrap"], function ($, keygenJS, crypt
    * Sets the value of chipher readonly text area
    * @param {number} state A value of ENCODED_STATE
    * @param {boolean} validate Validate Encrypted Result if true; Otherwise ignore Encrypted state.
+   * @returns {void}
    */
   const setValEncState = (state, validate) => {
-    const _isValidateState = () => {
+    const isValidateState = () => {
       let stateVal = methods.getValChipher();
       return stateVal.length > 0;
     }
     if (!state) {
-      state = ENCRYPTED_STATE.NORMAL;
+      state = ENCRYPTED_STATE_NORMAL;
     }
     if (validate) {
-      if (!_isValidateState()) {
-        state = ENCRYPTED_STATE.EMPTY;
+      if (!isValidateState()) {
+        state = ENCRYPTED_STATE_EMPTY;
       }
     }
     let el = document.getElementById("enc_state");
     el.value = state;
   }
-  /**
-   * Returns a boolean value if encrypted stated is valid.
-   * Basically does result contain an encrypted string.
-   */
-  const isValidEncState = () => {
-    let el = document.getElementById("enc_state");
-    if (!el) return false;
-    let val = el.value;
-    return val == 0;
-  }
+
   /**
    * Gets the value of chipher readonl text area
    * @returns {string} value of cipher text area.
@@ -561,9 +571,10 @@ define(["jquery", "keygen", "crypto", "bootstrap"], function ($, keygenJS, crypt
   /**
    * Sets an encrypted value for hidden field value for the current key param.
    * If key is null or undefined then the key defaults to the visible key field value
-   * @param {string|null|undefined} key 
+   * @param {string|null|undefined} key
+   * @returns {void}
    */
-  setKeyHidden = (key) => {
+  const setKeyHidden = (key) => {
     if (key == null) {
       key = getValKey();
     }
@@ -631,6 +642,27 @@ define(["jquery", "keygen", "crypto", "bootstrap"], function ($, keygenJS, crypt
 
   //#region Util Functions
   /**
+   * Gets if a string is encrypted or not.
+   * @param {string} str 
+   * @returns {boolean} True if str is encrypted text; Otherwise false.
+   * 
+   * This is best guess by searching for spaces in str.
+   */
+  const isStringEncrypted = (str) => {
+    if (str == null) {
+      return false;
+    }
+    const strTest = str.trim();
+    if (strTest.length === 0) {
+      return false;
+    }
+    let index = strTest.indexOf(" ");
+    if (index >= 0) {
+      return false;
+    }
+    return true;
+  }
+  /**
    * Set the selected value of a select element
    * @param {string} id the unique id of element
    * @param {string} valueToSelect the value to select
@@ -673,10 +705,22 @@ define(["jquery", "keygen", "crypto", "bootstrap"], function ($, keygenJS, crypt
   //#endregion
 
   //#region UI
+  /**
+   * Refresh the Page elements and converts text from markdown to html.
+   * Creates a photo gallery if text contains images.
+   * @returns {void}
+   * 
+   */
   methods.uiRefresh = () => {
     const foundImgagesElId = 'found_images';
     const foundPanelImageElId = 'found_img_pnl';
-    const foundContentContentElId = "found_content";
+    const foundContentElId = "found_content";
+    const foundPanelContentElId = "found_content_pnl";
+
+    let isValidContent = (getValEncState() == ENCRYPTED_STATE_NORMAL);
+    const strCv = methods.getValChipher();
+    isValidContent = isValidContent && (!isStringEncrypted(strCv));
+
     const thumbnailRowCount = 3;
     const create = (htmlStr) => {
       let frag = document.createDocumentFragment(),
@@ -686,6 +730,27 @@ define(["jquery", "keygen", "crypto", "bootstrap"], function ($, keygenJS, crypt
         frag.appendChild(temp.firstChild);
       }
       return frag;
+    }
+    const changeStateCardImg = (state) => {
+      const panelSel = '#' + foundPanelImageElId;
+      if (state === 'show') {
+        $(".card-img").show();
+        $(panelSel).collapse("show");
+      } else {
+        $(panelSel).collapse("hide");
+        $(".card-img").hide();
+      }
+    }
+    const changeStateCardContent = (state) => {
+      const panelSel = '#' + foundPanelContentElId;
+      if (state === 'show') {
+        $(".card-content").show();
+        $(panelSel).collapse("show");
+      } else {
+        $(panelSel).collapse("hide");
+        $(".card-content").hide();
+
+      }
     }
     /**
      * Add a single Image to element el
@@ -785,7 +850,7 @@ define(["jquery", "keygen", "crypto", "bootstrap"], function ($, keygenJS, crypt
       let resImg = str.match(reImage);
       el.innerHTML = '';
       let retval = false;
-      const panelSel = '#' + foundPanelImageElId;
+
       if (resImg) {
         if (resImg.length > 1) {
           procssImageMultiple(el, resImg);
@@ -793,21 +858,20 @@ define(["jquery", "keygen", "crypto", "bootstrap"], function ($, keygenJS, crypt
           processImageSingle(el, resImg[0]);
         }
         // expand the area
-        $(".card-img").show();
-        $(panelSel).collapse("show");
+        changeStateCardImg("show");
         retval = true;
       } else {
-        $(panelSel).collapse("hide");
-        $(".card-img").hide();
+        changeStateCardImg("hide");
       }
       return retval;
     }
+
 
     /**
      * Process Decrtypted value of chipher text area
      */
     const uiChiperVal = () => {
-      let isValid = (getValEncState() == ENCRYPTED_STATE.NORMAL);
+      let isValid = (getValEncState() == ENCRYPTED_STATE_NORMAL);
       let str = methods.getValChipher();
       const imgEl = document.getElementById(foundImgagesElId);
       const panelSelImages = '#' + foundPanelImageElId;
@@ -823,11 +887,10 @@ define(["jquery", "keygen", "crypto", "bootstrap"], function ($, keygenJS, crypt
       }
     }
     const processContent = () => {
-      let isValid = (getValEncState() == ENCRYPTED_STATE.NORMAL);
-      let str = methods.getValChipher();
-      const contentEl = document.getElementById(foundContentContentElId);
+      const contentEl = document.getElementById(foundContentElId);
       contentEl.innerHTML = '';
-      if (isValid && str) {
+      let str = strCv;
+      if (isValidContent) {
         let html = marked(str);
         if (window.USE_PURIFY) {
           html = DOMPurify.sanitize(html);
@@ -841,21 +904,50 @@ define(["jquery", "keygen", "crypto", "bootstrap"], function ($, keygenJS, crypt
         } else {
           contentEl.innerHTML = html;
         }
-
-        $(".card-content").show();
-        $("#found_content_pnl").collapse("show");
+        changeStateCardContent("show");
         if (window.USE_LAZY_LOAD) {
           window.observer.observe();
         }
       } else {
         contentEl.innerHTML = '';
-        $("#found_content_pnl").collapse("hide");
-        $(".card-content").hide();
-
+        changeStateCardContent("hide");
       }
     }
     uiChiperVal();
     processContent();
+  }
+  /**
+   * Gets the break point value in as an object
+   * @returns {Object} object in the form of {name: 'lg', index: 4}
+   * if or any reason values cannot be computed then returns default of { name: "sm", index: 1 };
+   */
+  bsDetectBreak =  () => {
+    const breakpointNames = ["xl", "lg", "md", "sm", "xs"];
+    // sometimes on first run getComputedStyle is not returning any value.
+    // maybe bootstrap is not fully initiated yet. Defaults are bootstrap default and used as a stand in
+    // if values are not yet computing.
+    const breakpointValues = {
+      xl: "1200px",
+      lg: "992px",
+      md: "768px",
+      sm: "576px",
+      xs: "0px"
+    };
+    for (let j = 0; j < breakpointNames.length; j++) {
+      const breakpointName = breakpointNames[j];
+      const computed = window.getComputedStyle(document.documentElement).getPropertyValue('--breakpoint-' + breakpointName);
+      if (computed.length !== 0) {
+        breakpointValues[breakpointName] = computed;
+      }
+    }
+    let i = breakpointNames.length;
+    for (const breakpointName of breakpointNames) {
+      i--
+      if (window.matchMedia("(min-width: " + breakpointValues[breakpointName] + ")").matches) {
+        return { name: breakpointName, index: i };
+      }
+    }
+    return { name: "sm", index: 1 };
   }
   //#endregion
 
@@ -899,17 +991,14 @@ define(["jquery", "keygen", "crypto", "bootstrap"], function ($, keygenJS, crypt
    * obj.name can contain one of the following values
    * xs, sm, md, lg, xl
    */
-  methods.windowResize = (obj) => {
-    // console.log('Bootstarp Changed: ', obj);
+  methods.windowResize = () => {
+    const obj = bsDetectBreak(); //methods.bsDetectBreakpoint();
     window.BS_SIZE_INDEX = obj.index;
-    // console.log('window.BS_SIZE_INDEX: ', window.BS_SIZE_INDEX);
-    // console.log('window.BS_SIZE_INDEX_PRV: ', window.BS_SIZE_INDEX_PRV);
     if (!window.BS_SIZE_INDEX_PRV) {
       window.BS_SIZE_INDEX_PRV = window.BS_SIZE_INDEX;
       $(document).trigger("bsSizeChanaged", [window.BS_SIZE_INDEX, obj]);
     }
     if (window.BS_SIZE_INDEX !== window.BS_SIZE_INDEX_PRV) {
-      // console.log('Bootstarp Changed: ', obj);
       $(document).trigger("bsSizeChanaged", [window.BS_SIZE_INDEX, obj]);
       window.BS_SIZE_INDEX_PRV = window.BS_SIZE_INDEX;
     }
@@ -932,8 +1021,8 @@ define(["jquery", "keygen", "crypto", "bootstrap"], function ($, keygenJS, crypt
   }
 
   //#region Clipboard
-  methods.copyToClipboard = (text) =>{
-    const listener =(ev) => {
+  methods.copyToClipboard = (text) => {
+    const listener = (ev) => {
       ev.preventDefault();
       ev.clipboardData.setData('text/plain', text);
     };

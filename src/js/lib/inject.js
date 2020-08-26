@@ -72,9 +72,9 @@ define(['jquery', 'methods', 'appdetect'], function ($, methods, appdetect) {
       if (!el) {
         return;
       }
-      let btnSwap = create('<button id="btnswap" class="button btn_refresh btn-success" onclick="methods.swap();" data-toggle="tooltip" title="Swap Text and Results"><span class="oi oi-loop-square"></span> Swap</button>');
-      let btnDecode = create('<button id="btndec" class="button btn_refresh btn-danger" onclick="methods.dec();" data-toggle="tooltip" title="Decrypt Text"><span class="oi oi-lock-unlocked"></span> Decrypt</button>');
-      let btnEncode = create('<button id="btnenc" class="button btn_refresh btn-primary" onclick="methods.enc();" data-toggle="tooltip" title="Encrypt Text"><span class="oi oi-lock-locked"></span> Encrypt</button>');
+      let btnSwap = create('<button id="btnswap" class="button btn_refresh btn-success" data-toggle="tooltip" title="Swap Text and Results"><span class="oi oi-loop-square"></span> Swap</button>');
+      let btnDecode = create('<button id="btndec" class="button btn_refresh btn-danger" data-toggle="tooltip" title="Decrypt Text"><span class="oi oi-lock-unlocked"></span> Decrypt</button>');
+      let btnEncode = create('<button id="btnenc" class="button btn_refresh btn-primary" data-toggle="tooltip" title="Encrypt Text"><span class="oi oi-lock-locked"></span> Encrypt</button>');
       el.appendChild(btnSwap);
       el.appendChild(create(sp));
       el.appendChild(btnDecode);

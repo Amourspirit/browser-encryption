@@ -10,7 +10,6 @@ define([
     'lazy-lozad',
     'dom-purify',
     'marked',
-    'bootstrap-detect-breakpoint',
     'ekko-lightbox'
 ], function ($, methods, keygenJS, injectHtmlJs, lozad, purify) {
     'use strict';
@@ -24,7 +23,6 @@ define([
     if (window.DOMPurify == null) {
         window.DOMPurify = purify;
     }
-
     const initCommon = () => {
         // if (!!window.performance && window.performance.navigation.type === 2) {
         //     // value 2 means "The page was accessed by navigating into the history"
@@ -37,6 +35,62 @@ define([
         //         window.location.reload();
         //     }
         // };
+        const scrollToElement = (jqSelector) => {
+            var target = $(jqSelector);
+            if (target.length && target.is(":visible")) {
+                $('html,body').animate({
+                    scrollTop: target.offset().top
+                }, 1000);
+                return false;
+            }
+        }
+        const contentEncrypt = () => {
+            const $this = $("#btnenc");
+            if ($this.length === 0) {
+                return;
+            }
+            $this.on("click", function () {
+                methods.enc();
+            });
+        }
+        const contentDecrypt = () => {
+            const $this = $("#btndec");
+            if ($this.length === 0) {
+                return;
+            }
+            $this.on("click", function () {
+                const result = methods.dec();
+                if (result) {
+                    scrollToElement("#card_content");
+                }
+                
+            });
+        }
+        const contentDecryptScroll = () => {
+            const $this = $("#btndec");
+            if ($this.length === 0) {
+                return;
+            }
+            $this.on("click", function () {
+                scrollToElement("#card_content");
+            });
+        }
+        const contentSwap = () => {
+            const $this = $("#btnswap");
+            if ($this.length === 0) {
+                return;
+            }
+            $this.on("click", function () {
+                methods.swap();
+            });
+        }
+        const buttonsRefresh = () => {
+            $(".btn_refresh").on("click", function () {
+                methods.uiRefresh();
+                // clear any generate url value when buttons have been clicked
+                methods.setValUrl('');
+            });
+        }
         $(document).ready(function () {
   
             //methods.windowResize(bootstrapDetectBreakpoint());
@@ -48,7 +102,16 @@ define([
                 e.value = "no"; 
                 //location.reload();
             }
+            contentEncrypt();
+            contentDecrypt();
+            contentSwap();
+            buttonsRefresh();
+            // contentDecryptScroll must come afte buttonsRefresh for event order
+            contentDecryptScroll();
+            methods.windowResize();
+            methods.uiRefresh();
         });
+
          
         window.RANDOM_INLINE_KEY = keygenJS(256, {
             ekey: true
@@ -91,11 +154,7 @@ define([
         $("#chipher").on("change", function () {
             methods.uiRefresh();
         });
-        $(".btn_refresh").on("click", function () {
-            methods.uiRefresh();
-            // clear any generate url value when buttons have been clicked
-            methods.setValUrl('');
-        });
+        
         $('.collapse-links').on("click", function () {
             const el = $('.collapse-links>span.glyph-toggle');
             if (el.length > 0) {
@@ -230,7 +289,7 @@ define([
         }
         const bsSizeChange = (arg) => {
             if (arg ==  null) {
-                arg = { index: 0 };
+                arg = { index: 1 };
             }
             if (arg.index > 3) {
                 $(".button-group").removeClass(function (index, className) {
@@ -251,13 +310,15 @@ define([
                 }).addClass("btn-group-vertical").addClass("btn-group-vert-wide");
             }
         }
+        $(window).on('resize', function () {
+            methods.windowResize();
+            
+        });
         $(document).on("bsSizeChanaged", function (event, arg1, arg2) {
-            // console.log(event.data.foo); // "bar"
            bsSizeChange(arg2);
         });
         injectFavIcon();
-        bsSizeChange(bootstrapDetectBreakpoint());
-        methods.uiRefresh();
+       
     }
     return initCommon;
 });

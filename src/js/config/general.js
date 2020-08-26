@@ -15,7 +15,6 @@ requirejs.config({
     jquery: "empty:",
     bootstrap: "empty:",
     "ekko-lightbox": "empty:",
-    "bootstrap-detect-breakpoint": "empty:",
     marked: "empty:",
     highlight: "empty:",
     "highlight-ahk": "empty:",

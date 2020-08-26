@@ -163,6 +163,18 @@ module.exports = function (grunt) {
               },
             },
             {
+              match: '[metaname]',
+              replacement: function () {
+                return packageData._meta_generator;
+              },
+            },
+            {
+              match: '[version]',
+              replacement: function () {
+                return packageData.version;
+              },
+            },
+            {
               match: '[source]',
               replacement: function () {
                 return packageData.homepage;
