@@ -7,6 +7,13 @@ requirejs.config({
   "paths": {
     main: "main",
     methods: "methods",
+    "marked-init": "empty:",
+    "inject": "empty:",
+    "keygen": "empty:",
+    "jq-bsresponsive": "empty:",
+    "jq-lazyLoad": "empty:",
+    "jq-newwindow": "empty:",
+    "appdetect": "empty:",
     jquery: "empty:",
     bootstrap: "empty:",
     "ekko-lightbox": "empty:",

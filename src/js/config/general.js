@@ -12,6 +12,8 @@ requirejs.config({
     "jq-lazyLoad": "jquery.lazyLoadExt",
     "jq-newwindow": "jquery.newwindow",
     "appdetect": "appdetect",
+    main: "empty:",
+    methods: "empty:",
     jquery: "empty:",
     bootstrap: "empty:",
     "ekko-lightbox": "empty:",
