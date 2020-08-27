@@ -1,0 +1,17 @@
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+   img.gen-image {
+     display: block;
+     background: white;
+     padding: 6px;
+     border: 2px solid #ccc;
+     box-shadow: none
+   }
+
+    #project_tagline {
+      color: #e1ddbf;
+      font-size: 12px;
+      font-weight: 400;
+      text-shadow: #111 0 0 3px;
+    }
+}

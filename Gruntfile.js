@@ -60,8 +60,8 @@ module.exports = function (grunt) {
     },
 
     shell: {
-      start: 'npx lite-server --baseDir=\'site\' --port 10001',
-      startsrc: 'npx lite-server --baseDir=\'src\' --port 10002'
+      start: 'npm run  lite',
+      dev: 'npm run dev'
     },
 
     remove_comments: {
@@ -201,7 +201,14 @@ module.exports = function (grunt) {
       },
       target: {
         files: {
-          'site/css/main.min.css': ['src/css/main.css', 'src/css/bs-oth.css', 'src/css/media992.css', 'src/css/media600.css']
+          'site/css/main.min.css': [
+            'src/css/main.css',
+            'src/css/bs-oth.css',
+            'src/css/sm.css',
+            'src/css/md.css',
+            'src/css/lg.css',
+            'src/css/xl.css'
+          ]
         }
       }
     },
@@ -336,8 +343,8 @@ module.exports = function (grunt) {
     grunt.log.writeln("BUILD_VERSION:" + BUILD_VERSION);
     grunt.log.writeln("packageData.version:" + packageData.version);
   });
-  grunt.registerTask('startsrc', [
-    'shell:startsrc'
+  grunt.registerTask('dev', [
+    'shell:dev'
   ]);
   grunt.registerTask('start', [
     'shell:start'

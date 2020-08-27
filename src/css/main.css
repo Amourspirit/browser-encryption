@@ -80,6 +80,10 @@
 body {
   background-color: #f4e2bf;
 }
+ .h3,
+ h3 {
+   font-size: 1.0rem;
+ }
 .found-content blockquote,
 .marked-content blockquote {
   display: block;
@@ -323,28 +327,34 @@ textarea#markdown {
   float: left;
 }
 
-#project_title,
-#project_title a,
-#project_title a:hover {
-  margin: 0;
-  color: #e1ddbf;
-  font-size: 42px;
-  font-weight: 700;
-  text-shadow: #111 0 0 10px;
-  text-decoration: none;
-}
+ #project_title,
+ #project_title a,
+ #project_title a:hover {
+   margin: 0;
+   color: #e1ddbf;
+   font-size: 20px;
+   font-weight: 400;
+   text-shadow: #111 0 0 5px;
+   text-decoration: none;
+ }
 
 #project_tagline {
-  color: #e1ddbf;
-  font-size: 24px;
-  font-weight: 700;
-  background: 0 0;
-  text-shadow: #111 0 0 10px;
-  text-decoration: none;
-}
+   color: #e1ddbf;
+   font-size: 12px;
+   font-weight: 400;
+   text-shadow: #111 0 0 3px;
+   text-decoration: none;
+ }
 
 
 #footer_wrap {
   background: #04253a;
   text-decoration: none;
+}
+img.gen-image {
+  display: block;
+  background: white;
+  padding: 2px;
+  border: 1px solid #ccc;
+  box-shadow: none;
 }

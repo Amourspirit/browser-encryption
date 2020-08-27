@@ -9,6 +9,70 @@ define([
   }
   const methods = {};
 
+//#region Util Functions
+    /**
+     * Gets if a string is encrypted or not.
+     * @param {string} str 
+     * @returns {boolean} True if str is encrypted text; Otherwise false.
+     * 
+     * This is best guess by searching for spaces in str.
+     */
+    const isStringEncrypted = (str) => {
+      if (str == null) {
+        return false;
+      }
+      const strTest = str.trim();
+      if (strTest.length === 0) {
+        return false;
+      }
+      let index = strTest.indexOf(" ");
+      if (index >= 0) {
+        return false;
+      }
+      return true;
+    }
+    /**
+     * Set the selected value of a select element
+     * @param {string} id the unique id of element
+     * @param {string} valueToSelect the value to select
+     */
+    const selectElement = (id, valueToSelect) => {
+      let element = document.getElementById(id);
+      element.value = valueToSelect;
+    }
+    /**
+     * Removes spaces and new line characters from a string 
+     * @param {string} str the value to remove white spaces from
+     * 
+     * @returns {string} with white space removed
+     */
+    const removeWs = (str) => {
+      let retval = str.replace(/\r?\n|\r/g, '')
+        .replace(/\s+/g, '');
+      return retval;
+    }
+
+    /**
+     * Gets a value from
+     * @param {string} name is the name of the parameter to get from querytring 
+     * @param {string} url is the optional url that contains the querystring.
+     * Defaults to the browsers url.
+     * 
+     * @returns {string} value of the name value pair in the querystring.
+     * If url is not valid then returns null.
+     * If no value is found then return empty string
+     */
+    const getParameterByName = (name, url) => {
+      if (!url) url = window.location.href;
+      name = name.replace(/[\[\]]/g, '\\$&');
+      var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    }
+ //#endregion
+
   //#region encrypt/decrypt
 
   const DEFAULT_MSG = 'Please enter encryption type';
@@ -640,69 +704,6 @@ define([
   }
   //#endregion
 
-  //#region Util Functions
-  /**
-   * Gets if a string is encrypted or not.
-   * @param {string} str 
-   * @returns {boolean} True if str is encrypted text; Otherwise false.
-   * 
-   * This is best guess by searching for spaces in str.
-   */
-  const isStringEncrypted = (str) => {
-    if (str == null) {
-      return false;
-    }
-    const strTest = str.trim();
-    if (strTest.length === 0) {
-      return false;
-    }
-    let index = strTest.indexOf(" ");
-    if (index >= 0) {
-      return false;
-    }
-    return true;
-  }
-  /**
-   * Set the selected value of a select element
-   * @param {string} id the unique id of element
-   * @param {string} valueToSelect the value to select
-   */
-  const selectElement = (id, valueToSelect) => {
-    let element = document.getElementById(id);
-    element.value = valueToSelect;
-  }
-  /**
-   * Removes spaces and new line characters from a string 
-   * @param {string} str the value to remove white spaces from
-   * 
-   * @returns {string} with white space removed
-   */
-  const removeWs = (str) => {
-    let retval = str.replace(/\r?\n|\r/g, '')
-      .replace(/\s+/g, '');
-    return retval;
-  }
-
-  /**
-   * Gets a value from
-   * @param {string} name is the name of the parameter to get from querytring 
-   * @param {string} url is the optional url that contains the querystring.
-   * Defaults to the browsers url.
-   * 
-   * @returns {string} value of the name value pair in the querystring.
-   * If url is not valid then returns null.
-   * If no value is found then return empty string
-   */
-  const getParameterByName = (name, url) => {
-    if (!url) url = window.location.href;
-    name = name.replace(/[\[\]]/g, '\\$&');
-    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-      results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, ' '));
-  }
-  //#endregion
 
   //#region UI
   /**
@@ -752,18 +753,40 @@ define([
 
       }
     }
+   
+    const createImageHtmlBs4 = (url) => {
+      let html = '<img ';
+      if (window.USE_LAZY_LOAD) {
+        html += 'class="lozad gen-image" data-src="' + url + '"';
+      } else {
+        html += 'class="gen-image" src="' + url + '"';
+      }
+      html += ' alt="" class="img-fluid rounded" alt="" style="width:100%"/>';
+      return html;
+    }
+    const createImageCellBs4 = (url, col) => {
+
+      let html = '<div class="col-md-' + col + '">';
+      html += '<a href="' + url + '" data-toggle="lightbox" data-gallery="gallery">';
+      html += createImageHtmlBs4(url);
+      html += '</a></div>';
+      return html;
+    }
     /**
      * Add a single Image to element el
      * @param {HTMLHtmlElement} el the element to add image to
      * @param {string} url the url of the image to add.
      */
     const processImageSingle = (el, url) => {
-      let strMatchHtml = '<a href="' + url + '" target="_blank">';
-      strMatchHtml += '<img src="' + url + '" class="img-responsive center-block" alt="image">';
-      strMatchHtml += '</a>'
-      el.appendChild(create(strMatchHtml));
+      // margin top right bottom left
+      let html = '<div class="row" style="margin: 0.938rem -1.125rem 0.938rem -1.125rem;">';
+      html += createImageCellBs4(url, 12);
+      html += '</div>';
+      el.appendChild(create(html));
     }
     const procssImageMultiple = (el, matches) => {
+      // filter matches to only display unique images.
+      const unique = matches.filter((v, i, a) => a.indexOf(v) === i); 
       if (thumbnailRowCount > 12) {
         throw new Error('rowcount can not be greater than 12');
       }
@@ -772,35 +795,20 @@ define([
       }
       let cellsPerRow = thumbnailRowCount;
 
-      if (matches.length < thumbnailRowCount && 12 % matches.length === 0) {
-        cellsPerRow = matches.length;
+      if (unique.length < thumbnailRowCount && 12 % unique.length === 0) {
+        cellsPerRow = unique.length;
       }
       let rowInt = 12 / cellsPerRow;
 
-      const createImageCellBs4 = (url) => {
-        let html = '<div class="col-md-' + rowInt + '">';
-        html += '<a href="' + url + '" data-toggle="lightbox" data-gallery="gallery">';
-        html += createImageHtmlBs4(url);
-        html += '</a></div>';
-        return html;
-      }
-      const createImageHtmlBs4 = (url) => {
-        let html = '<img ';
-        if (window.USE_LAZY_LOAD) {
-          html += 'class="lozad" data-src="' + url + '"';
-        } else {
-          html += 'src="' + url + '"';
-        }
-        html += ' alt="" class="img-fluid rounded" alt="" style="width:100%"/>';
-        return html;
-      }
+      
+     
       const createEmptyCell = () => {
         let html = '<div class="col-md-' + rowInt + '"></div>';
         return html;
       }
       let j = 0;
-      let quotient = Math.floor(matches.length / cellsPerRow);
-      let remainder = matches.length % cellsPerRow;
+      let quotient = Math.floor(unique.length / cellsPerRow);
+      let remainder = unique.length % cellsPerRow;
       let rowCount = quotient;
       if (remainder > 0) {
         // add an extra row to handle odd number of images
@@ -808,13 +816,13 @@ define([
       }
       let html = '';
       // let rows = '';
-      matches.forEach(m => {
+      unique.forEach(m => {
         j++;
         if (j === 1) {
           // create a new row
-          html = '<div class="row" style="margin: 15px;">';
+          html = '<div class="row" style="margin: 0.938rem -0.938rem 0.938rem -0.938rem;">';
         }
-        html += createImageCellBs4(m);
+        html += createImageCellBs4(m, rowInt);
         if (j === cellsPerRow) {
           j = 0;
           // row is complete close and add to el

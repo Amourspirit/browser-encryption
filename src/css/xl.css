@@ -1,0 +1,10 @@
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  img.gen-image {
+    display: block;
+    background: white;
+    padding: 9px;
+    border: 2px solid #ccc;
+    box-shadow: 11px 11px 11px #999;
+  }
+}

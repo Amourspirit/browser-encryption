@@ -13,8 +13,10 @@ define(["jquery", "methods", "main"], function ($, methods, main) {
       { link: "//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/default.min.css", integrity: null, crossorigin: null },
       { link: "css/bs-oth.css", integrity: null, crossorigin: null },
       { link: "css/main.css", integrity: null, crossorigin: null },
-      { link: "css/media992.css", integrity: null, crossorigin: null },
-      { link: "css/media600.css", integrity: null, crossorigin: null }
+      { link: "css/sm.css", integrity: null, crossorigin: null },
+      { link: "css/md.css", integrity: null, crossorigin: null },
+      { link: "css/lg.css", integrity: null, crossorigin: null },
+      { link: "css/xl.css", integrity: null, crossorigin: null }
     ]);
     
     // initCommon();
