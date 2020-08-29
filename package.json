@@ -6,7 +6,7 @@
   "_site_base": "https://amourspirit.github.io/browser-encryption/",
   "_og_image": "https://i.postimg.cc/Y9XM2wNj/security-2168233-1200.jpg",
   "_meta_generator": "browser-encryption",
-  "version": "1.5.4",
+  "version": "1.6.0",
   "description": "Online Encryption and Decryption project.",
   "homepage": "https://github.com/Amourspirit/browser-encryption",
   "repository": {
@@ -19,7 +19,7 @@
   "scripts": {
     "lite": "lite-server -c configs/bs-config.json",
     "start": "npm run lite",
-    "dev": "lite-server -c configs/local-bs-config.json",
+    "startd": "lite-server -c configs/dev-bs-config.json",
     "startsrc": "npm run litesrc"
   },
   "author": "",
@@ -29,8 +29,8 @@
     "grunt-contrib-clean": "^2.0.0",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-cssmin": "^3.0.0",
-    "grunt-contrib-requirejs": "^1.0.0",
     "grunt-contrib-uglify": "^5.0.0",
+    "grunt-env": "^1.0.1",
     "grunt-html": "^14.2.0",
     "grunt-minify-html": "^3.0.0",
     "grunt-remove-comments": "^0.1.6",
@@ -38,6 +38,9 @@
     "grunt-shell": "^3.0.1",
     "grunt-terser": "^1.0.0",
     "lite-server": "^2.5.4",
-    "load-grunt-tasks": "^5.1.0"
+    "load-grunt-tasks": "^5.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-systemjs-loader": "^1.0.1",
+    "systemjs": "^6.5.0"
   }
 }

@@ -5,8 +5,8 @@
 requirejs.config({
   "baseUrl": "js/lib",
   "paths": {
-    main: "main",
-    methods: "methods",
+    "strBreak": "string.breaker.min",
+    "bowser": "bowser.min",
     "marked-init": "empty:",
     "inject": "empty:",
     "keygen": "empty:",
@@ -14,10 +14,11 @@ requirejs.config({
     "jq-lazyLoad": "empty:",
     "jq-newwindow": "empty:",
     "appdetect": "empty:",
+    main: "empty:",
+    methods: "empty:",
     jquery: "empty:",
     bootstrap: "empty:",
     "ekko-lightbox": "empty:",
-    "bootstrap-detect-breakpoint": "empty:",
     marked: "empty:",
     highlight: "empty:",
     "highlight-ahk": "empty:",
@@ -26,8 +27,6 @@ requirejs.config({
     "dom-purify": "empty:",
     "lazy-lozad": "empty:",
     detect: "empty:",
-    crypto: "empty:",
-    "strBreak": "empty:",
-    "bowser": "empty:"
+    crypto: "empty:"
   }
 });

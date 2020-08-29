@@ -1,6 +1,4 @@
-define([], function() {
-  'use strict';
-  const keygenJS = (length, opt) => {
+const keygenJS = (length, opt) => {
   if (typeof length !== 'number') {
     throw new TypeError('keygenJS: length parmeter must be of type number');
   }
@@ -136,9 +134,8 @@ define([], function() {
     hex: false,
     ws: false,
     b64: false,
-    ekey:false
+    ekey: false
   }, opt);
   return randomPassword(length, params);
 }
-  return keygenJS;
-});
+export default keygenJS;

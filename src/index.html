@@ -1,67 +1,77 @@
+<!-- Start System JS Loader -->
 <!DOCTYPE html>
 <html lang="en-GB">
 
 <head>
-  <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-  <meta name="description" content="@@description">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta property="og:image" content="@@[ogimage]">
-  <meta property="og:image:alt" content="@@[base]img/pg_img.jpg">
-  <meta name="twitter:image" content="@@[base]img/pg_img.jpg">
-  <meta property="og:url" content="@@[base]">
-  <meta property="og:title" content="@@EncryptTools">
-  <meta property="og:description" content="@@description">
-  <meta property="og:type" content="website">
-  <meta name="generator" content="@@[metaname] @@[version]">
-  <!-- Site Title -->
-  <title>@@EncryptTools</title>
-  <style>
-    div#preloaded-images {position: absolute;overflow: hidden;left: -9999px;top: -9999px;height: 1px;width: 1px;}
-    div#loading {position: fixed;left: 0px;top: 0px;width: 100%;height: 100%;z-index: 9999;background: url('img/preloader.gif') 50% 50% no-repeat rgb(255, 255, 255);opacity: 1;}
-  </style>
-  <!-- <script async src="js/lib/crypto.min.js"></script> -->
-  <script type="text/javascript">
-    if (!window.publication_date) {
-      window.publication_date = "@@[pdate]";
-    }
-    if (!window.blog_title) {
-      window.blog_title = "@@[title]";
-    }
-    const onWindowLoadPage = () => {
-      // on window code here
-    }
-    window.addEventListener ? window.addEventListener("load", onWindowLoadPage, false) : window.attachEvent &&
-    window.attachEvent("onload", onWindowLoadPage);
-  </script>
-  <!-- https://requirejs.org/ -->
-  <!-- <script data-main="js/app" src="https://requirejs.org/docs/release/2.3.6/minified/require.js"></script> -->
+   <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+   <meta name="description" content="@@description">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta property="og:image" content="@@[ogimage]">
+   <meta property="og:image:alt" content="@@[base]img/pg_img.jpg">
+   <meta name="twitter:image" content="@@[base]img/pg_img.jpg">
+   <meta property="og:url" content="@@[base]">
+   <meta property="og:title" content="@@EncryptTools">
+   <meta property="og:description" content="@@description">
+   <meta property="og:type" content="website">
+   <meta name="generator" content="@@[metaname] @@[version]">
+   <!-- Site Title -->
+   <title>@@EncryptTools</title>
+   <style>
+     div#preloaded-images {
+       position: absolute;
+       overflow: hidden;
+       left: -9999px;
+       top: -9999px;
+       height: 1px;
+       width: 1px;
+     }
 
-  <!-- Crypto Libraries -->
-  <script
-    src="https://cdn.jsdelivr.net/gh/agorlov/javascript-blowfish@698bbb50d533db3425d448be324028a1f20b4ffe/Blowfish.js">
-    </script>
+     div#loading {
+       position: fixed;
+       left: 0px;
+       top: 0px;
+       width: 100%;
+       height: 100%;
+       z-index: 9999;
+       background: url('img/preloader.gif') 50% 50% no-repeat rgb(255, 255, 255);
+       opacity: 1;
+     }
+   </style>
+     <!-- #REMOVE_BLOCK -->
+     <script>
+       const ENV_DEV = true;
+     </script>
+     <!-- #END_REMOVE_BLOCK -->
+   <!-- <script async src="js/lib/crypto.min.js"></script> -->
+   <script type="text/javascript">
+     if (!window.publication_date) {
+       window.publication_date = "@@[pdate]";
+     }
+     if (!window.blog_title) {
+       window.blog_title = "@@[title]";
+     }
+     const onWindowLoadPage = () => {
+       // on window code here
+     }
+     window.addEventListener ? window.addEventListener("load", onWindowLoadPage, false) : window.attachEvent &&
+       window.attachEvent("onload", onWindowLoadPage);
+   </script>
+  <script src="https://cdn.jsdelivr.net/npm/systemjs/dist/system.js"></script>
+  <!-- #REMOVE_BLOCK -->
+  <script src="https://cdn.jsdelivr.net/npm/systemjs/dist/extras/amd.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/systemjs/dist/extras/named-exports.min.js"></script> -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/systemjs/dist/extras/named-register.js"></script> -->
+  <!-- #END_REMOVE_BLOCK -->
 
-  <!-- <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script> -->
-  <script type="module">
-    import { stringBreaker } from
-      'https://cdn.jsdelivr.net/gh/Amourspirit/node-string-breaker@fa591f1fc40fa77e749e5f741c81e23ae292b3f0/js/node_string_breaker.min.js';
-    if (!window.strBreaker) {
-      window.strBreaker = stringBreaker;
-    }
-  </script>
-  <script src="js/lib/require.js"></script>
-  <script>
-    requirejs(["./js/commonlocal"], function (common) {
-      requirejs(["init", "marked-init"]);
-      requirejs(["highlight-ahk", "highlight-vbscript", "highlight-vim"]);
-      requirejs(["bootstrap"]);
-      requirejs(["jq-bsresponsive", "jq-lazyLoad", "jq-newwindow"]);
-    });
-  </script>
+
+  <script type="systemjs-importmap" src="json/importmap.json"></script>
+
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="628" />
-  <!-- #REMOVE_BLOCK -->
-  <!-- #END_REMOVE_BLOCK -->
+
+<script>
+  System.import("./js/system.entry.js");
+</script>
 </head>
 
 <body>
@@ -69,10 +79,10 @@
     <img src="img/preloader.gif" width="1" height="1" alt="preloader" />
   </div>
   <div id="loading"></div>
-  
+
   <div id="content_header" style="display:none;"></div>
   <div id="main_content_wrap" class="container main-content" style="display:none;">
-  <div id="alert" class="alert" style="display: none;"></div>
+    <div id="alert" class="alert" style="display: none;"></div>
     <!-- <div class="card-group"> -->
     <div class="card card-default">
       <div class="card-heading">
@@ -438,4 +448,6 @@
   </div>
 </body>
 
+
 </html>
+<!-- End System JS Loader -->

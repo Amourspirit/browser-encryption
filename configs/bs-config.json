@@ -1,7 +1,7 @@
 {
   "port": 10001,
   "files": [
-    "./site/**/*.{html,htm,css,js}"
+    "./site/**/*.{html,htm,css,js,json}"
   ],
   "server": {
     "baseDir": "./site"

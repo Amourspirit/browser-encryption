@@ -1,0 +1,33 @@
+{
+  "imports": {
+    "jquery": "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js",
+    "bootstrap": "https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js",
+    "ekko-lightbox": "https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js",
+    "marked": "https://cdn.jsdelivr.net/npm/marked/marked.min.js",
+    "highlight": "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js",
+    "highlight-ahk": "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/languages/autohotkey.min.js",
+    "highlight-vbscript": "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/languages/vbscript.min.js",
+    "highlight-vim": "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/languages/vim.min.js",
+    "dom-purify": "https://cdn.jsdelivr.net/gh/cure53/DOMPurify/dist/purify.min.js",
+    "lozad": "https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js",
+    "crypto": "https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js",
+    "main": "../js/lib/main.min.js",
+    "bowser": "../js/lib/bowser.min.js",
+    "strBreak": "../js/lib/string.breaker.min.js"
+  },
+  "meta": {
+    "bootstrap": {
+      "deps": [
+        "jquery"
+      ]
+    }
+  },
+  "integrity": {
+    "https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js": "sha512-nOQuvD9nKirvxDdvQ9OMqe2dgapbPB7vYAMrzJihw5m+aNcf0dX53m6YxM4LgA9u8e9eg9QX+/+mPu8kCNpV2A==",
+    "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js": "sha512-7t8APmYpzEsZP7CYoA7RfMPV9Bb+PJHa9x2WiUnDXZx3XHveuyWUtvNOexhkierl5flZ3tr92dP1mMS+SGlD+A==",
+    "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/languages/autohotkey.min.js": "sha512-ofhyK8FnbSKozaUIeYREd+E4YCGfm0UjG2iFHWvbDfgtKxgf18Arz/0udetANkqDb6aUe2hUs1UDHThDs/ZcsA==",
+    "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/languages/vbscript.min.js": "sha512-ziIVezguEHKamuKnvQIaTHkLnARkfGDys8JPZyIhNxIDV9J7w0KCWjzky3BEAYnrJ/68bRs5/VIdRYRu7mO8XA==",
+    "https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js": "sha512-Y2IiVZeaBwXG1wSV7f13plqlmFOx8MdjuHyYFVoYzhyRr3nH/NMDjTBSswijzADdNzMyWNetbLMfOpIPl6Cv9g==",
+    "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js": "sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
+  }
+}

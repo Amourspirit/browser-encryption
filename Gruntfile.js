@@ -3,6 +3,8 @@
   // Define your library strictly...
 })();
 module.exports = function (grunt) {
+  // const systemJSLoader = require('rollup-plugin-systemjs-loader/dist/index.js');
+  const systemJSLoader = require('rollup-plugin-systemjs-loader');
   var isWin = process.platform === "win32";
   var nodeMajor = _getNodeMajor();
   var packageData = grunt.file.readJSON('package.json');
@@ -47,8 +49,25 @@ module.exports = function (grunt) {
   // #endregion
   // #region grunt init config
   grunt.initConfig({
+    env: {
+      options: {
+        //Shared Options Hash
+      },
+      dev: {
+        NODE_ENV: 'development',
+        DEST: 'dev',
+        DEV_FILE: '.dev',
+        MIN: ''
+      },
+      build: {
+        NODE_ENV: 'production',
+        DEST: 'site',
+        DEV_FILE: '',
+        MIN: '.min'
+      }
+    },
     clean: {
-      dirs: ['scratch', 'site'],
+      dirs: ['scratch', '<%= DEST %>'],
       scratch: ['scratch']
     },
 
@@ -61,7 +80,8 @@ module.exports = function (grunt) {
 
     shell: {
       start: 'npm run  lite',
-      dev: 'npm run dev'
+      startd: 'npm run startd',
+      roll: 'npx rollup -c'
     },
 
     remove_comments: {
@@ -81,24 +101,56 @@ module.exports = function (grunt) {
     },
 
     copy: {
-      js: {
-        src: 'src/js/clip.js',
-        dest: 'site/js/clip.min.js',
+      js_bower: {
+        src: 'src/js/lib/bowser.min.js',
+        dest: '<%= DEST %>/js/lib/bowser.min.js',
+      },
+      js_strbrk: {
+        src: 'src/js/lib/string.breaker.min.js',
+        dest: '<%= DEST %>/js/lib/string.breaker.min.js',
       },
       img: {
         expand: true,
         cwd: 'src/img/',
         src: '**/*',
-        dest: 'site/img/',
+        dest: '<%= DEST %>/img/',
       },
       ico: {
         expand: true,
         cwd: 'src/',
         src: '**/*.ico',
-        dest: 'site/',
+        dest: '<%= DEST %>/',
+      },
+      json: {
+        src: 'src/json/importmap<%= DEV_FILE %>.json',
+        dest: '<%= DEST %>/json/importmap.json',
+      },
+      cssjson: {
+        src: 'src/json/css<%= DEV_FILE %>.json',
+        dest: '<%= DEST %>/json/css.json',
+      },
+      dev_js_entry: {
+        src: 'src/js/system.entry<%= DEV_FILE %>.js',
+        dest: '<%= DEST %>/js/system.entry.js',
+      },
+      dev_js_mod: {
+        src: 'scratch/js/lib/nomodule/main.js',
+        dest: '<%= DEST %>/js/lib/main.js',
+      },
+      dev_css: {
+        expand: true,
+        cwd: 'src/css/',
+        src: '**/*',
+        dest: '<%= DEST %>/css/',
       }
     },
     htmllint: {
+      options: {
+        ignore: [
+          'Bad value “systemjs-importmap” for attribute “type” on element “script”: Subtype missing.',
+      'A “script” element with a “src” attribute must not have a “type” attribute whose value is anything other than the empty string, a JavaScript MIME type, or “module”.'
+    ]
+      },
       all: ['scratch/**/*.html']
     },
     replace: {
@@ -112,14 +164,6 @@ module.exports = function (grunt) {
             {
               match: / type="text\/javascript"/g,
               replacement: ''
-            },
-            {
-              match: /<script\s+src="([a-z/]+?)require\.js">/g,
-              replacement: '<script src="$1require.min.js">'
-            },
-            {
-              match: /"\.\/js\/commonlocal"/g,
-              replacement: '"./js/common.min"'
             },
             {
               match: '[pdate]',
@@ -185,12 +229,80 @@ module.exports = function (grunt) {
         files: [
           { expand: true, flatten: true, src: ['src/index.html'], dest: 'scratch/' }
         ]
+      },
+      html_dev: {
+        options: {
+          patterns: [
+            {
+              match: '[pdate]',
+              replacement: function () {
+                var d = new Date();
+                var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                var y = d.getFullYear();
+                var m = months[d.getMonth()];
+                var day = d.getDate();
+                return m + ' ' + day.toString() + ', ' + y.toString();
+              },
+            },
+            {
+              match: 'EncryptTools',
+              replacement: function () {
+                return packageData._site_title;
+              },
+            },
+            {
+              match: 'description',
+              replacement: function () {
+                return packageData.description;
+              },
+            },
+            {
+              match: '[title]',
+              replacement: function () {
+                return packageData._title;
+              },
+            },
+            {
+              match: '[base]',
+              replacement: function () {
+                return packageData._site_base;
+              },
+            },
+            {
+              match: '[ogimage]',
+              replacement: function () {
+                return packageData._og_image;
+              },
+            },
+            {
+              match: '[metaname]',
+              replacement: function () {
+                return packageData._meta_generator;
+              },
+            },
+            {
+              match: '[version]',
+              replacement: function () {
+                return packageData.version;
+              },
+            },
+            {
+              match: '[source]',
+              replacement: function () {
+                return packageData.homepage;
+              },
+            }
+          ]
+        },
+        files: [
+          { expand: true, flatten: true, src: ['src/index.html'], dest: 'dev/' }
+        ]
       }
     },
     minifyHtml: {
        dist: {
         files: {
-          'site/index.html': 'scratch/index.html'
+          '<%= DEST %>/index.html': 'scratch/index.html'
         }
       }
     },
@@ -201,7 +313,7 @@ module.exports = function (grunt) {
       },
       target: {
         files: {
-          'site/css/main.min.css': [
+          '<%= DEST %>/css/main.min.css': [
             'src/css/main.css',
             'src/css/bs-oth.css',
             'src/css/sm.css',
@@ -217,17 +329,7 @@ module.exports = function (grunt) {
         options: {
         },
         files: {
-          'site/js/lib/main.min.js': [
-            'src/js/lib/main.js',
-            'scratch/js/lib/html/inject.js',
-            'src/js/lib/copy.js',
-            'src/js/lib/clip.js'
-          ],
-          'site/js/lib/mainscript.min.js': ['src/js/lib/mainscript.js'],
-          'site/js/lib/download.min.js': ['src/js/lib/download.js'],
-          'site/js/lib/down.min.js': ['src/js/lib/down.js'],
-          'site/js/lib/enc/keygen.min.js': ['src/js/lib/enc/keygen.js']
-          // 'site/js/clip.min.js': ['src/js/clip.js']
+          '<%= DEST %>/js/lib/main.min.js': ['scratch/js/lib/nomodule/main.js'],
         }
       },
       custom_options: {
@@ -243,77 +345,50 @@ module.exports = function (grunt) {
         options: {
         },
         files: {
-          'site/js/common.min.js': ['src/js/common.js']
-          // 'site/js/clip.min.js': ['src/js/clip.js']
+          '<%= DEST %>/js/common.min.js': ['src/js/common.js']
+          // '<%= DEST %>/js/clip.min.js': ['src/js/clip.js']
+        }
+      },
+      entry: {
+        options: {
+        },
+        files: {
+          '<%= DEST %>/js/system.entry.js': ['src/js/system.entry.js']
+          // '<%= DEST %>/js/clip.min.js': ['src/js/clip.js']
         }
       },
       init: {
         options: {
         },
         files: {
-          'site/js/lib/init.min.js': ['src/js/lib/init.js']
-          // 'site/js/clip.min.js': ['src/js/clip.js']
+          '<%= DEST %>/js/lib/init.min.js': ['src/js/lib/init.js']
+          // '<%= DEST %>/js/clip.min.js': ['src/js/clip.js']
         }
       },
       main: {
         options: {
         },
         files: {
-          'site/js/lib/main.min.js': ['scratch/js/lib/main.js']
-          // 'site/js/clip.min.js': ['src/js/clip.js']
+          '<%= DEST %>/js/lib/main.min.js': ['scratch/js/lib/main.js']
+          // '<%= DEST %>/js/clip.min.js': ['src/js/clip.js']
         }
       },
       gen: {
         options: {
         },
         files: {
-          'site/js/lib/gen.min.js': ['scratch/js/lib/gen.js']
-          // 'site/js/clip.min.js': ['src/js/clip.js']
+          '<%= DEST %>/js/lib/gen.min.js': ['scratch/js/lib/gen.js']
+          // '<%= DEST %>/js/clip.min.js': ['src/js/clip.js']
         }
       },
       require_js: {
         options: {
         },
         files: {
-          'site/js/lib/require.min.js': ['src/js/lib/require.js']
-          // 'site/js/clip.min.js': ['src/js/clip.js']
+          '<%= DEST %>/js/lib/require.min.js': ['src/js/lib/require.js']
+          // '<%= DEST %>/js/clip.min.js': ['src/js/clip.js']
         }
       },
-    },
-    requirejs: {
-      compile_general: {
-        options: {
-          optimize: "none",
-          baseUrl: "src/js/lib",
-          mainConfigFile: "src/js/config/general.js",
-          // name: "path/to/almond", /* assumes a production build using almond, if you don't use almond, you
-          // need to set the "includes" or "modules" option instead of name */
-          include: [
-            "marked-init",
-            "inject",
-            "keygen",
-            "jq-bsresponsive",
-            "jq-lazyLoad",
-            "jq-newwindow",
-            "appdetect"
-          ],
-          out: "scratch/js/lib/gen.js"
-        }
-      },
-      compile_main: {
-        options: {
-          optimize: "none",
-          baseUrl: "src/js/lib",
-          mainConfigFile: "src/js/config/main.js",
-          // name: "path/to/almond", /* assumes a production build using almond, if you don't use almond, you
-          // need to set the "includes" or "modules" option instead of name */
-          include: [
-            "main",
-            "methods",
-          ],
-          out: "scratch/js/lib/main.js"
-        }
-      }
     }
   });
   // #endregion
@@ -333,7 +408,14 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-terser');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
+  grunt.loadNpmTasks('grunt-env');
+
   // #endregion
+  grunt.registerTask('loadconst', 'Load constants', function () {
+    grunt.config('DEST', process.env.DEST);
+    grunt.config('DEV_FILE', process.env.DEV_FILE);
+    grunt.config('MIN', process.env.MIN);
+  });
   grunt.registerTask('default', [
     // 'build'
     'build'
@@ -343,12 +425,15 @@ module.exports = function (grunt) {
     grunt.log.writeln("BUILD_VERSION:" + BUILD_VERSION);
     grunt.log.writeln("packageData.version:" + packageData.version);
   });
-  grunt.registerTask('dev', [
-    'shell:dev'
-  ]);
+
+
   grunt.registerTask('start', [
     'shell:start'
   ]);
+  grunt.registerTask('envtest', function () {
+    grunt.log.writeln('output from task envtest');
+    grunt.log.writeln("DEST:" + process.env.DEST);
+  });
   
   grunt.registerTask('rmain', [
     'clean:dirs',
@@ -359,20 +444,46 @@ module.exports = function (grunt) {
     'terser:gen'
   ]);
   grunt.registerTask('build', [
+    'env:build',
+    'loadconst',
     'clean:dirs',
+    'shell:roll',
+    'copy:js_bower',
+    'copy:js_strbrk',
     'copy:ico',
     'copy:img',
+    'copy:json',
+    'copy:cssjson',
     'replace:html',
     'htmllint:all',
     'minifyHtml:dist',
     'cssmin',
     //'uglify',
-    'requirejs:compile_main',
-    'requirejs:compile_general',
-    'terser:main',
-    'terser:init',
-    'terser:gen',
-    'terser:common',
-    'terser:require_js'
+    //'requirejs:compile_main',
+    //'requirejs:compile_general',
+    //'requirejs:compile_min',
+    'terser:mainscript',
+    'terser:entry'
+  ]);
+  grunt.registerTask('dev', [
+    'env:dev',
+    'loadconst',
+    'clean:dirs',
+    'shell:roll',
+    'copy:js_bower',
+    'copy:js_strbrk',
+    'copy:ico',
+    'copy:img',
+    'copy:json',
+    'copy:cssjson',
+    'copy:dev_js_entry',
+    'copy:dev_js_mod',
+    'copy:dev_css',
+    'replace:html_dev'
+  ]);
+  grunt.registerTask('startd', [
+    'env:dev',
+    'loadconst',
+    'shell:startd'
   ]);
 };

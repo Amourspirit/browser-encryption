@@ -25,6 +25,8 @@ requirejs.config({
     "dom-purify": "empty:",
     "lazy-lozad": "empty:",
     detect: "empty:",
-    crypto: "empty:"
+    crypto: "empty:",
+    "strBreak": "empty:",
+    "bowser": "empty:"
   }
 });
