@@ -1,6 +1,6 @@
 
 import $ from 'jquery';
-import initMain from './main'; // circular dependency
+import initMain from './main';
 import methods from './methods';
 import './appdetect';
 let cssJsonUrl = './json/css.json';

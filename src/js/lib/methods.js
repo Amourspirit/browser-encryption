@@ -2,12 +2,17 @@ import $ from 'jquery';
 import crypto from 'crypto';
 import keygenJS from './keygen';
 // import './string.breaker.min.js';
-import strBreak from 'strBreak';
+// import strBreak from 'strBreak';
+//import strBreak from 'string-breaker';
+// import 'string-breaker';
+import { stringBreaker } from 'string-breaker';
+// import * as strBreak  from 'string-breaker';
+//import { stringBreaker } from '../../../node_modules/string-breaker/index.js';
 
 if (window.CryptoJS == null) {
   window.CryptoJS = crypto;
 }
-const stringBreaker = strBreak.stringBreaker;
+// const stringBreaker = strBreak.stringBreaker;
 const methods = {};
 // const $ = jQuery;
 //#region Util Functions
