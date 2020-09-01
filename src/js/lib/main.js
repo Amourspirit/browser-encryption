@@ -7,6 +7,7 @@ import lozad from 'lozad';
 import methods from './methods';
 import injectHtmlJs from './inject';
 import marked from 'marked';
+import { clUrl } from './misc/element-values';
 
 // const $ = jQuery;
 
@@ -37,7 +38,7 @@ const initCommon = () => {
             }, 1000);
             return false;
         }
-    }
+    };
     const contentEncrypt = () => {
         const $this = $("#btnenc");
         if ($this.length === 0) {
@@ -46,7 +47,7 @@ const initCommon = () => {
         $this.on("click", function () {
             methods.enc();
         });
-    }
+    };
     const contentDecrypt = () => {
         const $this = $("#btndec");
         if ($this.length === 0) {
@@ -59,7 +60,7 @@ const initCommon = () => {
             }
 
         });
-    }
+    };
     const contentDecryptScroll = () => {
         const $this = $("#btndec");
         if ($this.length === 0) {
@@ -68,7 +69,7 @@ const initCommon = () => {
         $this.on("click", function () {
             scrollToElement("#card_content");
         });
-    }
+    };
     const contentSwap = () => {
         const $this = $("#btnswap");
         if ($this.length === 0) {
@@ -77,14 +78,14 @@ const initCommon = () => {
         $this.on("click", function () {
             methods.swap();
         });
-    }
+    };
     const buttonsRefresh = () => {
         $(".btn_refresh").on("click", function () {
             methods.uiRefresh();
             // clear any generate url value when buttons have been clicked
-            methods.setValUrl('');
+            clUrl().set('');
         });
-    }
+    };
     $(document).ready(function () {
 
         //methods.windowResize(bootstrapDetectBreakpoint());
@@ -144,7 +145,7 @@ const initCommon = () => {
     // $('[data-toggle="tooltip"]').tooltip();
     $('[data-toggle="tooltip"]').tooltip({
         trigger: 'hover'
-    })
+    });
     $("#chipher").on("change", function () {
         methods.uiRefresh();
     });
@@ -209,9 +210,9 @@ const initCommon = () => {
         const html = marked($("#markdown").val());
         const clean = DOMPurify.sanitize(html);
         $(".marked-content").html($(clean).lazyLoadExt().bsResponsive().newWindow());
-        $('#markdown').trigger('focus')
+        $('#markdown').trigger('focus');
         window.observer.observe();
-    })
+    });
     $('#edit_plain_md').on('click', function (event) {
         event.preventDefault();
         $("#markdown").val(function () {
@@ -225,7 +226,7 @@ const initCommon = () => {
         $('#markdown').trigger('focus');
         window.observer.observe();
 
-    })
+    });
     /**
      * Bind the makrdown textarea and updated the makrked-content to reflect the makred up html version.
      */
@@ -280,7 +281,7 @@ const initCommon = () => {
         // metaImage.setAttribute('property', 'og:image');
         // metaImage.content = url + "img/pg_img.jpg";
         // document.getElementsByTagName('head')[0].appendChild(metaImage);
-    }
+    };
     const bsSizeChange = (arg) => {
         if (arg == null) {
             arg = { index: 1 };
@@ -303,7 +304,7 @@ const initCommon = () => {
                 return (className.match(/(^|\s)btn-group[a-z\-]+/g) || []).join(' ');
             }).addClass("btn-group-vertical").addClass("btn-group-vert-wide");
         }
-    }
+    };
     $(window).on('resize', function () {
         methods.windowResize();
 
@@ -313,5 +314,5 @@ const initCommon = () => {
     });
     injectFavIcon();
 
-}
+};
 export default initCommon;

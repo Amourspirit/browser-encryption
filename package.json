@@ -6,7 +6,7 @@
   "_site_base": "https://amourspirit.github.io/browser-encryption/",
   "_og_image": "https://i.postimg.cc/Y9XM2wNj/security-2168233-1200.jpg",
   "_meta_generator": "browser-encryption",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "Online Encryption and Decryption project.",
   "homepage": "https://github.com/Amourspirit/browser-encryption",
   "repository": {
@@ -22,10 +22,12 @@
     "startd": "lite-server -c configs/bs-config.dev.json",
     "startsrc": "npm run litesrc"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Paul Moss <Amourspirit@users.noreply.github.com> (https://github.com/Amourspirit)",
+  "license": "MIT",
   "devDependencies": {
+    "@rbnlffl/rollup-plugin-eslint": "^1.1.2",
     "@rollup/plugin-node-resolve": "^9.0.0",
+    "bowser": "^2.10.0",
     "grunt": "^1.3.0",
     "grunt-contrib-clean": "^2.0.0",
     "grunt-contrib-copy": "^1.0.0",
@@ -42,6 +44,7 @@
     "load-grunt-tasks": "^5.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-systemjs-loader": "^1.0.1",
+    "store2": "^2.12.0",
     "string-breaker": "^1.0.0",
     "systemjs": "^6.5.0"
   }

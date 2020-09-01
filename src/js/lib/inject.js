@@ -1,7 +1,6 @@
 import $ from 'jquery';
-import methods from './methods';
 import appdetect from './appdetect';
-
+import { getUrlPath } from './misc/url';
 
 const injectHtmlJs = () => {
   const create = (htmlStr) => {
@@ -12,7 +11,7 @@ const injectHtmlJs = () => {
       frag.appendChild(temp.firstChild);
     }
     return frag;
-  }
+  };
   const sp = '&nbsp';
   const setHeader = () => {
     let x = document.getElementById("content_header");
@@ -21,14 +20,14 @@ const injectHtmlJs = () => {
       let html = '\
 <div id="header_wrap" class="outer">\
 <header class="inner container">\
-<h1 id="project_title"><a href="' + methods.getUrlPath() + '">' + blog_title + '</a></h1>\
+<h1 id="project_title"><a href="' + getUrlPath() + '">' + blog_title + '</a></h1>\
 <h2 id="project_tagline">Client Side Encryption and Decryption</h2>\
 </header>\
 </div>';
       let fragment = create(html);
       x.appendChild(fragment);
     }
-  }
+  };
 
   const setSorceCodeLink = () => {
     let x = document.getElementById("source_code");
@@ -38,7 +37,7 @@ const injectHtmlJs = () => {
       x.appendChild(fragment);
       x.style.display = 'block';
     }
-  }
+  };
 
   const setSignature = () => {
     let x = document.getElementById("signature");
@@ -46,7 +45,7 @@ const injectHtmlJs = () => {
       let fragment = create('<p>' + publication_date + '</p>');
       x.appendChild(fragment);
     }
-  }
+  };
 
   const setOtherOnline = () => {
     let x = document.getElementById("oth_online_tools");
@@ -58,7 +57,7 @@ const injectHtmlJs = () => {
       const gitMarkDownEdit = create('<a href="https://jbt.github.io/markdown-editor/" target="blank">Markdown Editor</a>');
       x.appendChild(gitMarkDownEdit);
     }
-  }
+  };
 
   const injectHoneyPot = () => {
     let x = document.getElementById("hp");
@@ -68,7 +67,7 @@ const injectHtmlJs = () => {
       x.appendChild(website);
       x.appendChild(name);
     }
-  }
+  };
 
   const injectEncryptionButtons = () => {
     let el = document.getElementById("btn_enc_cell");
@@ -83,7 +82,7 @@ const injectHtmlJs = () => {
     el.appendChild(btnDecode);
     el.appendChild(create(sp));
     el.appendChild(btnEncode);
-  }
+  };
 
   if (appdetect.isFacebookApp()) {
     let $this = $("#alert");
@@ -101,6 +100,6 @@ const injectHtmlJs = () => {
   setSignature();
   setOtherOnline();
   injectHoneyPot();
-}
+};
 
 export default injectHtmlJs;

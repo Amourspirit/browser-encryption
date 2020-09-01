@@ -1,4 +1,5 @@
 import { nodeResolve } from '@rollup/plugin-node-resolve';
+import eslint from '@rbnlffl/rollup-plugin-eslint';
 
 const _mod = 'scratch/js/lib';
 const _noMod = 'scratch/js/lib/nomodule';
@@ -10,8 +11,7 @@ const _globals = {
   'dom-purify': 'DOMPurify',
   'lozad': 'lozad',
   'marked': 'marked',
-  'bowser': 'bowser'
-  // 'strBreak': 'stringBreaker'
+  // 'bowser': 'bowser'
 }
 //const input = ['./src/js/tmp/jquery.bsresponsive.js'];
 export default {
@@ -20,7 +20,8 @@ export default {
     // use "jsnext:main" if possible
     // see https://github.com/rollup/rollup/wiki/jsnext:main
     jsnext: true
-  })
+  }),
+  eslint()
   ],
   output: [
     {
@@ -34,5 +35,5 @@ export default {
       globals: _globals
     }
   ],
-  external: ["jquery", "crypto", "dom-purify", "lozad", "marked", "bowser"]
+  external: ["jquery", "crypto", "dom-purify", "lozad", "marked"]
 }

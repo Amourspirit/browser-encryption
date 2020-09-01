@@ -12,8 +12,6 @@
     await System.import("highlight-ahk");
     await System.import("highlight-vbscript");
     await System.import("highlight-vim");
-    await System.import("bowser");
-    // await System.import("strBreak");
     await System.import("main");
     await System.import("ekko-lightbox");
   }
@@ -24,6 +22,4 @@
   }
 
   main();
-
-
 }());

@@ -15,37 +15,7 @@ module.exports = function (grunt) {
     var major = s.replace(/v?(?:(\d+)\.)?(?:(\d+)\.)?(\*|\d+)/, '$1');
     return parseInt(major, 10);
   }
-  function bumpVerson(segment) {
-    var file = 'package.json';
-    var jpkg = grunt.file.readJSON(file);
-    var verRegex = /(?:(\d+)\.)?(?:(\d+)\.)?(\*|\d+)/;
-    var verStr = jpkg.version;
-    var major = parseInt(verStr.replace(verRegex, '$1'), 10);
-    var minor = parseInt(verStr.replace(verRegex, '$2'), 10);
-    var build = parseInt(verStr.replace(verRegex, '$3'), 10);
-    var save = false;
-    if (segment === 'build') {
-      build++;
-      save = true;
-    } else if (segment === 'minor') {
-      minor++;
-      build = 0;
-      save = true;
-    } else if (segment === 'major') {
-      major++;
-      minor = 0;
-      build = 0;
-      save = true;
-    }
-    if (save === true) {
-      var newVer = major + '.' + minor + '.' + build;
-      jpkg.version = newVer;
-      grunt.file.write(file, JSON.stringify(jpkg, null, 2));
-      return newVer;
-    } else {
-      return verStr;
-    }
-  }
+
   // #endregion
   // #region grunt init config
   grunt.initConfig({
@@ -101,10 +71,6 @@ module.exports = function (grunt) {
     },
 
     copy: {
-      js_bower: {
-        src: 'src/js/lib/bowser.min.js',
-        dest: '<%= DEST %>/js/lib/bowser.min.js',
-      },
       js_strbrk: {
         src: 'src/js/lib/string.breaker.min.js',
         dest: '<%= DEST %>/js/lib/string.breaker.min.js',
@@ -448,8 +414,6 @@ module.exports = function (grunt) {
     'loadconst',
     'clean:dirs',
     'shell:roll',
-    'copy:js_bower',
-    // 'copy:js_strbrk',
     'copy:ico',
     'copy:img',
     'copy:json',
@@ -458,10 +422,6 @@ module.exports = function (grunt) {
     'htmllint:all',
     'minifyHtml:dist',
     'cssmin',
-    //'uglify',
-    //'requirejs:compile_main',
-    //'requirejs:compile_general',
-    //'requirejs:compile_min',
     'terser:mainscript',
     'terser:entry'
   ]);
@@ -470,8 +430,6 @@ module.exports = function (grunt) {
     'loadconst',
     'clean:dirs',
     'shell:roll',
-    'copy:js_bower',
-    // 'copy:js_strbrk',
     'copy:ico',
     'copy:img',
     'copy:json',

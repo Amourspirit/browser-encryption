@@ -1,11 +1,11 @@
 
 import $ from 'jquery';
+import { loadCSSJson } from './misc/link-loader';
 import initMain from './main';
-import methods from './methods';
 import './appdetect';
 let cssJsonUrl = './json/css.json';
 
-methods.loadCSSLinksJson(cssJsonUrl);
+loadCSSJson(cssJsonUrl);
 
 // $('#loading').hide();
 $('#content_header').show();

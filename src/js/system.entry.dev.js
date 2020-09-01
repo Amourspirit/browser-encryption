@@ -1,4 +1,4 @@
-(function () {
+(() => {
   System.baseURL = "/";
   async function loadScripts() {
     await System.import("jquery");
@@ -12,8 +12,6 @@
     await System.import("highlight-ahk");
     await System.import("highlight-vbscript");
     await System.import("highlight-vim");
-    await System.import("bowser");
-    // await System.import("strBreak");
     await System.import("main");
     await System.import("ekko-lightbox");
   }
@@ -22,8 +20,5 @@
     await loadScripts();
     //console.log('Done loading scripts in order');
   }
-
   main();
-
-
-}());
+})();

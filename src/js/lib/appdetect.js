@@ -1,5 +1,6 @@
 // import * as bowser from './bowser.min.js';
-import bowser from "bowser"
+// import bowser from "bowser"
+import Bowser from "bowser";
 
 const appdetect = {};
 
@@ -10,9 +11,10 @@ const appdetect = {};
 const getUserAgent = () => {
   let ua = navigator.userAgent || navigator.vendor || window.opera;
   return ua;
-}
-const parser = bowser.getParser(getUserAgent());
-const result = parser.getResult();
+};
+const browser = Bowser.getParser(getUserAgent());
+//const parser = bowser.getParser(getUserAgent());
+const result = browser.getResult();
 
 
 /**
@@ -26,7 +28,7 @@ const USER_AGENT = getUserAgent().toLowerCase();
  */
 const isIos = () => {
   return /iphone|ipod|ipad/.test(USER_AGENT);
-}
+};
 
 
 const IOS_BROWSER = isIos();
@@ -38,7 +40,7 @@ const IOS_BROWSER = isIos();
  */
 const isAndroid = () => {
   return USER_AGENT.indexOf("android") > -1;
-}
+};
 
 const ANDROID_BROWSER = isAndroid();
 
@@ -62,21 +64,21 @@ const isIosWebView = () => {
   // result = result && USER_AGENT.match(/\(ip.*applewebkit(?!.*(version|crios))/);
   // return result;
   return USER_AGENT.match(/\(ip.*applewebkit(?!.*(version|crios))/);
-}
+};
 
 const isAndoridWebView = () => {
   if (ANDROID_BROWSER === false) {
     return false;
   }
-  return USER_AGENT.match(/android.*applewebkit(?=.*version)/)
-}
+  return USER_AGENT.match(/android.*applewebkit(?=.*version)/);
+};
 /**
  * Gets is User agent matches facebook
  * @returns {boolean} True if user agent matches factbook; Otherwise, false.
  */
 appdetect.isFacebookApp = () => {
   return (USER_AGENT.indexOf("fban") > -1) || (USER_AGENT.indexOf("fbav") > -1);
-}
+};
 
 /**
  * Gets is Web veiw is detected
@@ -86,6 +88,6 @@ appdetect.isWebview = () => {
   let result = isIosWebView();
   result = result || isAndoridWebView();
   return result;
-}
+};
 
 export default appdetect;

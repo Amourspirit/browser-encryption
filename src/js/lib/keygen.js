@@ -12,7 +12,7 @@ const keygenJS = (length, opt) => {
     let crypto = window.crypto || window.msCrypto;
     const int = crypto.getRandomValues(new Uint32Array(1))[0];
     return int / 2 ** 32;
-  }
+  };
 
   /**
    * Return integers in the range of [min, max)
@@ -27,14 +27,14 @@ const keygenJS = (length, opt) => {
       throw new RangeError('randomInt: min and max must be greater than 0');
     }
     return Math.floor(randomFloat() * range + min);
-  }
+  };
 
   /**
    * Generate an array of integers in the range of [min, max).
    */
   const randomIntArray = (length, min, max) => {
     return new Array(length).fill(0).map(() => randomInt(min, max));
-  }
+  };
 
   const PWD_SYMBOLS = {
     ALPHA: 'abcdefghigjlmnopqrstuvwxyzABCDEFGHIJKLMNOPQURTUVWXYZ',
@@ -83,7 +83,7 @@ const keygenJS = (length, opt) => {
       pwd += str.charAt(i);
     });
     return pwd;
-  }
+  };
   const getOptions = (defaultOptions, options) => {
     if (options === null || options === undefined ||
       typeof options === 'function') {
@@ -137,5 +137,5 @@ const keygenJS = (length, opt) => {
     ekey: false
   }, opt);
   return randomPassword(length, params);
-}
+};
 export default keygenJS;
