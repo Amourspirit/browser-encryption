@@ -11,8 +11,7 @@
     "dom-purify": "https://cdn.jsdelivr.net/gh/cure53/DOMPurify/dist/purify.min.js",
     "lozad": "https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js",
     "crypto": "https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js",
-    "main": "../js/lib/main.min.js",
-    "bowser": "../js/lib/bowser.min.js"
+    "main": "../js/lib/main.min.js"
   },
   "meta": {
     "bootstrap": {
