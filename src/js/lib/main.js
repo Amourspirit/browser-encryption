@@ -7,8 +7,20 @@ import lozad from 'lozad';
 import methods from './methods';
 import injectHtmlJs from './inject';
 import marked from 'marked';
-import { clUrl } from './misc/element-values';
-
+import {
+    clUrl,
+    clBtnEnc,
+    clBtnDec,
+    clBtnSwap,
+    clBtnGenUrl,
+    clKey,
+    clPlain
+ } from './misc/element-instances';
+import {
+    Encrypt as enc,
+    Decrypt as dec,
+    methodIsSelected
+} from './crypt/crypt';
 // const $ = jQuery;
 
 if (window.lozad == null) {
@@ -40,42 +52,61 @@ const initCommon = () => {
         }
     };
     const contentEncrypt = () => {
-        const $this = $("#btnenc");
-        if ($this.length === 0) {
+        const cBtnEnc = clBtnEnc();
+        if(cBtnEnc.exist() === false) {
             return;
         }
+        const $this = $(cBtnEnc.el);
         $this.on("click", function () {
-            methods.enc();
+            if (clPlain().get() === "") {
+                $.getJSON('json/toast/plain-empty.json', function (data) {
+                    $.toast(data);
+                });
+                return;
+            }
+            if (methodIsSelected() === false) {
+                $.getJSON('json/toast/method-not-sel.json', function (data) {
+                    $.toast(data);
+                });
+                return;
+            }
+            const cKey = clKey();
+            if(cKey.get() === "") {
+                $.getJSON('json/toast/key-missing.json', function (data) {
+                    $.toast(data);
+                });
+            }
+            enc();
         });
     };
+   
     const contentDecrypt = () => {
-        const $this = $("#btndec");
-        if ($this.length === 0) {
+        const cBtnDec = clBtnDec();
+        if (cBtnDec.exist() === false) {
             return;
         }
-        $this.on("click", function () {
-            const result = methods.dec();
+        $(cBtnDec.el).on("click", function () {
+            const result = dec(); // methods.dec();
             if (result) {
                 scrollToElement("#card_content");
             }
-
         });
     };
     const contentDecryptScroll = () => {
-        const $this = $("#btndec");
-        if ($this.length === 0) {
+        const cBtnDec = clBtnDec();
+        if (cBtnDec.exist() === false) {
             return;
         }
-        $this.on("click", function () {
+        $(cBtnDec.el).on("click", function () {
             scrollToElement("#card_content");
         });
     };
     const contentSwap = () => {
-        const $this = $("#btnswap");
-        if ($this.length === 0) {
+        const cBtnSwap = clBtnSwap();
+        if(cBtnSwap.exist() === false) {
             return;
         }
-        $this.on("click", function () {
+        $(cBtnSwap.el).on("click", function () {
             methods.swap();
         });
     };
@@ -86,8 +117,21 @@ const initCommon = () => {
             clUrl().set('');
         });
     };
+    const buttonGenUrlOnclick =() => {
+        const cBtnGenUrl = clBtnGenUrl();
+        if (cBtnGenUrl.exist() === false) {
+            return;
+        }
+        $(cBtnGenUrl.el).on("click", function () {
+            if (methods.isChipherEnc() === false) {
+                $.getJSON('json/toast/link-suspect.json', function(data) {
+                    $.toast(data);
+                });
+            }
+            methods.genQuery();
+        });
+    };
     $(document).ready(function () {
-
         //methods.windowResize(bootstrapDetectBreakpoint());
         var e = document.getElementById("refreshed");
         // console.log("refreshed Value:", e.value);
@@ -101,6 +145,7 @@ const initCommon = () => {
         contentDecrypt();
         contentSwap();
         buttonsRefresh();
+        buttonGenUrlOnclick();
         // contentDecryptScroll must come afte buttonsRefresh for event order
         contentDecryptScroll();
         methods.windowResize();
@@ -286,20 +331,20 @@ const initCommon = () => {
         if (arg == null) {
             arg = { index: 1 };
         }
-        if (arg.index > 3) {
+        if (arg.index > 3) { // xl
             $(".button-group").removeClass(function (index, className) {
                 return (className.match(/(^|\s)btn-group[a-z\-]+/g) || []).join(' ');
             }).addClass("btn-group-lg");
             // $(".button-group").addClass("btn-group-lg");
-        } else if (arg.index === 3) {
+        } else if (arg.index === 3) { // lg
             $(".button-group").removeClass(function (index, className) {
                 return (className.match(/(^|\s)btn-group[a-z\-]+/g) || []).join(' ');
             });
-        } else if (arg.index === 2) {
+        } else if (arg.index === 2) { // md
             $(".button-group").removeClass(function (index, className) {
                 return (className.match(/(^|\s)btn-group[a-z\-]+/g) || []).join(' ');
             }).addClass("btn-group-sm");
-        } else {
+        } else { // sm, xs
             $(".button-group").removeClass(function (index, className) {
                 return (className.match(/(^|\s)btn-group[a-z\-]+/g) || []).join(' ');
             }).addClass("btn-group-vertical").addClass("btn-group-vert-wide");

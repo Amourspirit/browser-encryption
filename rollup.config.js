@@ -1,9 +1,9 @@
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import eslint from '@rbnlffl/rollup-plugin-eslint';
-
+import json from '@rollup/plugin-json';
 const _mod = 'scratch/js/lib';
 const _noMod = 'scratch/js/lib/nomodule';
-const _input = ['./src/js/lib/init.js'];
+const _input = ['./scratch/out/js/lib/init.js'];
 const _globals = {
   'jquery': 'jQuery',
   'crypto': 'CryptoJS',
@@ -16,12 +16,16 @@ const _globals = {
 //const input = ['./src/js/tmp/jquery.bsresponsive.js'];
 export default {
   input: _input,
-  plugins: [nodeResolve({
-    // use "jsnext:main" if possible
-    // see https://github.com/rollup/rollup/wiki/jsnext:main
-    jsnext: true
-  }),
-  eslint()
+  plugins: [
+    nodeResolve({
+      // use "jsnext:main" if possible
+      // see https://github.com/rollup/rollup/wiki/jsnext:main
+      jsnext: true
+    }),
+    eslint(),
+    json({
+      compact: false
+    })
   ],
   output: [
     {

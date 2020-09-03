@@ -47,13 +47,25 @@ export class BasicElement {
     }
     return true;
   }
+  /**
+   * Hides the element ( display: none )
+   */
+  hide() {
+    this._el.style.display = "none";
+  }
+  /**
+   * Shows the element
+   */
+  show() {
+    this._el.style.display = "";
+  }
 
   /**
   * Appends child html string
   * @param {string} htmlString Html string to append as child
   */
   appendHtml(htmlString) {
-    this._el.appendChild(BasicElement.createHtmlFragment(htmlString));
+    this._el.appendChild(BasicElement.createHtmlFrag(htmlString));
   }
 
   /**
@@ -72,7 +84,7 @@ export class BasicElement {
    * @param {string} htmlStr string to of html
    * @returns {DocumentFragment}
    */
-  static createHtmlFragment (htmlStr) {
+  static createHtmlFrag (htmlStr) {
     let frag = document.createDocumentFragment(),
       temp = document.createElement('div');
     temp.innerHTML = htmlStr;
@@ -85,9 +97,10 @@ export class BasicElement {
 //#endregion
 //#region   DivElement Class
 /**
- * Class that has a few helper methods for working with div html elements
+ * Class that has a few helper methods for working with html elements
+ * Use with normal inline elements such as p, span, div etc
  */
-export class DivElement extends BasicElement {
+export class Element extends BasicElement {
   /**
    * 
    * @param {HTMLDivElement} el 
@@ -99,30 +112,30 @@ export class DivElement extends BasicElement {
   /**
    * Static method to create class instance from id
    * @param {string} id the id of the element to load
-   * @returns {DivElement}
+   * @returns {Element}
    */
   static fromId(id) {
     const el = document.getElementById(id);
-    return new DivElement(el);
+    return new Element(el);
   }
 
 }
 //#endregion
-//#region   TextElement Class
+//#region   InputElement Class
 /**
  * Class that has a few helper methods for working with text html elements
  */
-export class TextElement extends BasicElement {
+export class InputElement extends BasicElement {
   /**
    * 
-   * @param {TextElement} el
+   * @param {InputElement} el
    */
   constructor(el) {
     super(el);
   }
 
   /**
-   * Gets value
+   * Gets value ( value attribute )
    * @returns {string} element value
    */
   get() {
@@ -130,26 +143,26 @@ export class TextElement extends BasicElement {
   }
 
   /**
-   * Sets value
+   * Sets value ( value attribute )
    * @param {string} value
    */
   set(value) {
-    this._el.value = value;
+    this._el.value = value.toString();
   }
   /**
-   * Clears inner html of element
+   * Clears value ( value attribute )
    */
   clear() {
-    this._el.value = '';
+    this.set('');
   }
   /**
    * Static method to create class instance from id
    * @param {string} id the id of the element to load
-   * @returns {TextElement}
+   * @returns {InputElement}
    */
   static fromId(id) {
     const el = document.getElementById(id);
-    return new TextElement(el);
+    return new InputElement(el);
   }
 
 }
@@ -158,10 +171,10 @@ export class TextElement extends BasicElement {
 /**
  * Class that has a few helper methods for working with text html elements
  */
-export class SelectElement extends TextElement {
+export class SelectElement extends InputElement {
   /**
    * 
-   * @param {TextElement} el
+   * @param {InputElement} el
    */
   constructor(el) {
     super(el);
@@ -241,4 +254,70 @@ export class CheckElement extends BasicElement {
 
 }
 //#endregion
+//#region   InputElement Class
+/**
+ * Class that has a few helper methods for working with text html elements
+ */
+export class ButtonElement extends BasicElement {
+  /**
+   * 
+   * @param {InputElement} el
+   */
+  constructor(el) {
+    super(el);
+  }
+
+  /**
+   * Gets value of the button ( value attribute )
+   * @returns {string} element value
+   */
+  get() {
+    return this._el.getAttribute("value");
+  }
+
+  /**
+   * Sets value of the button ( value attribute )
+   * @param {string} value
+   */
+  set(value) {
+    this._el.setAttribute("value", value.toString());
+  }
+  /**
+   * Clears Value of button ( value attribute )
+   */
+  clear() {
+    this.set('');
+  }
+  /**
+   * Sets the text or Html of the button
+   * @param {string} value 
+   */
+  setHtml(value) {
+    const val = value.toString();
+    // setting value differs in different browser
+    // setting innerHTML fails on some older browsers if it is set more than once
+    while (this._el.firstChild) {
+      this._el.removeChild(this._el.lastChild);
+    }
+    this._el.appendChild(BasicElement.createHtmlFrag(val));
+  }
+  /**
+   * Gets the button inner html
+   */
+  getHtml() {
+    return this._el.innerHTML;
+  }
+  /**
+   * Static method to create class instance from id
+   * @param {string} id the id of the element to load
+   * @returns {ButtonElement}
+   */
+  static fromId(id) {
+    const el = document.getElementById(id);
+    return new ButtonElement(el);
+  }
+
+}
+//#endregion
+
 //#endregion

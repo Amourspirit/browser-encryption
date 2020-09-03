@@ -9,7 +9,7 @@ import {
   clChipher,
   clWebsite,
   clName
-} from '../misc/element-values';
+} from '../misc/element-instances';
 import { stringBreaker } from 'string-breaker';
 
 if (window.CryptoJS == null) {
@@ -261,6 +261,17 @@ export const Decrypt = () => {
 };
 
 //#endregion
+/**
+ * Gets if Method is set to a valid option
+ * @returns {boolean} true if a valid option is selected; Otherwise, false
+ */
+export const methodIsSelected = () => {
+  const str = clMethod().get();
+  if(str === "" || str === 'def') {
+    return false;
+  }
+  return true;
+};
 
 //#region region HASH functions
 const SHA1 = () => {

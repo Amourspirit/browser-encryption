@@ -1,0 +1,9 @@
+{
+  "heading": "Select Method",
+  "text": "Select a method to encrypt with.",
+  "position": "top-right",
+  "showHideTransition": "slide",
+  "hideAfter": 5000,
+  "allowToastClose": true,
+  "icon": "info"
+}

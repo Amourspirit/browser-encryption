@@ -14,12 +14,11 @@ import {
   clChipher,
   clUrl,
   clMethod,
-  clIncludeKey
-} from './misc/element-values';
+  clIncludeKey,
+  clHex
+} from './misc/element-instances';
 import {
   Swap,
-  Encrypt,
-  Decrypt,
   SetKeyHidden,
   getKeyHidden
 } from './crypt/crypt';
@@ -31,18 +30,6 @@ import { RefreshUi } from './misc/ui';
 const methods = {};
 
 //#region encrypt/decrypt
-
-/**
- * Encrypts plain and updates the value of cipher on the page
-* @returns {boolean} True if encoding succeeded; Otherwise, false
- */
-methods.enc = Encrypt;
-
-/**
-* Decrypts the encrypted value of plain and populates the cipher field of the page
-* @returns {boolean} True if decoding succeeded; Otherwise, false
-*/
-methods.dec = Decrypt;
 
 /**
 * Gets if Contents of Plain is encrypted text
@@ -203,10 +190,9 @@ methods.processKeygen = (length) => {
     }
     return keygenJS(length, opt);
   };
-  let checkedValue = document.getElementById('chk_hex').checked;
   let len = length / 8;
   let bHex = false;
-  if (checkedValue) {
+  if (clHex().get()) {
     len += len;
     bHex = true;
   }
@@ -247,9 +233,8 @@ methods.download = (filename, cipher) => {
 };
 
 methods.doDL = () => {
-  var s = document.getElementById('chipher').value;
   const dataUrl = (data) => { return "data:x-application/text," + escape(data); };
-  window.open(dataUrl(s));
+  window.open(dataUrl(clChipher().get()));
 };
 
 //#region Clipboard

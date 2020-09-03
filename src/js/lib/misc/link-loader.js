@@ -34,17 +34,12 @@ const getLink = (linkinfo, breakPoints) => {
   return link;
 };
 
-
-const onCssLinksReady = () => {
-  console.log('css links ready event fired');
-};
 /**
 * Injects css links into the header of the document.
 * @param {Array} cssObj Array of objects where each element in the array is the following format:
 * {link: "./mycss.css", integrity: null, crossorigin: null}
 */
 export const loadCSSLinks = (cssObj) => {
-  const cssReadyEvent = new Event('cssLinksReady');
   const breakPoints = getBreakPoints();
   cssObj.map(linkinfo => {
     const link = getLink(linkinfo, breakPoints);
@@ -62,15 +57,56 @@ export const loadCSSJson = (jsonUrl) => {
     .then((out) => {
       //console.log('Output: ', out);
       loadCSSLinks(out.imports);
-    }).catch(err => console.error(err));
+    }).catch(/* err => console.error(err) */);
+};
+
+export const loadScriptsData = (data) => {
+  if (data.imports.header) {
+    loadJsLinks(data.imports.header);
+  }
+  if (data.imports.body) {
+    loadJsLinks(data.imports.body, "body");
+  }
+};
+
+
+export const loadCssData = (data) => {
+  loadCSSLinks(data.imports);
+};
+/**
+ * Loads css links by reading json from url and loading the link data into the header of the page.
+ * @param {string} jsonUrl URL to Json data
+ */
+export const loadJsJson = (jsonUrl) => {
+  if (out.imports.header) {
+    loadJsLinks(out.imports.header);
+  }
+  if (out.imports.body) {
+    loadJsLinks(out.imports.body, "body");
+  }
+  loadCSSLinks(out.imports);
+  fetch(jsonUrl)
+    .then(res => res.json())
+    .then((out) => {
+      //console.log('Output: ', out);
+      if (out.imports.header) {
+        loadJsLinks(out.imports.header);
+      }
+      if (out.imports.body) {
+        loadJsLinks(out.imports.body, "body");
+      }
+      loadCSSLinks(out.imports);
+    }).catch(/* err => console.error(err) */);
 };
 
 /**
 * Injects script links into the header of the document.
 * @param {Array} jsObj Array of objects where each element in the array is the following format:
+* @param {string} [tag=head] Location to add such as head (default) or body
+*
 * {link: "./myjs.js", integrity: null, crossorigin: null}
 */
-export const loadJsLinks = (jsObj) => {
+export const loadJsLinks = (jsObj, tag = "head") => {
   /**
 * Load a css file into header of document.
 * @param {string} linkinfo
@@ -94,7 +130,7 @@ export const loadJsLinks = (jsObj) => {
       link.setAttributeNode(attrCrossorigin);
     }
    
-    document.getElementsByTagName("head")[0].appendChild(link);
+    document.getElementsByTagName(tag)[0].appendChild(link);
   };
   jsObj.forEach(li => {
     loadJs(li);

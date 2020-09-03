@@ -1,11 +1,13 @@
 
 import $ from 'jquery';
-import { loadCSSJson } from './misc/link-loader';
+import { loadCssData, loadScriptsData } from './misc/link-loader';
 import initMain from './main';
 import './appdetect';
-let cssJsonUrl = './json/css.json';
+import jsData from '../../json/js.json';
+import cssData from '../../json/css.json';
 
-loadCSSJson(cssJsonUrl);
+loadCssData(cssData);
+loadScriptsData(jsData);
 
 // $('#loading').hide();
 $('#content_header').show();

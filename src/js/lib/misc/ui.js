@@ -5,8 +5,8 @@ import {
   clContentPanel,
   clChipher,
   clEncState
-} from './element-values';
-import { DivElement } from '../class/element';
+} from './element-instances';
+import { Element } from '../class/element';
 import { ENCRYPTED_STATE_NORMAL } from '../crypt/crypt';
 import { isStringEncrypted } from './util';
 //#region UI
@@ -70,7 +70,7 @@ export const RefreshUi = () => {
   };
   /**
    * Add a single Image to element el
-   * @param {DivElement} dv the element to add image to
+   * @param {Element} dv the element to add image to
    * @param {string} url the url of the image to add.
    */
   const processImageSingle = (dv, url) => {
@@ -83,7 +83,7 @@ export const RefreshUi = () => {
   };
   /**
    * Process multiple images
-   * @param {DivElement} dv 
+   * @param {Element} dv 
    * @param {Array} matches 
    */
   const procssImageMultiple = (dv, matches) => {
@@ -152,7 +152,7 @@ export const RefreshUi = () => {
   /**
    * Process decrypted text for images and display links on page.
    * @param {string} str Decrypted text
-   * @param {DivElement} de element that images will be appended
+   * @param {Element} de element that images will be appended
    * @returns {boolean} True if images are found and processed; Otherwise, false.
    */
   const processImages = (str, de) => {

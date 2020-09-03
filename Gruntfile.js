@@ -71,11 +71,13 @@ module.exports = function (grunt) {
     },
 
     copy: {
-      js_strbrk: {
-        src: 'src/js/lib/string.breaker.min.js',
-        dest: '<%= DEST %>/js/lib/string.breaker.min.js',
+      lib: {
+        expand: true,
+        cwd: 'src/js/lib/',
+        src: '**/*.js',
+        dest: 'scratch/out/js/lib/',
       },
-      img: {
+       img: {
         expand: true,
         cwd: 'src/img/',
         src: '**/*',
@@ -91,9 +93,13 @@ module.exports = function (grunt) {
         src: 'src/json/importmap<%= DEV_FILE %>.json',
         dest: '<%= DEST %>/json/importmap.json',
       },
-      cssjson: {
+      json_css: {
         src: 'src/json/css<%= DEV_FILE %>.json',
-        dest: '<%= DEST %>/json/css.json',
+        dest: 'scratch/out/json/css.json',
+      },
+      json_js: {
+        src: 'src/json/js.json',
+        dest: 'scratch/out/json/js.json',
       },
       dev_js_entry: {
         src: 'src/js/system.entry<%= DEV_FILE %>.js',
@@ -108,7 +114,13 @@ module.exports = function (grunt) {
         cwd: 'src/css/',
         src: '**/*',
         dest: '<%= DEST %>/css/',
-      }
+      },
+      json_toast: {
+        expand: true,
+        cwd: 'src/json/toast/',
+        src: '**/*.json',
+        dest: '<%= DEST %>/json/toast/',
+      },
     },
     htmllint: {
       options: {
@@ -373,7 +385,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-terser');
-  grunt.loadNpmTasks('grunt-contrib-requirejs');
+  //grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-env');
 
   // #endregion
@@ -413,11 +425,14 @@ module.exports = function (grunt) {
     'env:build',
     'loadconst',
     'clean:dirs',
+    'copy:lib',
+    'copy:json_css',
+    'copy:json_js',
     'shell:roll',
     'copy:ico',
     'copy:img',
     'copy:json',
-    'copy:cssjson',
+    'copy:json_toast',
     'replace:html',
     'htmllint:all',
     'minifyHtml:dist',
@@ -429,14 +444,17 @@ module.exports = function (grunt) {
     'env:dev',
     'loadconst',
     'clean:dirs',
+    'copy:lib',
+    'copy:json_css',
+    'copy:json_js',
     'shell:roll',
     'copy:ico',
     'copy:img',
     'copy:json',
-    'copy:cssjson',
     'copy:dev_js_entry',
     'copy:dev_js_mod',
     'copy:dev_css',
+    'copy:json_toast',
     'replace:html_dev'
   ]);
   grunt.registerTask('startd', [

@@ -1,0 +1,9 @@
+{
+  "heading": "Warning - No Key",
+  "text": "It appears you are encrypting without using a <strong>Key</strong></br>The encryption will not be secure!</br></br>Try generating a key if you wish.",
+  "position": "top-right",
+  "showHideTransition": "slide",
+  "hideAfter": false,
+  "allowToastClose": true,
+  "icon": "warning"
+}
