@@ -1,0 +1,9 @@
+{
+  "heading": "Decryption Error",
+  "text": "Decryption Failed.</br><ul><li>Check the Algorithm</li><li>Check the key</li></ul>",
+  "position": "top-right",
+  "showHideTransition": "slide",
+  "hideAfter": 5000,
+  "allowToastClose": true,
+  "icon": "error"
+}

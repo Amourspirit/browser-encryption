@@ -1,9 +1,10 @@
+import { stringBreaker, splitByOpt } from 'string-breaker';
 /**
  * Gets if a string is encrypted or not.
- * @param {string} str 
+ * @param {string} str the string to test
  * @returns {boolean} True if str is encrypted text; Otherwise false.
  * 
- * This is best guess by searching for spaces in str.
+ * This is a specific test. If str contains any char ( other than new line) it will fail test.
  */
 export const isStringEncrypted = (str) => {
   if (str == null) {
@@ -13,11 +14,17 @@ export const isStringEncrypted = (str) => {
   if (strTest.length === 0) {
     return false;
   }
-  let index = strTest.indexOf(" ");
-  if (index >= 0) {
-    return false;
+  const strArr = stringBreaker(strTest, { splitOpt: splitByOpt.line });
+  const regx = /^[a-zA-Z0-9+/=]+$/;
+  let regexFailed = false;
+  for (let i = 0; i < strArr.length; i++) {
+    const ln = strArr[i];
+    if (regx.test(ln) === false) {
+      regexFailed = true;
+      break;
+    }
   }
-  return true;
+  return !regexFailed;
 };
 
 /**

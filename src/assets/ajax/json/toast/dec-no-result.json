@@ -1,6 +1,6 @@
 {
-  "heading": "Select Method",
-  "text": "Select a method to encrypt with.",
+  "heading": "No Results",
+  "text": "The decryption did not yeild a result<ul><li>Check the value of your key</li></ul>",
   "position": "top-right",
   "showHideTransition": "slide",
   "hideAfter": 5000,

@@ -7,7 +7,7 @@ import {
   clEncState
 } from './element-instances';
 import { Element } from '../class/element';
-import { ENCRYPTED_STATE_NORMAL } from '../crypt/crypt';
+import { ENC_STATE_NORMAL} from '../misc/const';
 import { isStringEncrypted } from './util';
 //#region UI
 /**
@@ -23,7 +23,7 @@ export const RefreshUi = () => {
     observe = window.observer.observe;
   }
 
-  let isValidContent = (clEncState().get() == ENCRYPTED_STATE_NORMAL);
+  let isValidContent = (clEncState().get() == ENC_STATE_NORMAL);
   const strCv = clChipher().get();
   isValidContent = isValidContent && (!isStringEncrypted(strCv));
 
@@ -184,7 +184,7 @@ export const RefreshUi = () => {
    * Process Decrtypted value of chipher text area
    */
   const uiChiperVal = () => {
-    let isValid = (clEncState().get() == ENCRYPTED_STATE_NORMAL);
+    let isValid = (clEncState().get() == ENC_STATE_NORMAL);
     let str = clChipher().get();
     
     // const panelSelImages = '#' + foundPanelImageElId;

@@ -1,4 +1,4 @@
-
+//#region  imports
 import $ from 'jquery';
 import './jq.ext.js';
 import keygenJS from './keygen';
@@ -8,29 +8,55 @@ import methods from './methods';
 import injectHtmlJs from './inject';
 import marked from 'marked';
 import {
+    ERR_EMPTY,
+    ERR_FORMAT_BAD,
+    ENC_ERR_HP,
+    ENC_ERR_DEC_FAIL,
+    ENC_ERR_ENC_FAIL,
+    ENC_ERR_EMPTY,
+    ENC_ERR_OPTION_FAIL
+} from './misc/const';
+import {
     clUrl,
     clBtnEnc,
     clBtnDec,
     clBtnSwap,
     clBtnGenUrl,
     clKey,
+    clChipher,
     clPlain
- } from './misc/element-instances';
+} from './misc/element-instances';
 import {
     Encrypt as enc,
     Decrypt as dec,
-    methodIsSelected
+    setOutEncDecResult
 } from './crypt/crypt';
+//#endregion
+
 // const $ = jQuery;
 
-if (window.lozad == null) {
-    window.lozad = lozad;
-}
-
-if (window.DOMPurify == null) {
-    window.DOMPurify = DOMPurify;
-}
 const initCommon = () => {
+    //#region Window Globals
+    if (window.lozad == null) {
+        window.lozad = lozad;
+    }
+
+    if (window.DOMPurify == null) {
+        window.DOMPurify = DOMPurify;
+    }
+    window.observer = lozad(); // lazy loads elements with default selector as '.lozad'
+    window.observer.observe();
+    if (typeof (DOMPurify) === 'function') {
+        window.USE_PURIFY = true;
+    } else {
+        window.USE_PURIFY = false;
+    }
+    if (typeof (observer) === 'object') {
+        window.USE_LAZY_LOAD = true;
+    } else {
+        window.USE_LAZY_LOAD = false;
+    }
+    //#endregion
     // if (!!window.performance && window.performance.navigation.type === 2) {
     //     // value 2 means "The page was accessed by navigating into the history"
     //     console.log('Reloading');
@@ -42,6 +68,224 @@ const initCommon = () => {
     //         window.location.reload();
     //     }
     // };
+
+    const initJqMethods = () => {
+
+        //#region Clipboard
+        $("#copy-plain").click(function (e) {
+            e.preventDefault();
+            if (clPlain().get() === '') {
+                $.getJSON('assets/ajax/json/toast/clip-nothing.json', function (data) {
+                    $.toast(data);
+                });
+            } else {
+                methods.copyPlain();
+                $.getJSON('assets/ajax/json/toast/clip-content-copied.json', function (data) {
+                    $.toast(data);
+                });
+            }
+        });
+
+        $("#copy-url").click(function (e) {
+            e.preventDefault();
+            if (clUrl().get() === '') {
+                $.getJSON('assets/ajax/json/toast/clip-nothing.json', function (data) {
+                    $.toast(data);
+                });
+            } else {
+                methods.copyUrl();
+                $.getJSON('assets/ajax/json/toast/clip-content-copied.json', function (data) {
+                    $.toast(data);
+                });
+            }
+        });
+
+        $("#copy-key").click(function (e) {
+            e.preventDefault();
+            if (clKey().get() === '') {
+                $.getJSON('assets/ajax/json/toast/clip-nothing.json', function (data) {
+                    $.toast(data);
+                });
+            } else {
+                methods.copyKey();
+                $.getJSON('assets/ajax/json/toast/clip-content-copied.json', function (data) {
+                    $.toast(data);
+                });
+            }
+        });
+
+        $("#copy-out").click(function (e) {
+            e.preventDefault();
+            if (clChipher().get() === '') {
+                $.getJSON('assets/ajax/json/toast/clip-nothing.json', function (data) {
+                    $.toast(data);
+                });
+            } else {
+                methods.copyChipher();
+                $.getJSON('assets/ajax/json/toast/clip-content-copied.json', function (data) {
+                    $.toast(data);
+                });
+            }
+        });
+        //#endregion
+        //#region  Misc
+        //#region  Misc jQuery
+        // $('[data-toggle="tooltip"]').tooltip();
+        $('[data-toggle="tooltip"]').tooltip({
+            trigger: 'hover'
+        });
+        $("#chipher").on("change", function () {
+            methods.uiRefresh();
+        });
+        $("#btn_manual").click(function (params) {
+            const $this = $('#user_manual');
+            if ($this.data('cload') === undefined || $this.data("cload") === false) {
+                $this.load("assets/ajax/html/user_manual.html", function () {
+                    $this.data('cload', true);
+                    $this.collapse('toggle');
+                });
+            } else {
+                $this.collapse('toggle');
+            }
+        });
+
+        $('.collapse-links').on("click", function () {
+            const el = $('.collapse-links>span.glyph-toggle');
+            if (el.length > 0) {
+                if ($(this).hasClass("collapsed")) {
+                    el.removeClass("oi-chevron-bottom");
+                    el.addClass("oi-chevron-top");
+                } else {
+                    el.removeClass("oi-chevron-top");
+                    el.addClass("oi-chevron-bottom");
+                }
+            }
+        });
+
+        $('.collapse-content').on("click", function () {
+            const el = $('.collapse-content>span.glyph-toggle');
+            if (el.length > 0) {
+                if ($(this).hasClass("collapsed")) {
+                    el.removeClass("oi-chevron-bottom");
+                    el.addClass("oi-chevron-top");
+                } else {
+                    el.removeClass("oi-chevron-top");
+                    el.addClass("oi-chevron-bottom");
+                }
+            }
+        });
+
+        $('.collapse-imgages').on("click", function () {
+            const el = $('.collapse-imgages>span.glyph-toggle');
+            if (el.length > 0) {
+                if ($(this).hasClass("collapsed")) {
+                    el.removeClass("oi-chevron-bottom");
+                    el.addClass("oi-chevron-top");
+                } else {
+                    el.removeClass("oi-chevron-top");
+                    el.addClass("oi-chevron-bottom");
+                }
+            }
+        });
+
+        $('.collapse-form').on("click", function () {
+            const el = $('.collapse-form>span.glyph-toggle');
+            if (el.length > 0) {
+                if ($(this).hasClass("collapsed")) {
+                    el.removeClass("oi-chevron-bottom");
+                    el.addClass("oi-chevron-top");
+                } else {
+                    el.removeClass("oi-chevron-top");
+                    el.addClass("oi-chevron-bottom");
+                }
+            }
+        });
+        $(document).on("click", '[data-toggle="lightbox"]', function (event) {
+            event.preventDefault();
+            $(this).ekkoLightbox();
+        });
+        $('#myModal').on('shown.bs.modal', function () {
+            $("#markdown").val(function () {
+                return $("#plain").val();
+            });
+            // # Marked in browser\n\nRendered by **marked**.
+            const html = marked($("#markdown").val());
+            const clean = DOMPurify.sanitize(html);
+            $(".marked-content").html($(clean).lazyLoadExt().bsResponsive().newWindow());
+            $('#markdown').trigger('focus');
+            window.observer.observe();
+        });
+        $('#edit_plain_md').on('click', function (event) {
+            event.preventDefault();
+            $("#markdown").val(function () {
+                return $("#plain").val();
+            });
+            // # Marked in browser\n\nRendered by **marked**.
+            const html = marked($("#markdown").val());
+            const clean = DOMPurify.sanitize(html);
+            $(".marked-content").html($(clean).lazyLoadExt().bsResponsive().newWindow());
+            $('#myModal').modal('show');
+            $('#markdown').trigger('focus');
+            window.observer.observe();
+
+        });
+
+        /**
+    * Bind the makrdown textarea and updated the makrked-content to reflect the makred up html version.
+    */
+        $('#markdown').bind('input propertychange', function () {
+            // set the content of the marked-content element to the makred up value
+            const html = marked($("#markdown").val());
+            const clean = DOMPurify.sanitize(html);
+            $(".marked-content").html($(clean).lazyLoadExt().bsResponsive().newWindow());
+            window.observer.observe();
+        });
+        $("#modal_save_changes, #modal_save_changes_header").on("click", function (event) {
+            $("#plain").val($("#markdown").val());
+            $("#markdown").val('');
+            $('#myModal').modal('hide');
+        });
+
+        $(window).on('resize', function () {
+            methods.windowResize();
+        });
+        $(document).on("bsSizeChanaged", function (event, arg1, arg2) {
+            bsSizeChange(arg2);
+        });
+
+        /**
+     * Monitor .makred-content and when there is a change mark all a tags to open in a new window.
+     */
+        $('.marked-content, #found_content').bind('DOMSubtreeModified', function (event) {
+            // for found and marked up links open in a new window/tab
+            // $('.marked-content a, #found_content a').each(function () {
+            //     $(this).attr('target', '_blank');
+            // });
+            //$('.marked-content, #found_content').newWindow();
+            // add img-fluid bootstarp class to content where necessary
+            // this stops the images from extencing beyond their container
+            // $('.marked-content img, #found_content img').each(function () {
+            //     $(this).addClass("img-fluid");
+
+            // });
+            //$('.marked-content, #found_content').bsResponsive();
+        });
+        //#endregion
+
+    };
+
+    /**
+     * Prevents elemet from having a double click.
+     * @param {string|HTMLElement} selector if string must be conplete selector such as #mybtn or .copy-btns
+     */
+    const jqPrevendDbClick = (selector) => {
+        $(selector).on('dblclick', function (e) {
+            /*  Prevents default behaviour and bubbling  */
+            e.preventDefault();
+            e.stopPropagation();
+            return;
+        });
+    };
     const scrollToElement = (jqSelector) => {
         var target = $(jqSelector);
         if (target.length && target.is(":visible")) {
@@ -53,42 +297,98 @@ const initCommon = () => {
     };
     const contentEncrypt = () => {
         const cBtnEnc = clBtnEnc();
-        if(cBtnEnc.exist() === false) {
+        if (cBtnEnc.exist() === false) {
             return;
         }
         const $this = $(cBtnEnc.el);
         $this.on("click", function () {
-            if (clPlain().get() === "") {
-                $.getJSON('json/toast/plain-empty.json', function (data) {
-                    $.toast(data);
-                });
-                return;
+            try {
+                clChipher().clear();
+                setOutEncDecResult(enc(), false);
+                if (clKey().get() === "") {
+                    $.getJSON('assets/ajax/json/toast/enc-key-missing.json', function (data) {
+                        $.toast(data);
+                    });
+                }
+            } catch (err) {
+                const errMsg = err.message;
+                switch (errMsg) {
+                    case ENC_ERR_EMPTY:
+                        $.getJSON('assets/ajax/json/toast/enc-plain-empty.json', function (data) {
+                            $.toast(data);
+                        });
+                        break;
+                    case ENC_ERR_OPTION_FAIL:
+                        $.getJSON('assets/ajax/json/toast/method-not-sel.json', function (data) {
+                            $.toast(data);
+                        });
+                        break;
+                    case ENC_ERR_ENC_FAIL:
+                    case ERR_EMPTY:
+                        $.getJSON('assets/ajax/json/toast/enc-no-result.json', function (data) {
+                            $.toast(data);
+                        });
+                        break;
+                    case ENC_ERR_HP:
+                    default:
+                        break;
+                }
+                methods.uiRefresh();
             }
-            if (methodIsSelected() === false) {
-                $.getJSON('json/toast/method-not-sel.json', function (data) {
-                    $.toast(data);
-                });
-                return;
-            }
-            const cKey = clKey();
-            if(cKey.get() === "") {
-                $.getJSON('json/toast/key-missing.json', function (data) {
-                    $.toast(data);
-                });
-            }
-            enc();
         });
     };
-   
+
     const contentDecrypt = () => {
         const cBtnDec = clBtnDec();
         if (cBtnDec.exist() === false) {
             return;
         }
         $(cBtnDec.el).on("click", function () {
-            const result = dec(); // methods.dec();
-            if (result) {
+            try {
+                clChipher().clear();
+                setOutEncDecResult(dec(), true);
                 scrollToElement("#card_content");
+            } catch (err) {
+                const errMsg = err.message;
+                switch (errMsg) {
+                    case ENC_ERR_EMPTY:
+                        $.getJSON('assets/ajax/json/toast/dec-plain-empty.json', function (data) {
+                            $.toast(data);
+                        });
+                        break;
+                    case ENC_ERR_OPTION_FAIL:
+                        $.getJSON('assets/ajax/json/toast/method-not-sel.json', function (data) {
+                            $.toast(data);
+                        });
+                        break;
+                    case ENC_ERR_DEC_FAIL:
+                        const cKey = clKey();
+                        if (cKey.get() === "") {
+                            $.getJSON('assets/ajax/json/toast/key-missing.json', function (data) {
+                                $.toast(data);
+                            });
+                            break;
+                        }
+                        // CryptJS had a issue, likley a bad key
+                        $.getJSON('assets/ajax/json/toast/dec-gen-err.json', function (data) {
+                            $.toast(data);
+                        });
+                        break;
+                    case ERR_FORMAT_BAD:
+                        // the input contained bad char such as space
+                        $.getJSON('assets/ajax/json/toast/dec-not-encrypted.json', function (data) {
+                            $.toast(data);
+                        });
+                        break;
+                    case ERR_EMPTY:
+                        $.getJSON('assets/ajax/json/toast/dec-no-result.json', function (data) {
+                            $.toast(data);
+                        });
+                        break;
+                    case ENC_ERR_HP:
+                    default:
+                        break;
+                }
             }
         });
     };
@@ -103,7 +403,7 @@ const initCommon = () => {
     };
     const contentSwap = () => {
         const cBtnSwap = clBtnSwap();
-        if(cBtnSwap.exist() === false) {
+        if (cBtnSwap.exist() === false) {
             return;
         }
         $(cBtnSwap.el).on("click", function () {
@@ -117,20 +417,21 @@ const initCommon = () => {
             clUrl().set('');
         });
     };
-    const buttonGenUrlOnclick =() => {
+    const buttonGenUrlOnclick = () => {
         const cBtnGenUrl = clBtnGenUrl();
         if (cBtnGenUrl.exist() === false) {
             return;
         }
         $(cBtnGenUrl.el).on("click", function () {
             if (methods.isChipherEnc() === false) {
-                $.getJSON('json/toast/link-suspect.json', function(data) {
+                $.getJSON('assets/ajax/json/toast/link-suspect.json', function (data) {
                     $.toast(data);
                 });
             }
             methods.genQuery();
         });
     };
+
     $(document).ready(function () {
         //methods.windowResize(bootstrapDetectBreakpoint());
         var e = document.getElementById("refreshed");
@@ -150,6 +451,9 @@ const initCommon = () => {
         contentDecryptScroll();
         methods.windowResize();
         methods.uiRefresh();
+        initJqMethods();
+        jqPrevendDbClick('.copy_icon');
+        jqPrevendDbClick('button');
     });
 
 
@@ -164,18 +468,7 @@ const initCommon = () => {
             return hljs.highlight(validLanguage, code).value;
         },
     });
-    window.observer = lozad(); // lazy loads elements with default selector as '.lozad'
-    window.observer.observe();
-    if (typeof (DOMPurify) === 'function') {
-        window.USE_PURIFY = true;
-    } else {
-        window.USE_PURIFY = false;
-    }
-    if (typeof (observer) === 'object') {
-        window.USE_LAZY_LOAD = true;
-    } else {
-        window.USE_LAZY_LOAD = false;
-    }
+
 
     // window.USE_LAZY_LOAD = true;
     // window.USE_PURIFY = true;
@@ -187,123 +480,7 @@ const initCommon = () => {
     //  setSignature();
     methods.selectFromQueryString();
     // setSorceCodeLink();
-    // $('[data-toggle="tooltip"]').tooltip();
-    $('[data-toggle="tooltip"]').tooltip({
-        trigger: 'hover'
-    });
-    $("#chipher").on("change", function () {
-        methods.uiRefresh();
-    });
 
-    $('.collapse-links').on("click", function () {
-        const el = $('.collapse-links>span.glyph-toggle');
-        if (el.length > 0) {
-            if ($(this).hasClass("collapsed")) {
-                el.removeClass("oi-chevron-bottom");
-                el.addClass("oi-chevron-top");
-            } else {
-                el.removeClass("oi-chevron-top");
-                el.addClass("oi-chevron-bottom");
-            }
-        }
-    });
-    $('.collapse-content').on("click", function () {
-        const el = $('.collapse-content>span.glyph-toggle');
-        if (el.length > 0) {
-            if ($(this).hasClass("collapsed")) {
-                el.removeClass("oi-chevron-bottom");
-                el.addClass("oi-chevron-top");
-            } else {
-                el.removeClass("oi-chevron-top");
-                el.addClass("oi-chevron-bottom");
-            }
-        }
-    });
-    $('.collapse-imgages').on("click", function () {
-        const el = $('.collapse-imgages>span.glyph-toggle');
-        if (el.length > 0) {
-            if ($(this).hasClass("collapsed")) {
-                el.removeClass("oi-chevron-bottom");
-                el.addClass("oi-chevron-top");
-            } else {
-                el.removeClass("oi-chevron-top");
-                el.addClass("oi-chevron-bottom");
-            }
-        }
-    });
-    $('.collapse-form').on("click", function () {
-        const el = $('.collapse-form>span.glyph-toggle');
-        if (el.length > 0) {
-            if ($(this).hasClass("collapsed")) {
-                el.removeClass("oi-chevron-bottom");
-                el.addClass("oi-chevron-top");
-            } else {
-                el.removeClass("oi-chevron-top");
-                el.addClass("oi-chevron-bottom");
-            }
-        }
-    });
-    $(document).on("click", '[data-toggle="lightbox"]', function (event) {
-        event.preventDefault();
-        $(this).ekkoLightbox();
-    });
-    $('#myModal').on('shown.bs.modal', function () {
-        $("#markdown").val(function () {
-            return $("#plain").val();
-        });
-        // # Marked in browser\n\nRendered by **marked**.
-        const html = marked($("#markdown").val());
-        const clean = DOMPurify.sanitize(html);
-        $(".marked-content").html($(clean).lazyLoadExt().bsResponsive().newWindow());
-        $('#markdown').trigger('focus');
-        window.observer.observe();
-    });
-    $('#edit_plain_md').on('click', function (event) {
-        event.preventDefault();
-        $("#markdown").val(function () {
-            return $("#plain").val();
-        });
-        // # Marked in browser\n\nRendered by **marked**.
-        const html = marked($("#markdown").val());
-        const clean = DOMPurify.sanitize(html);
-        $(".marked-content").html($(clean).lazyLoadExt().bsResponsive().newWindow());
-        $('#myModal').modal('show');
-        $('#markdown').trigger('focus');
-        window.observer.observe();
-
-    });
-    /**
-     * Bind the makrdown textarea and updated the makrked-content to reflect the makred up html version.
-     */
-    $('#markdown').bind('input propertychange', function () {
-        // set the content of the marked-content element to the makred up value
-        const html = marked($("#markdown").val());
-        const clean = DOMPurify.sanitize(html);
-        $(".marked-content").html($(clean).lazyLoadExt().bsResponsive().newWindow());
-        window.observer.observe();
-    });
-    $("#modal_save_changes, #modal_save_changes_header").on("click", function (event) {
-        $("#plain").val($("#markdown").val());
-        $("#markdown").val('');
-        $('#myModal').modal('hide');
-    });
-    /**
-     * Monitor .makred-content and when there is a change mark all a tags to open in a new window.
-     */
-    $('.marked-content, #found_content').bind('DOMSubtreeModified', function (event) {
-        // for found and marked up links open in a new window/tab
-        // $('.marked-content a, #found_content a').each(function () {
-        //     $(this).attr('target', '_blank');
-        // });
-        //$('.marked-content, #found_content').newWindow();
-        // add img-fluid bootstarp class to content where necessary
-        // this stops the images from extencing beyond their container
-        // $('.marked-content img, #found_content img').each(function () {
-        //     $(this).addClass("img-fluid");
-
-        // });
-        //$('.marked-content, #found_content').bsResponsive();
-    });
     const injectFavIcon = () => {
         let link = document.querySelector("link[rel*='icon']") || document.createElement('link');
         let pathname = window.location.pathname;
@@ -327,6 +504,7 @@ const initCommon = () => {
         // metaImage.content = url + "img/pg_img.jpg";
         // document.getElementsByTagName('head')[0].appendChild(metaImage);
     };
+
     const bsSizeChange = (arg) => {
         if (arg == null) {
             arg = { index: 1 };
@@ -350,13 +528,7 @@ const initCommon = () => {
             }).addClass("btn-group-vertical").addClass("btn-group-vert-wide");
         }
     };
-    $(window).on('resize', function () {
-        methods.windowResize();
 
-    });
-    $(document).on("bsSizeChanaged", function (event, arg1, arg2) {
-        bsSizeChange(arg2);
-    });
     injectFavIcon();
 
 };

@@ -1,0 +1,9 @@
+{
+  "heading": "No encryptd text",
+  "text": "The text is not a valid encryption",
+  "position": "top-right",
+  "showHideTransition": "slide",
+  "hideAfter": 5000,
+  "allowToastClose": true,
+  "icon": "error"
+}

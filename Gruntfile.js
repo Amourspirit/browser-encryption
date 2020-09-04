@@ -71,6 +71,12 @@ module.exports = function (grunt) {
     },
 
     copy: {
+      assets_ajax: {
+        expand: true,
+        cwd: 'src/assets/ajax/',
+        src: '**/*',
+        dest: '<%= DEST %>/assets/ajax/',
+      },
       lib: {
         expand: true,
         cwd: 'src/js/lib/',
@@ -79,9 +85,9 @@ module.exports = function (grunt) {
       },
        img: {
         expand: true,
-        cwd: 'src/img/',
+        cwd: 'src/assets/img/',
         src: '**/*',
-        dest: '<%= DEST %>/img/',
+        dest: '<%= DEST %>/assets/img/',
       },
       ico: {
         expand: true,
@@ -90,37 +96,31 @@ module.exports = function (grunt) {
         dest: '<%= DEST %>/',
       },
       json: {
-        src: 'src/json/importmap<%= DEV_FILE %>.json',
-        dest: '<%= DEST %>/json/importmap.json',
+        src: 'src/assets/json/importmap<%= DEV_FILE %>.json',
+        dest: '<%= DEST %>/assets/json/importmap.json',
       },
       json_css: {
-        src: 'src/json/css<%= DEV_FILE %>.json',
+        src: 'src/assets/json/embed/css<%= DEV_FILE %>.json',
         dest: 'scratch/out/json/css.json',
       },
       json_js: {
-        src: 'src/json/js.json',
+        src: 'src/assets/json/embed/js.json',
         dest: 'scratch/out/json/js.json',
       },
       dev_js_entry: {
         src: 'src/js/system.entry<%= DEV_FILE %>.js',
-        dest: '<%= DEST %>/js/system.entry.js',
+        dest: '<%= DEST %>/assets/js/system.entry.js',
       },
       dev_js_mod: {
         src: 'scratch/js/lib/nomodule/main.js',
-        dest: '<%= DEST %>/js/lib/main.js',
+        dest: '<%= DEST %>/assets/js/lib/main.js',
       },
       dev_css: {
         expand: true,
-        cwd: 'src/css/',
+        cwd: 'src/assets/css/',
         src: '**/*',
-        dest: '<%= DEST %>/css/',
-      },
-      json_toast: {
-        expand: true,
-        cwd: 'src/json/toast/',
-        src: '**/*.json',
-        dest: '<%= DEST %>/json/toast/',
-      },
+        dest: '<%= DEST %>/assets/css/',
+      }
     },
     htmllint: {
       options: {
@@ -291,13 +291,13 @@ module.exports = function (grunt) {
       },
       target: {
         files: {
-          '<%= DEST %>/css/main.min.css': [
-            'src/css/main.css',
-            'src/css/bs-oth.css',
-            'src/css/sm.css',
-            'src/css/md.css',
-            'src/css/lg.css',
-            'src/css/xl.css'
+          '<%= DEST %>/assets/css/main.min.css': [
+            'src/assets/css/main.css',
+            'src/assets/css/bs-oth.css',
+            'src/assets/css/sm.css',
+            'src/assets/css/md.css',
+            'src/assets/css/lg.css',
+            'src/assets/css/xl.css'
           ]
         }
       }
@@ -307,7 +307,7 @@ module.exports = function (grunt) {
         options: {
         },
         files: {
-          '<%= DEST %>/js/lib/main.min.js': ['scratch/js/lib/nomodule/main.js'],
+          '<%= DEST %>/assets/js/lib/main.min.js': ['scratch/js/lib/nomodule/main.js'],
         }
       },
       custom_options: {
@@ -331,15 +331,7 @@ module.exports = function (grunt) {
         options: {
         },
         files: {
-          '<%= DEST %>/js/system.entry.js': ['src/js/system.entry.js']
-          // '<%= DEST %>/js/clip.min.js': ['src/js/clip.js']
-        }
-      },
-      init: {
-        options: {
-        },
-        files: {
-          '<%= DEST %>/js/lib/init.min.js': ['src/js/lib/init.js']
+          '<%= DEST %>/assets/js/system.entry.js': ['src/js/system.entry.js']
           // '<%= DEST %>/js/clip.min.js': ['src/js/clip.js']
         }
       },
@@ -413,14 +405,6 @@ module.exports = function (grunt) {
     grunt.log.writeln("DEST:" + process.env.DEST);
   });
   
-  grunt.registerTask('rmain', [
-    'clean:dirs',
-    'requirejs:compile_main',
-    'requirejs:compile_general',
-    'terser:main',
-    'terser:init',
-    'terser:gen'
-  ]);
   grunt.registerTask('build', [
     'env:build',
     'loadconst',
@@ -432,7 +416,7 @@ module.exports = function (grunt) {
     'copy:ico',
     'copy:img',
     'copy:json',
-    'copy:json_toast',
+    'copy:assets_ajax',
     'replace:html',
     'htmllint:all',
     'minifyHtml:dist',
@@ -454,12 +438,16 @@ module.exports = function (grunt) {
     'copy:dev_js_entry',
     'copy:dev_js_mod',
     'copy:dev_css',
-    'copy:json_toast',
+    'copy:assets_ajax',
     'replace:html_dev'
   ]);
   grunt.registerTask('startd', [
     'env:dev',
     'loadconst',
     'shell:startd'
+  ]);
+  grunt.registerTask('devs', [
+    'dev',
+    'startd'
   ]);
 };

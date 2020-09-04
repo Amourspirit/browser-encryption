@@ -1,0 +1,12 @@
+{
+  "heading": "",
+  "text": "Copied to clipboard <span class=\"oi oi-clipboard\"></span>",
+  "position": "top-right",
+  "showHideTransition": "fade",
+  "hideAfter": 2000,
+  "textAlign": "left",
+  "stack": false,
+  "loader": false,
+  "allowToastClose": true,
+  "icon": "success"
+}

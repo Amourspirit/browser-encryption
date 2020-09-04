@@ -1,5 +1,6 @@
+//#region Imports
 import crypto from 'crypto';
-import { removeWs } from '../misc/util';
+import { removeWs, isStringEncrypted } from '../misc/util';
 import {
   clEncKey,
   clEncState,
@@ -11,10 +12,22 @@ import {
   clName
 } from '../misc/element-instances';
 import { stringBreaker } from 'string-breaker';
-
+import { 
+  ERR_EMPTY,
+  ERR_FORMAT_BAD,
+  ENC_ERR_HP,
+  ENCRYPT_WRAP,
+  ENC_ERR_DEC_FAIL,
+  ENC_ERR_EMPTY,
+  ENC_ERR_OPTION_FAIL,
+  ENC_ERR_ENC_FAIL,
+  ENC_STATE_NORMAL
+} from '../misc/const';
 if (window.CryptoJS == null) {
   window.CryptoJS = crypto;
 }
+//#endregion
+
 //#region Honey Pot
 
 /**
@@ -43,12 +56,8 @@ const hpTest = () => {
 //#endregion
 
 //#region encrypt/decrypt
-export const ENCRYPTED_STATE_NORMAL = 0;
-const DEFAULT_MSG = 'Please enter encryption type';
-const ENCRYPT_WRAP = 67;
 const ENCRYPTED_STATE_EMPTY = 1;
 const ENCRYPTED_STATE_ERR_GEN = 101;
-const ENCRYPTED_STATE_ERR_NO_ENC = 102;
 
 /**
  * Sets the value of chipher readonly text area
@@ -62,7 +71,7 @@ const setEncodedStateValue = (state, validate) => {
     return stateVal.length > 0;
   };
   if (!state) {
-    state = ENCRYPTED_STATE_NORMAL;
+    state = ENC_STATE_NORMAL;
   }
   if (validate) {
     if (!isValidateState()) {
@@ -82,7 +91,7 @@ export const SetKeyHidden = (key) => {
   if (key == null) {
     key = clKey().get();
   }
-  const encrypted = CryptoJS.AES.encrypt(key, RANDOM_INLINE_KEY);
+  const encrypted = CryptoJS.AES.encrypt(key, window.RANDOM_INLINE_KEY);
   clEncKey().set(encrypted.toString());
 };
 
@@ -91,10 +100,10 @@ export const SetKeyHidden = (key) => {
  */
 export const getKeyHidden = () => {
   const keyValue = clEncKey().get();
-  const decrypted = CryptoJS.AES.decrypt(keyValue, RANDOM_INLINE_KEY);
+  const decrypted = CryptoJS.AES.decrypt(keyValue, window.RANDOM_INLINE_KEY);
   return decrypted.toString(CryptoJS.enc.Utf8);
 };
-
+//#region Encryption methods
 /**
  * Encrypts plain and updates the value of cipher on the page
 * @returns {boolean} True if encoding succeeded; Otherwise, false
@@ -104,170 +113,221 @@ export const Encrypt = () => {
   if (!hpTest()) {
     // honey pot test failed.
     cChipher.set('');
+    clPlain().set('');
     setEncodedStateValue(ENCRYPTED_STATE_EMPTY, false);
-    return false;
+    throw new Error(ENC_ERR_HP);
   }
   let pp = clPlain().get();
-  if (pp.length === 0) {
+  if (pp.trim().length === 0) {
     cChipher.set('');
     setEncodedStateValue(ENCRYPTED_STATE_EMPTY, false);
-    return false;
+    throw new Error(ENC_ERR_EMPTY);
   }
-  // const clean = DOMPurify.sanitize(html);
-  if (window.USE_PURIFY) {
-    pp = DOMPurify.sanitize(pp);
-  }
+
   let tp = clMethod().get();
   let kk = clKey().get();
-  let encrypted = null;
-  let strArray = null;
-  let success = false;
-  const cJs = CryptoJS; // assign to const for smaller minify file
+  const encObj = encryptString(pp, kk, tp);
+  validateEncrypted(encObj);
+
+  if (encObj.str.length === 0) {
+    throw new Error(ERR_EMPTY);
+  }
+  return encObj.str;
+};
+
+
+/**
+ * 
+ * @param {string} pp 
+ * @param {string} kk 
+ * @param {*} encryptor 
+ */
+const encryptString = (pp, kk, encryptor) => {
+  let hasError = false;
+  const cjs = CryptoJS; // assign to const for smaller minify file
+  let fn = undefined;
+  let errorCode = '';
+  let strUtf8 = '';
   try {
-    switch (tp) {
+    switch (encryptor) {
       case 'aes':
-        encrypted = cJs.AES.encrypt(pp, kk);
-        strArray = stringBreaker(encrypted.toString(), { width: ENCRYPT_WRAP });
-        cChipher.set(strArray.join('\n'));
-        success = true;
+        fn = cjs.AES.encrypt;
         break;
       case '3des':
-        encrypted = cJs.DES.encrypt(pp, kk);
-        strArray = stringBreaker(encrypted.toString(), { width: ENCRYPT_WRAP });
-        cChipher.set(strArray.join('\n'));
-        success = true;
+        fn = cjs.TripleDES.encrypt;
         break;
       case 'des':
-        encrypted = cJs.TripleDES.encrypt(pp, kk);
-        strArray = stringBreaker(encrypted.toString(), { width: ENCRYPT_WRAP });
-        cChipher.set(strArray.join('\n'));
-        success = true;
+        fn = cjs.DES.encrypt;
         break;
       case 'rc4':
-        encrypted = cJs.RC4.encrypt(pp, kk);
-        strArray = stringBreaker(encrypted.toString(), { width: ENCRYPT_WRAP });
-        cChipher.set(strArray.join('\n'));
-        success = true;
+        fn = cjs.RC4.encrypt;
         break;
       case 'rb':
-        encrypted = cJs.Rabbit.encrypt(pp, kk);
-        strArray = stringBreaker(encrypted.toString(), { width: ENCRYPT_WRAP });
-        cChipher.set(strArray.join('\n'));
-        success = true;
+        fn = cjs.Rabbit.encrypt;
         break;
       default:
-        // case def
-        cChipher.set(DEFAULT_MSG);
-        setEncodedStateValue(ENCRYPTED_STATE_ERR_NO_ENC, false);
         break;
     }
-  } catch (error) {
-    cChipher.set('Error occurred: Encryption failed...');
-    setEncodedStateValue(ENCRYPTED_STATE_ERR_GEN, false);
+    if (fn === undefined) {
+      errorCode = ENC_ERR_OPTION_FAIL;
+      throw Error(ENC_ERR_OPTION_FAIL);
+    }
+
+    if (window.USE_PURIFY) {
+      pp = DOMPurify.sanitize(pp);
+    }
+    const decrypted = fn(pp, kk);
+    const strArray = stringBreaker(decrypted.toString(), { width: ENCRYPT_WRAP });
+    strUtf8 = strArray.join('\n');
+   
+  } finally {
+    // do noting
   }
-  if (success === true) {
-    setEncodedStateValue(ENCRYPTED_STATE_NORMAL, true);
-    SetKeyHidden(null);
-  }
-  return success;
+  return { 
+    str: strUtf8,
+    err: {
+      isError: hasError,
+      errCode: errorCode
+    }
+  };
 };
 
 /**
+ * If decObj.err is true then this method will throw an error
+ * @param {{str:string, err: {isError: boolean, errCode: string}}} decObj
+ * @throws ENC_ERR_DEC_FAIL error.
+ */
+const validateEncrypted = (decObj) => {
+  if (decObj.err.isError === true) {
+    let errMsg = decObj.err.errCode;
+    if (errMsg === '') {
+      errMsg = ENC_ERR_ENC_FAIL;
+    }
+    setEncodedStateValue(ENCRYPTED_STATE_ERR_GEN, false);
+    throw new Error(errMsg);
+  }
+};
+//#endregion
+
+//#region Decrypt Methods
+/**
 * Decrypts the encrypted value of plain and populates the cipher field of the page
-* @returns {boolean} True if decoding succeeded; Otherwise, false
+* @returns {string} True if decoding succeeded; Otherwise, false
 */
 export const Decrypt = () => {
-  const cChipher = clChipher();
   if (!hpTest()) {
     // honey pot test failed.
-    cChipher.set('');
     setEncodedStateValue(ENCRYPTED_STATE_EMPTY, false);
-    return false;
+    clChipher().set('');
+    clPlain().set('');
+    throw new Error(ENC_ERR_HP);
   }
-  let pp = clPlain().get();
+  let pp = clPlain().get().trim();
   if (pp.length === 0) {
-    cChipher.set('');
     setEncodedStateValue(ENCRYPTED_STATE_EMPTY, false);
-    return false;
+    throw new Error(ENC_ERR_EMPTY);
+  }
+  if (isStringEncrypted(pp) === false) {
+    throw new Error(ERR_FORMAT_BAD);
   }
   let tp = clMethod().get();
   let kk = clKey().get();
-  let decrypted = null;
-  let success = false;
-  let strUtf8 = null;
-  const cJs = CryptoJS; // assign to const for smaller minify file
-  try {
-    switch (tp) {
-      case '3des':
-        decrypted = cJs.DES.decrypt(removeWs(pp), kk);
-        strUtf8 = decrypted.toString(CryptoJS.enc.Utf8);
-        if (window.USE_PURIFY) {
-          strUtf8 = DOMPurify.sanitize(strUtf8);
-        }
-        cChipher.set(strUtf8);
-        success = true;
-        break;
-      case 'des':
-        decrypted = cJs.TripleDES.decrypt(removeWs(pp), kk);
-        strUtf8 = decrypted.toString(CryptoJS.enc.Utf8);
-        if (window.USE_PURIFY) {
-          strUtf8 = DOMPurify.sanitize(strUtf8);
-        }
-        cChipher.set(strUtf8);
-        success = true;
-        break;
-      case 'aes':
-        decrypted = cJs.AES.decrypt(removeWs(pp), kk);
-        strUtf8 = decrypted.toString(CryptoJS.enc.Utf8);
-        if (window.USE_PURIFY) {
-          strUtf8 = DOMPurify.sanitize(strUtf8);
-        }
-        cChipher.set(strUtf8);
-        success = true;
-        break;
-      case 'rc4':
-        decrypted = cJs.RC4.decrypt(removeWs(pp), kk);
-        strUtf8 = decrypted.toString(CryptoJS.enc.Utf8);
-        if (window.USE_PURIFY) {
-          strUtf8 = DOMPurify.sanitize(strUtf8);
-        }
-        cChipher.set(strUtf8);
-        success = true;
-        break;
-      case 'rb':
-        decrypted = cJs.Rabbit.decrypt(removeWs(pp), kk);
-        strUtf8 = decrypted.toString(CryptoJS.enc.Utf8);
-        if (window.USE_PURIFY) {
-          strUtf8 = DOMPurify.sanitize(strUtf8);
-        }
-        cChipher.set(strUtf8);
-        success = true;
-        break;
-      default:
-        // case def
-        cChipher.set(DEFAULT_MSG);
-        setEncodedStateValue(ENCRYPTED_STATE_ERR_NO_ENC, false);
-        break;
-    }
-  } catch (error) {
-    cChipher.set('Error occurred: Decryption failed...');
-    setEncodedStateValue(ENCRYPTED_STATE_ERR_GEN, false);
+  const decObj = decryptString(pp, kk, tp);
+  validateDecrypted(decObj);
+  if (decObj.str.length === 0) {
+    throw new Error(ERR_EMPTY);
   }
-  if (success === true) {
-    setEncodedStateValue(ENCRYPTED_STATE_NORMAL, true);
-    SetKeyHidden(null);
-  }
-  return success;
+  return decObj.str;
 };
 
+export const setOutEncDecResult = (str, isEnc = false) => {
+  const cChipher = clChipher();
+  cChipher.clear();
+  cChipher.set(str);
+  setEncodedStateValue(ENC_STATE_NORMAL, !isEnc);
+  SetKeyHidden(null);
+};
+
+/**
+ * Decrypts string and returns as a object with str and err
+ * @param {string} pp Plain Text
+ * @param {string} kk Key
+ * 
+ * {str: string, err: boolean}
+ */
+const decryptString = (pp, kk, decryptor) => {
+  let hasError = false;
+  let strUtf8 = '';
+  const cjs = CryptoJS; // assign to const for smaller minify file
+  const p = removeWs(pp);
+  let fn = undefined;
+  let errorCode = '';
+  try {
+    let decrypted = '';
+    switch (decryptor) {
+      case 'aes':
+        fn = cjs.AES.decrypt;
+        break;
+      case '3des':
+        fn = cjs.TripleDES.decrypt;
+        break;
+      case 'des':
+        fn = cjs.DES.decrypt;
+        break;
+      case 'rc4':
+        fn = cjs.RC4.decrypt;
+        break;
+      case 'rb':
+        fn = cjs.Rabbit.decrypt;
+        break;
+      default:
+        break;
+    }
+    if (fn === undefined) {
+      errorCode = ENC_ERR_OPTION_FAIL;
+      throw Error(ENC_ERR_OPTION_FAIL);
+    }
+    decrypted = fn(p, kk);
+    strUtf8 = decrypted.toString(cjs.enc.Utf8);
+    if (window.USE_PURIFY) {
+      strUtf8 = DOMPurify.sanitize(strUtf8);
+    }
+  } catch (err) {
+    hasError = true;
+  }
+  return {
+    str: strUtf8,
+    err: {
+      isError: hasError,
+      errCode: errorCode
+    }
+  };
+};
+
+/**
+ * If decObj.err is true then this method will throw an error
+ * @param {{str:string, err: {isError: boolean, errCode: string}}} decObj
+ * @throws ENC_ERR_DEC_FAIL error.
+ */
+const validateDecrypted = (decObj) => {
+  if (decObj.err.isError === true) {
+    let errMsg = decObj.err.errCode;
+    if (errMsg === '') {
+      errMsg = ENC_ERR_DEC_FAIL;
+    }
+    setEncodedStateValue(ENCRYPTED_STATE_ERR_GEN, false);
+    throw new Error(errMsg);
+  }
+};
 //#endregion
+
 /**
  * Gets if Method is set to a valid option
  * @returns {boolean} true if a valid option is selected; Otherwise, false
  */
 export const methodIsSelected = () => {
   const str = clMethod().get();
-  if(str === "" || str === 'def') {
+  if (str === "" || str === 'def') {
     return false;
   }
   return true;

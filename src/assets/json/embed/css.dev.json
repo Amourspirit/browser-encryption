@@ -25,37 +25,37 @@
       "media": null
     },
     {
-      "link": "css/bs-oth.css",
+      "link": "assets/css/bs-oth.css",
       "integrity": null,
       "crossorigin": null,
       "media": null
     },
     {
-      "link": "css/main.css",
+      "link": "assets/css/main.css",
       "integrity": null,
       "crossorigin": null,
       "media": null
     },
     {
-      "link": "css/sm.css",
+      "link": "assets/css/sm.css",
       "integrity": null,
       "crossorigin": null,
       "media": null
     },
     {
-      "link": "css/md.css",
+      "link": "assets/css/md.css",
       "integrity": null,
       "crossorigin": null,
       "media": "md"
     },
     {
-      "link": "css/lg.css",
+      "link": "assets/css/lg.css",
       "integrity": null,
       "crossorigin": null,
       "media": "lg"
     },
     {
-      "link": "css/xl.css",
+      "link": "assets/css/xl.css",
       "integrity": null,
       "crossorigin": null,
       "media": "xl"

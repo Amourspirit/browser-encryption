@@ -18,7 +18,7 @@
    <title>@@EncryptTools</title>
    <style>
      div#preloaded-images {position: absolute;overflow: hidden;left: -9999px;top: -9999px;height: 1px;width: 1px;}
-     div#loading {position: fixed; left: 0px;top: 0px;width: 100%;height: 100%;z-index: 9999;background: url('img/preloader.gif') 50% 50% no-repeat rgb(255, 255, 255);opacity: 1;}
+     div#loading {position: fixed; left: 0px;top: 0px;width: 100%;height: 100%;z-index: 9999;background: url('assets/img/preloader.gif') 50% 50% no-repeat rgb(255, 255, 255);opacity: 1;}
    </style>
      <!-- #REMOVE_BLOCK -->
      <script>
@@ -47,22 +47,21 @@
   <!-- #END_REMOVE_BLOCK -->
 
 
-  <script type="systemjs-importmap" src="json/importmap.json"></script>
+  <script type="systemjs-importmap" src="/assets/json/importmap.json"></script>
 
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="628" />
 
 <script>
-  System.import("./js/system.entry.js");
+  System.import("./assets/js/system.entry.js");
 </script>
 </head>
 
 <body>
   <div id="preloaded-images">
-    <img src="img/preloader.gif" width="1" height="1" alt="preloader" />
+    <img src="assets/img/preloader.gif" width="1" height="1" alt="preloader" />
   </div>
   <div id="loading"></div>
-
   <div id="content_header" style="display:none;"></div>
   <div id="main_content_wrap" class="container main-content" style="display:none;">
     <div id="alert" class="alert" style="display: none;"></div>
@@ -105,8 +104,7 @@
                 <input type="password" id="key" name="key" class="form-control" placeholder="Enter key ..">
               </div>
             </div>
-            <div class="col-sm-1"><a href="#" onclick="methods.copyKey(); return false;"
-                title="Click to copy key text to the clipboard" data-toggle="tooltip" data-placement="top"
+            <div class="col-sm-1"><a id="copy-key" href="#" title="Click to copy key text to the clipboard" data-toggle="tooltip" data-placement="top"
                 class="copy_icon">
                 <span class="oi oi-clipboard"></span>
               </a>
@@ -167,8 +165,7 @@
             </div>
             <div class="col-sm-1">
               <div class="row">
-                <div class="col-sm-6"><a href="#" onclick="methods.copyPlain(); return false;"
-                    title="Click to copy this text to the clipboard" data-toggle="tooltip" data-placement="top"
+                <div class="col-sm-6"><a id="copy-plain" href="#" title="Click to copy this text to the clipboard" data-toggle="tooltip" data-placement="top"
                     class="copy_icon">
                     <span class="oi oi-clipboard"></span></a></div>
                 <div class="col-sm-6"><a id="edit_plain_md" href="#" data-toggle="tooltip" data-placement="top"
@@ -190,11 +187,8 @@
                   placeholder="Result will appear here.." style="height:200px;"></textarea>
               </div>
             </div>
-            <div class="col-sm-1"><a href="#" onclick="methods.copyChipher(); return false;"
-                title="Click to copy this text to the clipboard" data-toggle="tooltip" data-placement="top"
-                class="copy_icon">
-                <span class="oi oi-clipboard"></span>
-              </a>
+            <div class="col-sm-1"><a id="copy-out" href="#" title="Click to copy this text to the clipboard" data-toggle="tooltip" data-placement="top"
+                class="copy_icon"><span class="oi oi-clipboard"></span></a>
             </div>
           </div>
           <div id="row_chipher_btn" class="row row-main button-row">
@@ -215,8 +209,7 @@
                     placeholder="Url will appear here.."></textarea>
                 </div>
               </div>
-              <div class="col-sm-1"><a href="#" onclick="methods.copyUrl(); return false;"
-                  title="Click to copy this text to the clipboard" data-toggle="tooltip" data-placement="top"
+              <div class="col-sm-1"><a id="copy-url" href="#" title="Click to copy this text to the clipboard" data-toggle="tooltip" data-placement="top"
                   class="copy_icon">
                   <span class="oi oi-clipboard"></span>
                 </a>
@@ -238,97 +231,10 @@
             </div>
           </div>
           <div>
-            <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#user_manual">
+            <button id="btn_manual" type="button" class="btn btn-primary">
               <span class="oi oi-book"></span> Manual</button>
-            <div id="user_manual" class="collapse">
-              <!-- <div class="card-group" id="acc_manual"> -->
-              <div class="card card-default card-user-manual">
-                <div class="card-heading">
-                  <h4 class="card-title">
-                    <a data-toggle="collapse" href="#acc_enc">Encryption:</a>
-                  </h4>
-                </div>
-                <div id="acc_enc" class="card-collapse collapse show" data-parent="#user_manual">
-                  <div class="card-body">
-                    <ol>
-                      <li>Choose Algorithm (AES, 3DES ..)</li>
-                      <li>Enter or generate your secret key (AKA password)</li>
-                      <li>Copy/paste or write your text you want to encrypt</li>
-                      <li>Click Encrypt</li>
-                      <li>Click on Download to save your file</li>
-                      <li>Click Gen URL to create a link that contins the encryptd text ( without key ) that can
-                        be
-                        shared
-                      </li>
-                    </ol>
-                  </div>
-                </div>
-              </div>
-              <div class="card card-default card-user-manual">
-                <div class="card-heading">
-                  <h4 class="card-title">
-                    <a data-toggle="collapse" href="#acc_dec">Decryption:</a>
-                  </h4>
-                </div>
-                <div id="acc_dec" class="card-collapse collapse" data-parent="#user_manual">
-                  <div class="card-body">
-                    <ol>
-                      <li>Choose Algorithm (AES, 3DES ..)</li>
-                      <li>Enter your secret key you used for encryption (AKA password)</li>
-                      <li>Copy/paste or write your encrypted text you want to decrypt</li>
-                      <li>Click decrypt</li>
-                      <li>Click on Download to save your file</li>
-                    </ol>
-                  </div>
-                </div>
-              </div>
-              <div class="card card-default card-user-manual">
-                <div class="card-heading">
-                  <h4 class="card-title">
-                    <a data-toggle="collapse" href="#acc_url">URL:</a>
-                  </h4>
-                </div>
-                <div id="acc_url" class="card-collapse collapse" data-parent="#user_manual">
-                  <div class="card-body">
-                    <ul>
-                      <li>After encryption optinally generate a url</li>
-                      <li>Url can be shared publicly or privatly, its up to you</li>
-                      <li>Copy url and share the link</li>
-                      <li>Url does not contain the key unless you <strong>specifically</strong> <em>Include Key</em>
-                        check-box</li>
-                      <li>Url link will populate this page when clicked. Only Key need be entered <em>(if key was not
-                          specifically included)</em> and then click
-                        Decrypt
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="card card-default card-user-manual">
-                <div class="card-heading">
-                  <h4 class="card-title">
-                    <a data-toggle="collapse" href="#acc_markdown">MARKDOWN:</a>
-                  </h4>
-                </div>
-                <div id="acc_markdown" class="card-collapse collapse" data-parent="#user_manual">
-                  <div class="card-body">
-                    <ul>
-                      <li>Markdown is supported and will be transformed when decrypted into the <strong>Content</strong>
-                        section</li>
-                      <li>Markdown can be typed directly into the <strong>Plain Text</strong> area or can be edited by
-                        clicking the <span class="oi oi-pencil"></span> next to the edit box</li>
-                      <li>Markdown on <a href="https://en.wikipedia.org/wiki/Markdown" target="_blank">WikipediA</a>
-                      </li>
-                      <li><a href="https://github.github.com/gfm/" target="_blank">GitHub Flavored Markdown Spec</a>
-                      </li>
-                      <li>See: <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet"
-                          target="_blank">Markdown Cheetsheat</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <!-- </div> -->
-            </div>
+              <div id="user_manual" class="collapse"></div>
+            
           </div>
         </div>
         <div class="card-footer">
@@ -400,7 +306,7 @@
           <h4 class="modal-title">Markdown Edit</h4>
           <div>
             <button type="button" class="close" data-dismiss="modal"><span class="oi oi-x"></span></button>
-            <button type="button" class="close"><img id="modal_save_changes_header" src="img/save_50.png"
+            <button type="button" class="close"><img id="modal_save_changes_header" src="assets/img/save_50.png"
                 style="width:24px;height:24px;" alt="Save" /></button>
           </div>
         </div>
