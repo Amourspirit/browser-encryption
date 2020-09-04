@@ -1,6 +1,6 @@
 {
   "heading": "Nothing to do",
-  "text": "Enter some text to encrypt",
+  "text": "Requires encryptd text to Decrypt",
   "position": "top-right",
   "showHideTransition": "slide",
   "hideAfter": 5000,

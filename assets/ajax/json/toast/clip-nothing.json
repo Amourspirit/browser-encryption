@@ -1,0 +1,13 @@
+{
+  "text": "Nothing to copy <span class=\"oi oi-clipboard\"></span>",
+  "heading": "",
+  "icon": "warning",
+  "showHideTransition": "fade",
+  "allowToastClose": true,
+  "hideAfter": 2000,
+  "stack": false,
+  "position": "top-right",
+  "textAlign": "left",
+  "loader": false,
+  "loaderBg": "#9EC600"
+}

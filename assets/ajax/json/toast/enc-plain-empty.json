@@ -1,0 +1,9 @@
+{
+  "heading": "Nothing to do",
+  "text": "Enter text to encrypt",
+  "position": "top-right",
+  "showHideTransition": "slide",
+  "hideAfter": 5000,
+  "allowToastClose": true,
+  "icon": "info"
+}

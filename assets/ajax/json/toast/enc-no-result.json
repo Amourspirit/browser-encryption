@@ -1,0 +1,9 @@
+{
+  "heading": "No Results",
+  "text": "The encryption did not yeild a result",
+  "position": "top-right",
+  "showHideTransition": "slide",
+  "hideAfter": 5000,
+  "allowToastClose": true,
+  "icon": "info"
+}
