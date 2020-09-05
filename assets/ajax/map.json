@@ -1,0 +1,17 @@
+{
+  "t_clip1": "assets/ajax/json/toast/clip-content-copied.json",
+  "h_uman": "assets/ajax/html/user_manual.html",
+  "t_clip2": "assets/ajax/json/toast/clip-nothing.json",
+  "t_e_miss": "assets/ajax/json/toast/enc-key-missing.json",
+  "t_e_p_e": "assets/ajax/json/toast/enc-plain-empty.json",
+  "t_e_e": "assets/ajax/json/toast/enc-no-result.json",
+  "t_m_no": "assets/ajax/json/toast/method-not-sel.json",
+  "t_d_p_no": "assets/ajax/json/toast/dec-plain-empty.json",
+  "t_d_ge": "assets/ajax/json/toast/dec-gen-err.json",
+  "t_d_ne": "assets/ajax/json/toast/dec-not-encrypted.json",
+  "t_d_nr": "assets/ajax/json/toast/dec-no-result.json",
+  "t_lne": "assets/ajax/json/toast/link-not-encrypted.json",
+  "t_lik": "assets/ajax/json/toast/link-includes-key.json",
+  "t_m_n_s": "assets/ajax/json/toast/method-not-sel.json",
+  "t_k_m": "assets/ajax/json/toast/key-missing.json"
+}

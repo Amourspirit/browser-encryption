@@ -4,7 +4,7 @@
   "position": "top-right",
   "showHideTransition": "fade",
   "hideAfter": 2000,
-  "textAlign": "left",
+  "textAlign": "center",
   "stack": false,
   "loader": false,
   "allowToastClose": true,

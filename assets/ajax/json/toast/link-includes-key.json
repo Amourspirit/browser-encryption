@@ -1,0 +1,9 @@
+{
+  "heading": "KEY Included",
+  "text": "The generated link contains a key.</br></br>Be Warned anyone with this link can decrypt it without and extra key",
+  "position": "top-right",
+  "showHideTransition": "slide",
+  "hideAfter": 8000,
+  "allowToastClose": true,
+  "icon": "info"
+}

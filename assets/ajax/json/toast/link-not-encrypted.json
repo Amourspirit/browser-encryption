@@ -1,0 +1,9 @@
+{
+  "heading": "Not Encrypted",
+  "text": "The link would contain un-encrypted information<ul><li>Checkt that the output is the encrypted value</li><li>Try clicking the swap Generate Link again</li></ul>",
+  "position": "top-right",
+  "showHideTransition": "slide",
+  "hideAfter": 8000,
+  "allowToastClose": true,
+  "icon": "error"
+}
