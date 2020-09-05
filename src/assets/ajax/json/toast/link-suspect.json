@@ -1,9 +1,0 @@
-{
-  "heading": "Warning",
-  "text": "The link may be un-encrypted information",
-  "position": "top-right",
-  "showHideTransition": "slide",
-  "hideAfter": 5000,
-  "allowToastClose": true,
-  "icon": "warning"
-}

@@ -24,7 +24,10 @@ import {
     clBtnGenUrl,
     clKey,
     clChipher,
-    clPlain
+    clPlain,
+    clIncludeKey,
+    getClGenBitKey,
+    clKeyGenSection
 } from './misc/element-instances';
 import {
     Encrypt as enc,
@@ -69,18 +72,48 @@ const initCommon = () => {
     //     }
     // };
 
+    /**
+     * Gets a url for an assec from the 
+     * @param {string} key 
+     */
+    const getMappedUrl = (key) => {
+        let result = '';
+        $.ajax({
+            url: 'assets/ajax/map.json',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            async: false,
+            cache: true,
+            customKey: key
+        }).done(function (data) {
+            result = data[this.customKey];
+        })
+            .fail(function () {
+                // console.log("error");
+            })
+            .always(function () {
+                // console.log("complete");
+            });
+            return result;
+    };
+    /**
+     * Collapes the keygen_section button area
+     */
+    const collapsButtenArea = () => {
+        $(clKeyGenSection().el).collapse("hide");
+    };
     const initJqMethods = () => {
 
         //#region Clipboard
         $("#copy-plain").click(function (e) {
             e.preventDefault();
             if (clPlain().get() === '') {
-                $.getJSON('assets/ajax/json/toast/clip-nothing.json', function (data) {
+                $.getJSON(getMappedUrl('t_clip2'), function (data) {
                     $.toast(data);
                 });
             } else {
                 methods.copyPlain();
-                $.getJSON('assets/ajax/json/toast/clip-content-copied.json', function (data) {
+                $.getJSON(getMappedUrl('t_clip1'), function (data) {
                     $.toast(data);
                 });
             }
@@ -89,12 +122,12 @@ const initCommon = () => {
         $("#copy-url").click(function (e) {
             e.preventDefault();
             if (clUrl().get() === '') {
-                $.getJSON('assets/ajax/json/toast/clip-nothing.json', function (data) {
+                $.getJSON(getMappedUrl('t_clip2'), function (data) {
                     $.toast(data);
                 });
             } else {
                 methods.copyUrl();
-                $.getJSON('assets/ajax/json/toast/clip-content-copied.json', function (data) {
+                $.getJSON(getMappedUrl('t_clip1'), function (data) {
                     $.toast(data);
                 });
             }
@@ -103,12 +136,12 @@ const initCommon = () => {
         $("#copy-key").click(function (e) {
             e.preventDefault();
             if (clKey().get() === '') {
-                $.getJSON('assets/ajax/json/toast/clip-nothing.json', function (data) {
+                $.getJSON(getMappedUrl('t_clip2'), function (data) {
                     $.toast(data);
                 });
             } else {
                 methods.copyKey();
-                $.getJSON('assets/ajax/json/toast/clip-content-copied.json', function (data) {
+                $.getJSON(getMappedUrl('t_clip1'), function (data) {
                     $.toast(data);
                 });
             }
@@ -117,18 +150,49 @@ const initCommon = () => {
         $("#copy-out").click(function (e) {
             e.preventDefault();
             if (clChipher().get() === '') {
-                $.getJSON('assets/ajax/json/toast/clip-nothing.json', function (data) {
+                $.getJSON(getMappedUrl('t_clip2'), function (data) {
                     $.toast(data);
                 });
             } else {
                 methods.copyChipher();
-                $.getJSON('assets/ajax/json/toast/clip-content-copied.json', function (data) {
+                $.getJSON(getMappedUrl('t_clip1'), function (data) {
                     $.toast(data);
                 });
             }
         });
         //#endregion
-        //#region  Misc
+
+        //#region Button Group Generate Keys
+        $(getClGenBitKey(64).el).click(function () {
+            methods.processKeygen(64);
+            collapsButtenArea();
+        });
+        $(getClGenBitKey(128).el).click(function () {
+            methods.processKeygen(128);
+            collapsButtenArea();
+        });
+        $(getClGenBitKey(256).el).click(function () {
+            methods.processKeygen(256);
+            collapsButtenArea();
+        });
+        $(getClGenBitKey(512).el).click(function () {
+            methods.processKeygen(512);
+            collapsButtenArea();
+        });
+        $(getClGenBitKey(1024).el).click(function () {
+            methods.processKeygen(1024);
+            collapsButtenArea();
+        });
+        $(getClGenBitKey(2048).el).click(function () {
+            methods.processKeygen(2048);
+            collapsButtenArea();
+        });
+        $(getClGenBitKey(4096).el).click(function () {
+            methods.processKeygen(4096);
+            collapsButtenArea();
+        });
+        //#endregion
+
         //#region  Misc jQuery
         // $('[data-toggle="tooltip"]').tooltip();
         $('[data-toggle="tooltip"]').tooltip({
@@ -140,7 +204,7 @@ const initCommon = () => {
         $("#btn_manual").click(function (params) {
             const $this = $('#user_manual');
             if ($this.data('cload') === undefined || $this.data("cload") === false) {
-                $this.load("assets/ajax/html/user_manual.html", function () {
+                $this.load(getMappedUrl('h_uman'), function () {
                     $this.data('cload', true);
                     $this.collapse('toggle');
                 });
@@ -306,7 +370,7 @@ const initCommon = () => {
                 clChipher().clear();
                 setOutEncDecResult(enc(), false);
                 if (clKey().get() === "") {
-                    $.getJSON('assets/ajax/json/toast/enc-key-missing.json', function (data) {
+                    $.getJSON(getMappedUrl("t_e_miss"), function (data) {
                         $.toast(data);
                     });
                 }
@@ -314,18 +378,18 @@ const initCommon = () => {
                 const errMsg = err.message;
                 switch (errMsg) {
                     case ENC_ERR_EMPTY:
-                        $.getJSON('assets/ajax/json/toast/enc-plain-empty.json', function (data) {
+                        $.getJSON(getMappedUrl("t_e_p_e"), function (data) {
                             $.toast(data);
                         });
                         break;
                     case ENC_ERR_OPTION_FAIL:
-                        $.getJSON('assets/ajax/json/toast/method-not-sel.json', function (data) {
+                        $.getJSON(getMappedUrl("t_m_no"), function (data) {
                             $.toast(data);
                         });
                         break;
                     case ENC_ERR_ENC_FAIL:
                     case ERR_EMPTY:
-                        $.getJSON('assets/ajax/json/toast/enc-no-result.json', function (data) {
+                        $.getJSON(getMappedUrl("t_e_e"), function (data) {
                             $.toast(data);
                         });
                         break;
@@ -352,36 +416,36 @@ const initCommon = () => {
                 const errMsg = err.message;
                 switch (errMsg) {
                     case ENC_ERR_EMPTY:
-                        $.getJSON('assets/ajax/json/toast/dec-plain-empty.json', function (data) {
+                        $.getJSON(getMappedUrl("t_d_p_no"), function (data) {
                             $.toast(data);
                         });
                         break;
                     case ENC_ERR_OPTION_FAIL:
-                        $.getJSON('assets/ajax/json/toast/method-not-sel.json', function (data) {
+                        $.getJSON(getMappedUrl("t_m_n_s"), function (data) {
                             $.toast(data);
                         });
                         break;
                     case ENC_ERR_DEC_FAIL:
                         const cKey = clKey();
                         if (cKey.get() === "") {
-                            $.getJSON('assets/ajax/json/toast/key-missing.json', function (data) {
+                            $.getJSON(getMappedUrl("t_k_m"), function (data) {
                                 $.toast(data);
                             });
                             break;
                         }
                         // CryptJS had a issue, likley a bad key
-                        $.getJSON('assets/ajax/json/toast/dec-gen-err.json', function (data) {
+                        $.getJSON(getMappedUrl("t_d_ge"), function (data) {
                             $.toast(data);
                         });
                         break;
                     case ERR_FORMAT_BAD:
                         // the input contained bad char such as space
-                        $.getJSON('assets/ajax/json/toast/dec-not-encrypted.json', function (data) {
+                        $.getJSON(getMappedUrl("t_d_ne"), function (data) {
                             $.toast(data);
                         });
                         break;
                     case ERR_EMPTY:
-                        $.getJSON('assets/ajax/json/toast/dec-no-result.json', function (data) {
+                        $.getJSON(getMappedUrl("t_d_nr"), function (data) {
                             $.toast(data);
                         });
                         break;
@@ -424,7 +488,14 @@ const initCommon = () => {
         }
         $(cBtnGenUrl.el).on("click", function () {
             if (methods.isChipherEnc() === false) {
-                $.getJSON('assets/ajax/json/toast/link-suspect.json', function (data) {
+                $.getJSON(getMappedUrl("t_lne"), function (data) {
+                    $.toast(data);
+                });
+                return;
+            }
+
+            if (clIncludeKey().get() === true) {
+                $.getJSON(getMappedUrl("t_lik"), function (data) {
                     $.toast(data);
                 });
             }
@@ -454,10 +525,11 @@ const initCommon = () => {
         initJqMethods();
         jqPrevendDbClick('.copy_icon');
         jqPrevendDbClick('button');
+        console.log(getMappedUrl('t_clip1'));
     });
 
 
-    window.RANDOM_INLINE_KEY = keygenJS(256, {
+    window.RANDOM_INLINE_KEY = keygenJS.gen(256, {
         ekey: true
     });
     marked.setOptions({

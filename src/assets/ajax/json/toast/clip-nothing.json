@@ -7,7 +7,7 @@
   "hideAfter": 2000,
   "stack": false,
   "position": "top-right",
-  "textAlign": "left",
+  "textAlign": "center",
   "loader": false,
   "loaderBg": "#9EC600"
 }

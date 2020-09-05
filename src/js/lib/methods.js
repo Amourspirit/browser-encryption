@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import keygenJS from './keygen';
+import KeygenJS from './keygen';
 import { detectBreak } from './bs/bs';
 import { copyToClip, copyRichClip } from './clip/clip';
 import { isStringEncrypted } from './misc/util';
@@ -171,32 +171,20 @@ methods.uiRefresh = RefreshUi;
 //#endregion
 
 //#region Generate Key
+/**
+ * Proceses and generates a key.
+ * Checks if Hex is checked and cumputes accrodingly
+ * Set the Oput textbox for the key.
+ * @param {number} length 
+ */
 methods.processKeygen = (length) => {
-  const generateEncKey = (length, hex) => {
-    const opt = {
-      alpha: false,
-      num: false,
-      symbols: false,
-      special: false,
-      hex: false,
-      ws: false,
-      b64: false,
-      ekey: false
-    };
-    if (hex) {
-      opt.hex = true;
-    } else {
-      opt.ekey = true;
-    }
-    return keygenJS(length, opt);
-  };
   let len = length / 8;
   let bHex = false;
   if (clHex().get()) {
     len += len;
     bHex = true;
   }
-  clKey().set(generateEncKey(len, bHex));
+  clKey().set(KeygenJS.genEncryptionKey(len, bHex));
 };
 /**
  * Function that fires when there is a resize event of the browser window

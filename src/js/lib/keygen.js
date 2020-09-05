@@ -1,4 +1,24 @@
-const keygenJS = (length, opt) => {
+
+/**
+ * @typedef  KeygenJsOptions
+ * @type {{alpha: boolean,num: boolean,symbols: boolean,special: boolean,hex: boolean,ws: boolean, b64: boolean,ekey: boolean}}
+ */
+
+const KeygenJS = {};
+/**
+ * 
+ * @param {number} length 
+ * @param {KeygenJsOptions} [opt] various optons used to generat the key with
+ * @param {boolean} [opt.alpha=] if trun alpha Upper and lower case characters will be included
+ * @param {boolean} [opt.num=true] if true thne numbers 0-9 will be include
+ * @param {boolean} [opt.symbols=false] if true then includes symbols  `!"@#$%&/{}()[]=+?*<>,;.:-_`
+ * @param {boolean} [opt.hex=false] if true then includes hex symbol `0-9` and `A-F`
+ * @param {boolan} [opt.ws=false] if true then includes space characters
+ * @param {boolean} [opt.b64=false] if true then includes base 64 accepted characters
+ * @param {boolean} [opt.ekey=false] if true then includes characters for encryption specific
+ * @returns {string} a key in string format
+ */
+const keygenJS = (length, opt=null) => {
   if (typeof length !== 'number') {
     throw new TypeError('keygenJS: length parmeter must be of type number');
   }
@@ -36,17 +56,51 @@ const keygenJS = (length, opt) => {
     return new Array(length).fill(0).map(() => randomInt(min, max));
   };
 
+
+/**
+ * Various string constants used in build string for generating passwords
+* @typedef PWD_SYMBOLS_TYPE
+* @type {PWD_SYMBOLS}
+* @param {string} ALPHA Upper and lower case character from `a-z`
+* @param {string} ALPHA_UPPER Upper cals characters `A-Z`
+* @param {string} ALPHA_LOWER Lower cals characters `a-z`
+* @param {string} NUM numbers from `0-9`
+* @param {string} HEX numbers from `0-9` and letters `A-F`
+* @param {string} SYMBOLS characters: `!"@#$%&/{}()[]=+?*<>,;.:-_`
+* @param {string} SPECIAL characters `|`~^'`
+* @param {string} WS White space character
+* @param {string} B64 ALPHA symboles and `+/`
+* @param {string} ENCRYPT_KEY ALPHA, NUM and `!%*@/?(+$&)`
+* @const
+*/
   const PWD_SYMBOLS = {
-    ALPHA: 'abcdefghigjlmnopqrstuvwxyzABCDEFGHIJKLMNOPQURTUVWXYZ',
+    ALPHA: '',
+    ALPHA_UPPER: 'ABCDEFGHIJKLMNOPQURTUVWXYZ',
+    ALPHA_LOWER: 'abcdefghigjlmnopqrstuvwxyz',
     NUM: '0123456789',
-    HEX: '0123458789ABCDEF',
+    HEX: '',
     SYMBOLS: '!"@#$%&/{}()[]=+?*<>,;.:-_',
     SPECIAL: '|`~^\'',
     WS: ' ',
-    B64: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
-    ENCRYPT_KEY: 'abcdefghigjlmnopqrstuvwxyzABCDEFGHIJKLMNOPQURTUVWXYZ0123456789!%*@/?(+$&)',
+    B64: '',
+    ENCRYPT_KEY: '',
   };
+  PWD_SYMBOLS.ALPHA = PWD_SYMBOLS.ALPHA_LOWER + PWD_SYMBOLS.ALPHA_UPPER;
+  PWD_SYMBOLS.HEX = PWD_SYMBOLS.NUM + 'ACBDEF';
+  PWD_SYMBOLS.b64 = PWD_SYMBOLS.ALPHA + PWD_SYMBOLS.NUM + '+/';
+  PWD_SYMBOLS.ENCRYPT_KEY = PWD_SYMBOLS.ALPHA + PWD_SYMBOLS.NUM + '!%*@/?(+$&)';
 
+  // * @param {Object} PWD_SYMBOLS Object that contains string to mix and match for password generation.
+
+//@type {{ALPHA: string, ALPHA_UPPER: string, ALPHA_LOWER: string, NUM: string, HEX: string, SYMBOLS: string, SPECIAL: string, WS, string, B64: string,ENCRYPT_KEY, string }}
+
+
+  /**
+   * 
+   * @param {number} length 
+   * @param {KeygenJsOptions} opt
+  
+   */
   const randomPassword = (length, opt) => {
     let str = '';
     if (opt.alpha) {
@@ -73,17 +127,27 @@ const keygenJS = (length, opt) => {
     if (opt.ekey) {
       str += PWD_SYMBOLS.ENCRYPT_KEY;
     }
-    const strLength = str.length;
-    if (strLength === 0) {
+        
+    if (str.length === 0) {
       throw new RangeError('keygenJS: Selected options will not produce a password, Select at least one option to include');
     }
+    // get the unique characters only from str.
+    var unique = str.split('').filter(function (item, i, ar) { return ar.indexOf(item) === i; }).join('');
+    const strLength = unique.length;
+
     let rndA = randomIntArray(length, 0, strLength - 1);
     let pwd = '';
     rndA.forEach(i => {
-      pwd += str.charAt(i);
+      pwd += unique.charAt(i);
     });
     return pwd;
   };
+  /**
+   * 
+   * @param {KeygenJsOptions} defaultOptions 
+   * @param {KeygenJsOptions} options 
+   * @returns {KeygenJsOptions} result will merge options with defaultOptons with options overriding defaults
+   */
   const getOptions = (defaultOptions, options) => {
     if (options === null || options === undefined ||
       typeof options === 'function') {
@@ -126,6 +190,9 @@ const keygenJS = (length, opt) => {
     }
     return options;
   };
+  /**
+   * @type {KeygenJsOptions}
+   */
   const params = getOptions({
     alpha: true,
     num: true,
@@ -138,4 +205,35 @@ const keygenJS = (length, opt) => {
   }, opt);
   return randomPassword(length, params);
 };
-export default keygenJS;
+
+/**
+ * Generates an ecryptoin key
+ * @param {number} length The length of the key output
+ * @param {boolean} [hex = false] If true value will be up out in hex; Otherwise, regurlar encryption values
+ */
+const generateEncryptionKey = (length, hex=false) => {
+  /**
+   * @type {KeygenJsOptions}
+  * @param { KeygenJsOptions} opt -the options
+  * @param { boolean } opt.alpha determins is alpha characters are to be used.
+   */
+  const opt = {
+    alpha: false,
+    num: false,
+    symbols: false,
+    special: false,
+    hex: false,
+    ws: false,
+    b64: false,
+    ekey: false
+  };
+  if (hex) {
+    opt.hex = true;
+  } else {
+    opt.ekey = true;
+  }
+  return keygenJS(length, opt);
+};
+KeygenJS.gen =keygenJS;
+KeygenJS.genEncryptionKey = generateEncryptionKey;
+export default KeygenJS;
