@@ -229,7 +229,7 @@ export const clContentPanel = () => {
 //#endregion
 //#endregion  Found Content
 
-//#region Buttons -- Encrypt, Decrypt, Swap
+//#region Buttons -- Encrypt, Decrypt, Swap, Shorten
 
 //#region   Button Encrypt element
 /**
@@ -263,6 +263,18 @@ export const clBtnSwap = () => {
   return ButtonElement.fromId('btnswap');
 };
 //#endregion
+
+//#region   Button Url Shortener
+/**
+ * Gets an instance that represents Url Shorten Button  
+ * This button when clicked navigates to a url shorting service
+ * @returns {ButtonElement}
+ */
+export const clBtnShort = () => {
+  return ButtonElement.fromId('btnowe');
+};
+//#endregion
+
 //#endregion
 
 //#region Messages

@@ -1,4 +1,5 @@
 //#region Imports
+import $ from 'jquery';
 import crypto from 'crypto';
 import { removeWs, isStringEncrypted } from '../misc/util';
 import {
@@ -92,7 +93,8 @@ export const SetKeyHidden = (key) => {
     key = clKey().get();
   }
   const encrypted = CryptoJS.AES.encrypt(key, window.RANDOM_INLINE_KEY);
-  clEncKey().set(encrypted.toString());
+  $(clEncKey().el).val(encrypted.toString()).trigger('change');
+  // clEncKey().set(encrypted.toString());
 };
 
 /**
@@ -112,14 +114,14 @@ export const Encrypt = () => {
   const cChipher = clChipher();
   if (!hpTest()) {
     // honey pot test failed.
-    cChipher.set('');
-    clPlain().set('');
+    $(cChipher.el).val('').trigger('change');
+    $(clPlain().el).val('').trigger('change');
     setEncodedStateValue(ENCRYPTED_STATE_EMPTY, false);
     throw new Error(ENC_ERR_HP);
   }
   let pp = clPlain().get();
   if (pp.trim().length === 0) {
-    cChipher.set('');
+    $(cChipher.el).val('').trigger('change');
     setEncodedStateValue(ENCRYPTED_STATE_EMPTY, false);
     throw new Error(ENC_ERR_EMPTY);
   }
@@ -218,8 +220,8 @@ export const Decrypt = () => {
   if (!hpTest()) {
     // honey pot test failed.
     setEncodedStateValue(ENCRYPTED_STATE_EMPTY, false);
-    clChipher().set('');
-    clPlain().set('');
+    $(clChipher().el).val('').trigger('change');
+    $(clPlain().el).val('').trigger('change');
     throw new Error(ENC_ERR_HP);
   }
   let pp = clPlain().get().trim();
@@ -243,7 +245,7 @@ export const Decrypt = () => {
 export const setOutEncDecResult = (str, isEnc = false) => {
   const cChipher = clChipher();
   cChipher.clear();
-  cChipher.set(str);
+  $(cChipher.el).val(str).trigger('change');
   setEncodedStateValue(ENC_STATE_NORMAL, !isEnc);
   SetKeyHidden(null);
 };
@@ -337,18 +339,18 @@ export const methodIsSelected = () => {
 const SHA1 = () => {
   let pp = clPlain().get();
   let hash1 = CryptoJS.SHA1(pp);
-  clChipher().set(hash1.toString(CryptoJS.enc.Hex));
+  $(clChipher().el).val(hash1.toString(CryptoJS.enc.Hex)).trigger('change');
 };
 const MD = () => {
   let pp = clPlain().get();
   let hash = CryptoJS.MD5(pp);
-  clChipher().set(hash.toString(CryptoJS.enc.Hex));
+  $(clChipher().el).val(hash.toString(CryptoJS.enc.Hex)).trigger('change');
 };
 
 const SHA3 = () => {
   let pp = clPlain().get();
   let hash2 = CryptoJS.SHA3(pp, { outputLength: 224 });
-  clChipher().set(hash2.toString(CryptoJS.enc.Hex));
+  $(clChipher().el).val(hash2.toString(CryptoJS.enc.Hex)).trigger('change');
 };
 //#endregion
 
@@ -361,7 +363,7 @@ export const Swap = () => {
   let src = cPlain.get();
   let dst = cChipher.get();
 
-  cChipher.set(src);
-  cPlain.set(dst);
+  $(cChipher.el).val(src).trigger('change');
+  $(cPlain.el).val(dst).trigger('change');
   setEncodedStateValue(null, true);
 };

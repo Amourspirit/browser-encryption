@@ -59,7 +59,8 @@ methods.selectFromQueryString = () => {
     let val = getParameterByName('val', null);
     if (!val) return;
     // do not replace + with spaces in this case when using decodeURIComponent
-    clPlain().set(val);
+    // clPlain().set(val);
+    $(clPlain().el).val(val).trigger('change');
   };
   /**
 * Gets the value from query string and populates plain input
@@ -100,7 +101,8 @@ methods.selectFromQueryString = () => {
         break;
     }
   };
-  clChipher().set('');
+  // clChipher().set('');
+  $(clChipher().el).val('').trigger('change');
   selectEncFromQuery();
   getPlainFromQuery();
   getKeyFromQuery();
@@ -132,7 +134,8 @@ methods.genQuery = () => {
       .replace(/\)/g, '%29');
     url += '&key=' + keyStr;
   }
-  clUrl().set(url);
+  // clUrl().set(url);
+  $(clUrl().el).val(url).trigger('change');
 };
 
 //#endregion
@@ -184,7 +187,8 @@ methods.processKeygen = (length) => {
     len += len;
     bHex = true;
   }
-  clKey().set(KeygenJS.genEncryptionKey(len, bHex));
+  // clKey().set(KeygenJS.genEncryptionKey(len, bHex));
+  $(clKey().el).val(KeygenJS.genEncryptionKey(len, bHex)).trigger('change');
 };
 /**
  * Function that fires when there is a resize event of the browser window

@@ -44,3 +44,8 @@
 .card-footer {
   padding: .75rem 1rem;
 }
+
+button:disabled {
+  cursor: not-allowed;
+  pointer-events: all !important;
+}

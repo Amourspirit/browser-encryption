@@ -34,6 +34,8 @@ import {
     Decrypt as dec,
     setOutEncDecResult
 } from './crypt/crypt';
+import './short/oweurl';
+import './ui/inputEvents';
 //#endregion
 
 // const $ = jQuery;
@@ -105,7 +107,7 @@ const initCommon = () => {
     const initJqMethods = () => {
 
         //#region Clipboard
-        $("#copy-plain").click(function (e) {
+        $("#copy-plain").on("click", function (e) {
             e.preventDefault();
             if (clPlain().get() === '') {
                 $.getJSON(getMappedUrl('t_clip2'), function (data) {
@@ -119,7 +121,7 @@ const initCommon = () => {
             }
         });
 
-        $("#copy-url").click(function (e) {
+        $("#copy-url").on("click",function (e) {
             e.preventDefault();
             if (clUrl().get() === '') {
                 $.getJSON(getMappedUrl('t_clip2'), function (data) {
@@ -133,7 +135,7 @@ const initCommon = () => {
             }
         });
 
-        $("#copy-key").click(function (e) {
+        $("#copy-key").on("click", function (e) {
             e.preventDefault();
             if (clKey().get() === '') {
                 $.getJSON(getMappedUrl('t_clip2'), function (data) {
@@ -147,7 +149,7 @@ const initCommon = () => {
             }
         });
 
-        $("#copy-out").click(function (e) {
+        $("#copy-out").on("click", function (e) {
             e.preventDefault();
             if (clChipher().get() === '') {
                 $.getJSON(getMappedUrl('t_clip2'), function (data) {
@@ -163,31 +165,31 @@ const initCommon = () => {
         //#endregion
 
         //#region Button Group Generate Keys
-        $(getClGenBitKey(64).el).click(function () {
+        $(getClGenBitKey(64).el).on("click", function () {
             methods.processKeygen(64);
             collapsButtenArea();
         });
-        $(getClGenBitKey(128).el).click(function () {
+        $(getClGenBitKey(128).el).on("click", function () {
             methods.processKeygen(128);
             collapsButtenArea();
         });
-        $(getClGenBitKey(256).el).click(function () {
+        $(getClGenBitKey(256).el).on("click",function () {
             methods.processKeygen(256);
             collapsButtenArea();
         });
-        $(getClGenBitKey(512).el).click(function () {
+        $(getClGenBitKey(512).el).on("click", function () {
             methods.processKeygen(512);
             collapsButtenArea();
         });
-        $(getClGenBitKey(1024).el).click(function () {
+        $(getClGenBitKey(1024).el).on("click", function () {
             methods.processKeygen(1024);
             collapsButtenArea();
         });
-        $(getClGenBitKey(2048).el).click(function () {
+        $(getClGenBitKey(2048).el).on("click", function () {
             methods.processKeygen(2048);
             collapsButtenArea();
         });
-        $(getClGenBitKey(4096).el).click(function () {
+        $(getClGenBitKey(4096).el).on("click",function () {
             methods.processKeygen(4096);
             collapsButtenArea();
         });
@@ -201,7 +203,7 @@ const initCommon = () => {
         $("#chipher").on("change", function () {
             methods.uiRefresh();
         });
-        $("#btn_manual").click(function (params) {
+        $("#btn_manual").on("click", function (params) {
             const $this = $('#user_manual');
             if ($this.data('cload') === undefined || $this.data("cload") === false) {
                 $this.load(getMappedUrl('h_uman'), function () {
@@ -297,7 +299,7 @@ const initCommon = () => {
         /**
     * Bind the makrdown textarea and updated the makrked-content to reflect the makred up html version.
     */
-        $('#markdown').bind('input propertychange', function () {
+        $('#markdown').on('change keyup paste input', function () {
             // set the content of the marked-content element to the makred up value
             const html = marked($("#markdown").val());
             const clean = DOMPurify.sanitize(html);
@@ -305,8 +307,8 @@ const initCommon = () => {
             window.observer.observe();
         });
         $("#modal_save_changes, #modal_save_changes_header").on("click", function (event) {
-            $("#plain").val($("#markdown").val());
-            $("#markdown").val('');
+            $("#plain").val($("#markdown").val()).trigger('change');
+            $("#markdown").val('').trigger('change');
             $('#myModal').modal('hide');
         });
 
@@ -320,20 +322,7 @@ const initCommon = () => {
         /**
      * Monitor .makred-content and when there is a change mark all a tags to open in a new window.
      */
-        $('.marked-content, #found_content').bind('DOMSubtreeModified', function (event) {
-            // for found and marked up links open in a new window/tab
-            // $('.marked-content a, #found_content a').each(function () {
-            //     $(this).attr('target', '_blank');
-            // });
-            //$('.marked-content, #found_content').newWindow();
-            // add img-fluid bootstarp class to content where necessary
-            // this stops the images from extencing beyond their container
-            // $('.marked-content img, #found_content img').each(function () {
-            //     $(this).addClass("img-fluid");
-
-            // });
-            //$('.marked-content, #found_content').bsResponsive();
-        });
+ 
         //#endregion
 
     };
@@ -478,7 +467,7 @@ const initCommon = () => {
         $(".btn_refresh").on("click", function () {
             methods.uiRefresh();
             // clear any generate url value when buttons have been clicked
-            clUrl().set('');
+            $(clUrl().el).val('').trigger('change');
         });
     };
     const buttonGenUrlOnclick = () => {
@@ -502,8 +491,8 @@ const initCommon = () => {
             methods.genQuery();
         });
     };
-
-    $(document).ready(function () {
+    //The following is depreciated $(document).ready(function () {
+    $(function () {
         //methods.windowResize(bootstrapDetectBreakpoint());
         var e = document.getElementById("refreshed");
         // console.log("refreshed Value:", e.value);
@@ -525,7 +514,7 @@ const initCommon = () => {
         initJqMethods();
         jqPrevendDbClick('.copy_icon');
         jqPrevendDbClick('button');
-        console.log(getMappedUrl('t_clip1'));
+        // console.log(getMappedUrl('t_clip1'));
     });
 
 
@@ -555,10 +544,8 @@ const initCommon = () => {
 
     const injectFavIcon = () => {
         let link = document.querySelector("link[rel*='icon']") || document.createElement('link');
-        let pathname = window.location.pathname;
-        let fav = pathname;
-
-        fav += 'favicon.ico';
+        let fav = location.pathname.substr(0, location.pathname.lastIndexOf('/'));
+        fav += '/favicon.ico';
         link.type = 'image/x-icon';
         link.rel = 'shortcut icon';
         link.href = fav;

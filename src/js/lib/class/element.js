@@ -308,6 +308,24 @@ export class ButtonElement extends BasicElement {
     return this._el.innerHTML;
   }
   /**
+   * Sets the disabled state of the button
+   * @param {boolean} value
+   */
+  set disabled(value) {
+    this._el.disabled = value;
+  }
+  /**
+   * Gets if the button is disabled
+   * @returns {boolean}
+   */
+  get disabled() {
+    if(this._el.disable) {
+      return false;
+    }
+    return true;
+  }
+  
+  /**
    * Static method to create class instance from id
    * @param {string} id the id of the element to load
    * @returns {ButtonElement}
