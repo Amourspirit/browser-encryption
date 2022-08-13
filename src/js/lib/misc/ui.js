@@ -207,7 +207,7 @@ export const RefreshUi = () => {
     cPanel.clear();
     let str = strCv;
     if (isValidContent) {
-      let html = marked(str);
+      let html = marked.marked(str);
       if (window.USE_PURIFY) {
         html = DOMPurify.sanitize(html);
       }
