@@ -12,7 +12,7 @@ import {
       return;
     }
     const enc = encodeURIComponent(url);
-    window.open('https://oweurl.com/?url=' + enc);
+    window.open('https://tinyurl.com/api-create.php?url=' + enc);
   });
   $(clUrl().el).on('change keyup paste input textarea', function () {
     const url = clUrl().get();
