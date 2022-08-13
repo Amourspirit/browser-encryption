@@ -275,7 +275,7 @@ const initCommon = () => {
                 return $("#plain").val();
             });
             // # Marked in browser\n\nRendered by **marked**.
-            const html = marked($("#markdown").val());
+            const html = marked.marked($("#markdown").val());
             const clean = DOMPurify.sanitize(html);
             $(".marked-content").html($(clean).lazyLoadExt().bsResponsive().newWindow());
             $('#markdown').trigger('focus');
@@ -287,7 +287,7 @@ const initCommon = () => {
                 return $("#plain").val();
             });
             // # Marked in browser\n\nRendered by **marked**.
-            const html = marked($("#markdown").val());
+            const html = marked.marked($("#markdown").val());
             const clean = DOMPurify.sanitize(html);
             $(".marked-content").html($(clean).lazyLoadExt().bsResponsive().newWindow());
             $('#myModal').modal('show');
@@ -301,7 +301,7 @@ const initCommon = () => {
     */
         $('#markdown').on('change keyup paste input', function () {
             // set the content of the marked-content element to the makred up value
-            const html = marked($("#markdown").val());
+            const html = marked.marked($("#markdown").val());
             const clean = DOMPurify.sanitize(html);
             $(".marked-content").html($(clean).lazyLoadExt().bsResponsive().newWindow());
             window.observer.observe();

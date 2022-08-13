@@ -16,11 +16,11 @@ Honey Pot security is written into this site.
 
 ## Security Tool
 
-As a security tool this project works well in a browser and is mobile firendly.
+As a security tool this project works well in a browser and is mobile friendly.
 
-If someone were to share content using this tool with a colleague. The colleague could then securly decrypt the content using a key (passowrd) that is known only to both of them.
+If someone were to share content using this tool with a colleague. The colleague could then securely decrypt the content using a key (password) that is known only to both of them.
 
-This tool does all encryption and decryption client side and does not post any data to cloud or send data over the internet. With the exception if user actually sharing the data on purpose.
+This tool does all encryption and decryption client side and does not post any data to cloud or send data over the Internet. With the exception if user actually sharing the data on purpose.
 
 ## Building this project
 
@@ -40,7 +40,7 @@ grunt build
 
 Building output all the website files to a sub-folder named site.
 
-To run local copy after buld
+To run local copy after build
 
 ```
 grunt start
