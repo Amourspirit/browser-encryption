@@ -34,7 +34,7 @@ import {
     Decrypt as dec,
     setOutEncDecResult
 } from './crypt/crypt';
-import './short/oweurl';
+import './short/shorten';
 import './ui/inputEvents';
 //#endregion
 
